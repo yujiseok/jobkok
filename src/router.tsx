@@ -14,6 +14,7 @@ import FindUserInfo from "@pages/FindUserInfo";
 import Home from "@pages/Home";
 import LinkForm from "@pages/LinkForm";
 import NewForm from "@pages/NewForm";
+import NotFound from "@pages/NotFound";
 import Notification from "@pages/Notification";
 import SearchForm from "@pages/SearchForm";
 import SignIn from "@pages/SignIn";
@@ -237,6 +238,10 @@ const router: RemixRouter = createBrowserRouter([
         element: <Completion />,
       },
     ],
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);
 

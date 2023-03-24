@@ -12,15 +12,20 @@ const Aside = () => {
             <li key={i} className="items-start">
               <li onClick={() => setIsOpen(!isOpen)}>{menu}</li>
               {isOpen ? (
-                <li
-                  className="items-start bg-transparent text-sm"
-                  onClick={() => setSubMenuIsOpen(!subMenuIsOpen)}
-                >
-                  - 인재관리
-                  {subMenuIsOpen ? (
-                    <li className="items-start text-xs">- 채용 진행 현황</li>
-                  ) : null}
-                </li>
+                <>
+                  <li
+                    className="items-start bg-transparent text-sm"
+                    onClick={() => setSubMenuIsOpen(!subMenuIsOpen)}
+                  >
+                    - 인재관리
+                    {subMenuIsOpen ? (
+                      <li className="items-start text-xs">- 채용 진행 현황</li>
+                    ) : null}
+                  </li>
+                  <li className="items-start bg-transparent text-sm">
+                    - 보류 인재 보관함
+                  </li>
+                </>
               ) : null}
             </li>
           ) : (

@@ -15,7 +15,7 @@ import { client } from "./axios";
 export const getStatus = async (recruitId: number) => {
   const { data }: AxiosResponse<IStatus> = await client({
     method: "GET",
-    url: "/manage/status",
+    url: `/manage/status/${recruitId}`,
   });
 
   return data;

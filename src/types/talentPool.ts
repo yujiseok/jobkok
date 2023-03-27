@@ -9,23 +9,22 @@ export interface IStatus {
   };
 }
 interface ITalentBase {
-  applyId?: string;
+  applyId?: number;
   applyName: string;
   applyPhone: string;
   applyEmail: string;
   applyProcedure: string;
-  pass: string;
-  wish: string;
-  applyDelete: string;
+  applyDelete: boolean;
+  createdTime: string;
+  pass: boolean;
+  wish: boolean;
   keywordsSelect: any[];
 }
 
 export interface ITalent extends ITalentBase {
   resumeContent: string;
   applyPortfolio: string;
-  applyProcedure: string;
   evaluation: string;
-  creationTime: string;
 }
 
 export interface ITalentWithCount extends ITalentBase {
@@ -33,7 +32,6 @@ export interface ITalentWithCount extends ITalentBase {
 }
 
 export interface IFailedTalent extends ITalentBase {
-  createdTime: string;
   recentMessageTime: string;
 }
 

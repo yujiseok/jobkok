@@ -1,9 +1,11 @@
 import type { AxiosResponse } from "axios";
 import type {
+  IEditSuccess,
   IFailedTalent,
   IRegisteredForm,
   IStatus,
   ITalent,
+  ITalentWithCount,
 } from "@/types/talentPool";
 import { client } from "./axios";
 
@@ -14,7 +16,6 @@ export const getStatus = async (recruitId: number) => {
   const { data }: AxiosResponse<IStatus> = await client({
     method: "GET",
     url: "/manage/status",
-    data: recruitId,
   });
 
   return data;
@@ -35,7 +36,7 @@ export const getTalentByProcedure = async (
   recruitId: number,
   applyProcedure: string,
 ) => {
-  const { data } = await client({
+  const { data }: AxiosResponse<ITalentWithCount[]> = await client({
     method: "GET",
     url: `manage/${recruitId}/${applyProcedure}`,
   });
@@ -48,7 +49,7 @@ export const editTalentByProcedure = async (
   applyId: number,
   applyProcedure: string,
 ) => {
-  const { data } = await client({
+  const { data }: AxiosResponse<IEditSuccess> = await client({
     method: "PUT",
     url: `manage/change/${applyId}/${applyProcedure}`,
   });
@@ -58,7 +59,7 @@ export const editTalentByProcedure = async (
 
 // 지원자 지원자 합격 처리
 export const passTalent = async (applyId: number) => {
-  const { data } = await client({
+  const { data }: AxiosResponse<IEditSuccess> = await client({
     method: "PUT",
     url: `manage/pass/${applyId}`,
   });

@@ -10,7 +10,7 @@ import { client } from "./axios";
 // jwt 인증 필요
 
 // 인재현황
-export const getStatus = async (recruitId: string) => {
+export const getStatus = async (recruitId: number) => {
   const { data }: AxiosResponse<IStatus> = await client({
     method: "GET",
     url: "/manage/status",
@@ -21,7 +21,7 @@ export const getStatus = async (recruitId: string) => {
 };
 
 // 전체 지원자 조회
-export const getAllTalent = async (recruitId: string) => {
+export const getAllTalent = async (recruitId: number) => {
   const { data }: AxiosResponse<ITalent[]> = await client({
     method: "GET",
     url: `manage/${recruitId}`,
@@ -32,7 +32,7 @@ export const getAllTalent = async (recruitId: string) => {
 
 // 단계별 인재 조회
 export const getTalentByProcedure = async (
-  recruitId: string,
+  recruitId: number,
   applyProcedure: string,
 ) => {
   const { data } = await client({
@@ -45,7 +45,7 @@ export const getTalentByProcedure = async (
 
 // 지원자 채용단계 변경
 export const editTalentByProcedure = async (
-  applyId: string,
+  applyId: number,
   applyProcedure: string,
 ) => {
   const { data } = await client({
@@ -57,7 +57,7 @@ export const editTalentByProcedure = async (
 };
 
 // 지원자 지원자 합격 처리
-export const passTalent = async (applyId: string) => {
+export const passTalent = async (applyId: number) => {
   const { data } = await client({
     method: "PUT",
     url: `manage/pass/${applyId}`,
@@ -77,7 +77,7 @@ export const getRegisteredForm = async () => {
 };
 
 // 탈락 인재 조회
-export const getFailedTalent = async (recruitId: string) => {
+export const getFailedTalent = async (recruitId: number) => {
   const { data }: AxiosResponse<IFailedTalent[]> = await client({
     method: "GET",
     url: `/drop/view-applicant/${recruitId}`,

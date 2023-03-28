@@ -1,64 +1,135 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 import * as z from "zod";
 
 const SignIn = () => {
-  // 비밀번호 유효성 검사
-  const pwRegex =
-    /^(?!((?:[A-Za-z]+)|(?:[~!@#$%^&*()_+=]+)|(?:[0-9]+))$)[A-Za-z\d~!@#$%^&*()_+=]{8,20}$/;
-  // 휴대폰 번호 유효성 검사 정규표현식
-  const phoneRegex = /^\d{3}-\d{3,4}-\d{4}$/;
+  const [cookies, setCookie, removeCookie] = useCookies(["rememberEmail"]);
+  const [remember, setRemember] = useState(false);
+  const [showPw, setShowPw] = useState<any>({
+    type: "password",
+    visible: false,
+  });
 
+  // 새로고침 했을때 저장된 이메일 값 보여주기
+  useEffect(() => {
+    if (cookies.rememberEmail !== undefined) {
+      setValue("useremail", cookies.rememberEmail);
+      setRemember(true);
+    }
+  }, []);
+
+  // 비밀번호 보이기 설정
+  const handleToggle = (e: any) => {
+    e.preventDefault();
+    setShowPw(() => {
+      if (!showPw.visible) {
+        return { type: "text", visible: true };
+      }
+      return { type: "password", visible: false };
+    });
+  };
+
+  // 이메일 값 쿠키 저장
+  const handleChange = (e: any) => {
+    setRemember(e.target.checked);
+    const value = getValues("useremail");
+    if (e.target.checked) {
+      setCookie("rememberEmail", value, { maxAge: 2000 });
+    } else {
+      removeCookie("rememberEmail");
+    }
+  };
+
+  // schema 유효성 검사
   const userSchema = z.object({
     useremail: z
       .string()
-      .email({ message: "유효하지 않은 이메일 주소입니다." }),
-    password: z.string().regex(pwRegex, {
-      message:
-        "8~20자의 영문 대/소문자, 숫자, 특수문자 중 2가지 조합을 사용하세요.",
-    }),
-    username: z.string().optional(),
+      .min(1, "이메일을 입력해 주세요.")
+      .email("이메일 주소를 확인해 주세요."),
+    password: z
+      .string()
+      .min(8, "비밀번호는 8자 이상 20자 이하로 입력해 주세요.")
+      .max(20, "비밀번호는 8자 이상 20자 이하로 입력해 주세요."),
   });
 
   type User = z.infer<typeof userSchema>;
 
-  const user = { useremail: "hran9404@naver.com", password: "dlgpfks1234" };
-  console.log(userSchema.safeParse(user));
-
   const {
     register,
     handleSubmit,
-    watch,
+    setValue,
+    getValues,
     formState: { errors },
   } = useForm<User>({
     resolver: zodResolver(userSchema),
   });
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: User) => {
     console.log(data);
   };
-  console.log(watch("useremail"));
+  console.log(errors);
 
   return (
     <div className="container">
       <div className="logo">logo</div>
       <div className="wrapper">
         <p>로그인</p>
-        <form className="flex w-64 flex-col" onSubmit={handleSubmit(onSubmit)}>
-          <div className="border border-solid border-black">
-            <span>EMAIL</span>
-            <input {...register("useremail", { required: true })} />
+        <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
+          <div className="mt-3 flex h-10 w-80 items-center border border-solid border-black">
+            {/* 이메일 입력칸 */}
+            <span className="px-2">Email</span>
+            <input
+              className="outline-none"
+              {...register("useremail", {
+                required: true,
+              })}
+            />
+            <button
+              className="ml-auto px-5"
+              onClick={() => {
+                setValue("useremail", "");
+              }}
+            >
+              x
+            </button>
           </div>
           {/* 오류 메세지 띄우기 */}
-          {errors?.useremail?.message}
-          <input
-            placeholder="PW"
-            className="border border-solid border-black"
-            {...register("password", { required: true })}
-          />
+          <span className="text-red-600">{errors?.useremail?.message}</span>
+          {/* 패스워드 입력칸 */}
+          <div className="mt-3 flex h-10 w-80 items-center border border-solid border-black">
+            <span className="px-2">PW</span>
+            <input
+              type={showPw.type}
+              maxLength={20}
+              className="outline-none"
+              {...register("password", { required: true })}
+            />
+            <button className="ml-auto px-5" onClick={handleToggle}>
+              {showPw.visible ? <span>눈감기</span> : <span>눈뜨기</span>}
+            </button>
+          </div>
           {/* 오류 메세지 띄우기 */}
-          {errors?.useremail?.message}
-          <input type="submit" />
+          <span className="text-red-600">{errors?.password?.message}</span>
+          <div className="mt-3">
+            <input type="checkbox" onChange={handleChange} checked={remember} />
+            <span className="ml-1.5">아이디 저장하기</span>
+          </div>
+          <input
+            className="my-5 h-10 w-36 self-center border border-solid border-black"
+            type="submit"
+            value="로그인"
+          />
         </form>
+        <div className="flex justify-center">
+          <Link to="/sign-up" className="mx-2">
+            회원가입
+          </Link>
+          <Link to="/find-user-info" className="mx-2">
+            비밀번호 찾기
+          </Link>
+        </div>
       </div>
     </div>
   );

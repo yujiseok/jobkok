@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 // import { applicantSubmit, emailAuth, submitApply } from "@/api/applicant";
+import FormDetail from "@pages/ApplicantAuth/formDetail";
 
 const ApplicantAuth = () => {
   const navigate = useNavigate();
@@ -12,22 +13,7 @@ const ApplicantAuth = () => {
 
   return (
     <div className="my-10 mx-auto w-8/12 flex-col content-center">
-      {/* 추후 api 값 조회하여 출력으로 변경 */}
-      <section className="mb-10">
-        <h1 className="mb-5 text-center text-xl font-bold">
-          아기사랑 파트타이머 직원 채용
-        </h1>
-        <ul>
-          <li className="flex gap-5 ">
-            <span>지원서 접수 마감일</span>
-            <p>23/03/30</p>
-          </li>
-          <li className="flex gap-5">
-            <span>면접 가능 기간</span>
-            <p>2023/03/31 ~ 2023/04/01</p>
-          </li>
-        </ul>
-      </section>
+      <FormDetail />
       <section>
         <h2 className="text-l mb-5 font-bold">지원자 기본 정보</h2>
         <form className="flex-col gap-5">

@@ -84,7 +84,7 @@ const SignIn = () => {
         <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
           <div className="mt-3 flex h-10 w-80 items-center border border-solid border-black">
             {/* 이메일 입력칸 */}
-            <span className="px-2">Email</span>
+            <label className="px-2">Email</label>
             <input
               className="outline-none"
               {...register("useremail", {
@@ -105,7 +105,7 @@ const SignIn = () => {
           <span className="text-red-600">{errors?.useremail?.message}</span>
           {/* 패스워드 입력칸 */}
           <div className="mt-3 flex h-10 w-80 items-center border border-solid border-black">
-            <span className="px-2">PW</span>
+            <label className="px-2">PW</label>
             <input
               type={showPw.type}
               maxLength={20}

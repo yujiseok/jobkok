@@ -5,10 +5,15 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import * as z from "zod";
 
+interface ShowPw {
+  type: "password" | "text";
+  visible: boolean;
+}
+
 const SignIn = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["rememberEmail"]);
-  const [remember, setRemember] = useState(false);
-  const [showPw, setShowPw] = useState<any>({
+  const [isRemember, setIsRemember] = useState(false);
+  const [showPw, setShowPw] = useState<ShowPw>({
     type: "password",
     visible: false,
   });
@@ -17,7 +22,7 @@ const SignIn = () => {
   useEffect(() => {
     if (cookies.rememberEmail !== undefined) {
       setValue("useremail", cookies.rememberEmail);
-      setRemember(true);
+      setIsRemember(true);
     }
   }, []);
 
@@ -34,7 +39,7 @@ const SignIn = () => {
 
   // 이메일 값 쿠키 저장
   const handleChange = (e: any) => {
-    setRemember(e.target.checked);
+    setIsRemember(e.target.checked);
     const value = getValues("useremail");
     if (e.target.checked) {
       setCookie("rememberEmail", value, { maxAge: 2000 });
@@ -62,17 +67,17 @@ const SignIn = () => {
     handleSubmit,
     setValue,
     getValues,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<User>({
     resolver: zodResolver(userSchema),
   });
   const onSubmit = (data: User) => {
+    // 로그인 api 수정 예정
     console.log(data);
   };
-  console.log(errors);
 
   return (
-    <div className="container">
+    <div className="container flex flex-col items-center">
       <div className="logo">logo</div>
       <div className="wrapper">
         <p>로그인</p>
@@ -88,7 +93,8 @@ const SignIn = () => {
             />
             <button
               className="ml-auto px-5"
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
                 setValue("useremail", "");
               }}
             >
@@ -113,12 +119,17 @@ const SignIn = () => {
           {/* 오류 메세지 띄우기 */}
           <span className="text-red-600">{errors?.password?.message}</span>
           <div className="mt-3">
-            <input type="checkbox" onChange={handleChange} checked={remember} />
+            <input
+              type="checkbox"
+              onChange={handleChange}
+              checked={isRemember}
+            />
             <span className="ml-1.5">아이디 저장하기</span>
           </div>
-          <input
+          <button
             className="my-5 h-10 w-36 self-center border border-solid border-black"
             type="submit"
+            disabled={isSubmitting}
             value="로그인"
           />
         </form>

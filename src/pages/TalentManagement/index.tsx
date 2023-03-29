@@ -271,7 +271,9 @@ const TalentManagement = () => {
               <Droppable key={section.id} droppableId={section.id}>
                 {(provided) => (
                   <div {...provided.droppableProps} ref={provided.innerRef}>
-                    <div>{section.title}</div>
+                    <div>
+                      {section.title} <span>{section.tasks.length}</span>
+                    </div>
 
                     <div className="flex flex-col gap-4">
                       {section.tasks.map((task, index) => (
@@ -294,7 +296,16 @@ const TalentManagement = () => {
                                 ...provided.draggableProps.style,
                               }}
                             >
-                              {task.title}
+                              {task.title}{" "}
+                              <span>
+                                {
+                                  data[
+                                    data.findIndex(
+                                      (item) => item.title === task.title,
+                                    )
+                                  ]?.tasks.length
+                                }
+                              </span>
                             </div>
                           )}
                         </Draggable>

@@ -1,22 +1,24 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 // import { applicantSubmit, emailAuth, submitApply } from "@/api/applicant";
-import FormDetail from "@pages/ApplicantAuth/formDetail";
+import GetFormInfo from "@pages/ApplicantAuth/getFormInfo";
 
 const ApplicantAuth = () => {
   const navigate = useNavigate();
   const [isToggled, setToggle] = useState(false);
+
+  //지원서 작성 버튼 클릭시
   const handleSubmitBtn = () => {
-    navigate("/applicant/application?");
-    // 지원서 등록 api
+    navigate("/applicant/application");
+    // 이메일 중복확인 api
   };
 
   return (
-    <div className="my-10 mx-auto w-8/12 flex-col content-center">
-      <FormDetail />
+    <div className="mx-auto flex-col content-center">
+      <GetFormInfo />
       <section>
         <h2 className="text-l mb-5 font-bold">지원자 기본 정보</h2>
-        <form className="flex-col gap-5">
+        <form className="flex-col">
           <div>
             <label htmlFor="name">이름(필수)</label>
             <input

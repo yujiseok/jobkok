@@ -1,11 +1,28 @@
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-// import { applicantSubmit, emailAuth, submitApply } from "@/api/applicant";
 import GetFormInfo from "@pages/ApplicantAuth/getFormInfo";
+// import { applicantSubmit, emailAuth, submitApply } from "@/api/applicant";
+
+interface IForm {
+  name: string;
+  tel: string;
+  email: string;
+  number: number;
+}
 
 const ApplicantAuth = () => {
   const navigate = useNavigate();
   const [isToggled, setToggle] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<IForm>({ mode: "onChange" });
+
+  const onSubmit = (data: IForm) => {
+    console.log(data);
+  };
 
   //지원서 작성 버튼 클릭시
   const handleSubmitBtn = () => {
@@ -18,15 +35,34 @@ const ApplicantAuth = () => {
       <GetFormInfo />
       <section>
         <h2 className="text-l mb-5 font-bold">지원자 기본 정보</h2>
-        <form className="flex-col">
+        <form className="flex-col" onSubmit={handleSubmit(onSubmit)}>
           <div>
             <label htmlFor="name">이름(필수)</label>
             <input
               className="ml-3 border-2 border-solid border-gray-600"
               type="text"
               id="name"
-              placeholder="이름을 작성해주세요"
+              placeholder="이름을 입력해주세요"
+              {...register("name", {
+                required: {
+                  value: true,
+                  message: "이름을 입력해주세요.",
+                },
+                minLength: {
+                  value: 2,
+                  message: "이름을 2자 이상 20자 이내로 입력해주세요.",
+                },
+                maxLength: {
+                  value: 15,
+                  message: "이름을 2자 이상 20자 이내로 입력해주세요.",
+                },
+                pattern: {
+                  value: /^[ㄱ-ㅎ가-힣a-zA-Z]+$/,
+                  message: "특수문자, 숫자, 공백은 입력 불가합니다.",
+                },
+              })}
             />
+            {errors.name && <p>{errors.name.message}</p>}
           </div>
           <div>
             <label htmlFor="tel">전화번호(필수)</label>
@@ -35,7 +71,18 @@ const ApplicantAuth = () => {
               type="tel"
               id="tel"
               placeholder="010-1234-5678"
+              {...register("tel", {
+                required: {
+                  value: true,
+                  message: "전화번호를 입력해주세요.",
+                },
+                pattern: {
+                  value: /^\d{3}-\d{3,4}-\d{4}$/,
+                  message: "010-0000-0000 형식으로 입력해주세요",
+                },
+              })}
             />
+            {errors.tel && <p>{errors.tel.message}</p>}
           </div>
           <div>
             <label htmlFor="email">이메일(필수)</label>
@@ -43,7 +90,18 @@ const ApplicantAuth = () => {
               className="ml-3 border-2 border-solid border-gray-600"
               type="email"
               id="email"
-              placeholder="이메일 주소를 작성해주세요."
+              placeholder="이메일을 입력해주세요."
+              {...register("email", {
+                required: {
+                  value: true,
+                  message: "이메일을 입력해주세요.",
+                },
+                pattern: {
+                  value:
+                    /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i,
+                  message: "올바른 이메일을 입력해주세요",
+                },
+              })}
             />
             <button
               type="button"
@@ -52,23 +110,42 @@ const ApplicantAuth = () => {
             >
               인증받기
             </button>
+            {errors.email && <p>{errors.email.message}</p>}
           </div>
           {isToggled ? (
             <>
               <label>인증번호</label>
-              <input type="number" placeholder="인증번호를 입력해주세요." />
+              <input
+                type="text"
+                maxLength={6}
+                placeholder="인증번호를 입력해주세요."
+                {...register("number", {
+                  required: {
+                    value: true,
+                    message: "숫자 6자리를 입력해주세요",
+                  },
+                  minLength: {
+                    value: 6,
+                    message: "숫자 6자리를 입력해주세요",
+                  },
+                  pattern: {
+                    value: /^[0-9]+$/,
+                    message: "숫자 6자리를 입력해주세요",
+                  },
+                })}
+              />
+              {errors.number && <p>{errors.number.message}</p>}
               <button type="button" onClick={() => setToggle(!isToggled)}>
                 완료
               </button>
             </>
           ) : null}
-          <button
+          <input
             type="submit"
             className="bg-slate-300"
-            onClick={handleSubmitBtn}
-          >
-            지원서 작성
-          </button>
+            value="지원서 작성"
+            disabled={isSubmitting}
+          />
         </form>
       </section>
     </div>

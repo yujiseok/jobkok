@@ -249,7 +249,7 @@ const TalentManagement = () => {
             한 눈에 칸반보드에서 인재 현황을 확인해보세요. 인재카드를
             Drag&Drop을 통해 자유롭게 이동해보세요.
           </p>
-          <Link to="/talent-pool/status">관리하기</Link>
+          <Link to="/talent/status">관리하기</Link>
         </div>
 
         {/* <div className="flex">

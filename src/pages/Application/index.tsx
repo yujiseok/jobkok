@@ -1,42 +1,88 @@
 import { useNavigate } from "react-router-dom";
+import {
+  EDULEVEL_OPTION,
+  EDUSTATUS_OPTION,
+  KEYWORDS_CHECK,
+  LANGUAGELEVEL_OPTION,
+  MILITARY_OPTION,
+} from "@/constants/applicant";
 import FormDetail from "@pages/ApplicantAuth/getFormInfo";
 import PolicyTerms from "@pages/Application/policyTerms";
 
 const Application = () => {
   const navigate = useNavigate();
+
   const handleSubmitBtn = () => {
-    navigate("/applicant/completion?");
+    navigate("/applicant/completion");
     // 지원서 등록 api
   };
+
   return (
-    <div className="my-10 mx-auto w-8/12 flex-col content-center">
+    <div className="my-10 mx-auto w-8/12 flex-col">
       <FormDetail />
-      <section>
-        <h3>경력</h3>
+      <section className="mb-10 rounded-md rounded-lg border border-solid p-10">
+        <h2 className="mb-5 text-2xl font-bold">지원자 추가정보</h2>
+        <h3 className="mb-5 text-xl font-bold">
+          경력 <span className="text-sm text-red-500">필수</span>
+        </h3>
         <form className="mb-20">
           <div>
-            <label htmlFor="careerName">일한곳</label>
+            <label className="mr-5" htmlFor="careerName">
+              일한곳
+            </label>
             <input
               type="text"
-              placeholder="일한 곳 이름을 알려주세요."
               id="careerName"
+              placeholder="일한 곳 이름을 알려주세요."
             />
           </div>
           <div>
-            <label htmlFor="careerPeriod">일한 기간</label>
+            <label className="mr-5" htmlFor="careerPeriod">
+              일한 기간
+            </label>
             <input type="date" id="careerPeriod" />
             <span> ~ </span>
             <input type="date" id="careerPeriod" />
           </div>
           <div>
-            <label htmlFor="careerDetail">상세내용</label>
-            <textarea placeholder="어떤 일을 하셨는지 설명해주세요."></textarea>
+            <label className="mr-5" htmlFor="careerDetail">
+              상세내용
+            </label>
+            <textarea
+              id="careerDetail"
+              placeholder="어떤 일을 하셨는지 설명해주세요."
+            ></textarea>
           </div>
         </form>
-        <h3>최종학력</h3>
+        <h3 className="mb-5 text-xl font-bold">
+          자기소개 <span className="text-sm text-red-500">필수</span>
+        </h3>
         <form className="mb-20">
           <div>
-            <label htmlFor="eduName">학교명</label>
+            <label className="mr-5" htmlFor="resumeSubject">
+              주제
+            </label>
+            <input type="text" id="resumeSubject" value="조회api" readOnly />
+          </div>
+          <div>
+            <label className="mr-5" htmlFor="resumeContent">
+              상세내용
+            </label>
+            <textarea
+              id="resumeContent"
+              placeholder="위 주제에 대해 자유롭게 서술해주세요."
+            ></textarea>
+          </div>
+          <div>
+            <span>문항 답변 글자수 : 1000자</span>
+          </div>
+        </form>
+        <h3 className="mb-5 text-xl font-bold">최종학력</h3>
+        <form className="mb-20">
+          <div>
+            <label className="mr-5" htmlFor="eduName">
+              학교명
+            </label>
             <input
               type="text"
               id="eduName"
@@ -44,13 +90,17 @@ const Application = () => {
             />
           </div>
           <div>
-            <label htmlFor="eduPeriod">기간</label>
+            <label className="mr-5" htmlFor="eduPeriod">
+              기간
+            </label>
             <input type="date" id="eduPeriod" />
             <span> ~ </span>
             <input type="date" id="eduPeriod" />
           </div>
           <div>
-            <label htmlFor="eduMajor">전공</label>
+            <label className="mr-5" htmlFor="eduMajor">
+              전공
+            </label>
             <input
               type="text"
               id="eduMajor"
@@ -58,49 +108,32 @@ const Application = () => {
             />
           </div>
           <div>
-            <label htmlFor="eduLevel">년제</label>
+            <label className="mr-5" htmlFor="eduLevel">
+              년제
+            </label>
             <select id="eduLevel">
-              <option>선택</option>
-              <option>초등학교</option>
-              <option>중학교</option>
-              <option>고등학교</option>
-              <option>대학(2,3년제)</option>
-              <option>대학(4년제)</option>
-              <option>대학원</option>
+              {EDULEVEL_OPTION.map((element) => {
+                return <option key={element}>{element}</option>;
+              })}
             </select>
           </div>
           <div>
-            <label htmlFor="eduStatus">졸업상태</label>
+            <label className="mr-5" htmlFor="eduStatus">
+              졸업상태
+            </label>
             <select id="eduStatus">
-              <option>선택</option>
-              <option>재학</option>
-              <option>중퇴</option>
-              <option>휴학</option>
-              <option>수료</option>
-              <option>졸업</option>
-              <option>졸업유예</option>
+              {EDUSTATUS_OPTION.map((element) => {
+                return <option key={element}>{element}</option>;
+              })}
             </select>
           </div>
         </form>
-        <h3>자기소개</h3>
+        <h3 className="mb-5 text-xl font-bold">자격증</h3>
         <form className="mb-20">
           <div>
-            <label>주제</label>
-            <input type="text" value="조회api" readOnly />
-          </div>
-          <div>
-            <label>주제</label>
-            <textarea placeholder="위 주제에 대해 자유롭게 서술해주세요."></textarea>
-          </div>
-          <div>
-            <span>문항 답변 글자수 :</span>
-            <span>1000 자</span>
-          </div>
-        </form>
-        <h3>자격증</h3>
-        <form className="mb-20">
-          <div>
-            <label htmlFor="certificateName">자격증 이름</label>
+            <label className="mr-5" htmlFor="certificateName">
+              자격증 이름
+            </label>
             <input
               type="text"
               id="certificateName"
@@ -108,7 +141,9 @@ const Application = () => {
             />
           </div>
           <div>
-            <label htmlFor="certificatePublisher">발행처</label>
+            <label className="mr-5" htmlFor="certificatePublisher">
+              발행처
+            </label>
             <input
               type="text"
               id="certificatePublisher"
@@ -116,46 +151,68 @@ const Application = () => {
             />
           </div>
           <div>
-            <label htmlFor="certificateDate">취득일</label>
+            <label className="mr-5" htmlFor="certificateDate">
+              취득일
+            </label>
             <input type="date" id="certificateDate" />
           </div>
         </form>
-        <h3>취업우대사항</h3>
+        <h3 className="mb-5 text-xl font-bold">취업우대사항</h3>
         <form className="mb-20">
           <div>
-            <label>장애여부</label>
-            <input type="checkbox" />
+            <label className="mr-5" htmlFor="disability">
+              장애여부
+            </label>
+            <input type="checkbox" id="disability" />
           </div>
           <div>
-            <label>국가보훈여부</label>
-            <input type="checkbox" />
+            <label className="mr-5" htmlFor="veterans">
+              국가보훈여부
+            </label>
+            <input type="checkbox" id="veterans" />
           </div>
           <div>
-            <label>고용지원금</label>
-            <input type="checkbox" />
+            <label className="mr-5" htmlFor="subsidy">
+              고용지원금
+            </label>
+            <input type="checkbox" id="subsidy" />
           </div>
           <div>
-            <label htmlFor="eduStatus">병역사항</label>
-            <select id="eduStatus">
-              <option>선택</option>
-              <option>군필</option>
-              <option>미필</option>
-              <option>면제</option>
+            <label className="mr-5" htmlFor="military">
+              병역사항
+            </label>
+            <select id="military">
+              {MILITARY_OPTION.map((element) => {
+                return <option key={element}>{element}</option>;
+              })}
             </select>
           </div>
         </form>
-        <h3>포트폴리오</h3>
-        <form className="mb-20">
-          <input type="url" placeholder="링크를 입력해주세요." />
-        </form>
-        <h3>기타이력서</h3>
-        <form className="mb-20">
-          <input type="url" placeholder="링크를 입력해주세요." />
-        </form>
-        <h3>어학능력</h3>
+        <h3 className="mb-5 text-xl font-bold">기타 이력서</h3>
         <form className="mb-20">
           <div>
-            <label htmlFor="languageName">언어</label>
+            <label className="mr-5" htmlFor="portfolio">
+              포트폴리오
+            </label>
+            <input
+              type="url"
+              id="portfolio"
+              placeholder="링크를 입력해주세요."
+            />
+          </div>
+          <div>
+            <label className="mr-5" htmlFor="resume">
+              기타 이력서
+            </label>
+            <input type="url" id="resume" placeholder="링크를 입력해주세요." />
+          </div>
+        </form>
+        <h3 className="mb-5 text-xl font-bold">어학능력</h3>
+        <form className="mb-20">
+          <div>
+            <label className="mr-5" htmlFor="languageName">
+              언어
+            </label>
             <input
               type="text"
               id="languageName"
@@ -163,18 +220,22 @@ const Application = () => {
             />
           </div>
           <div>
-            <label htmlFor="languageLevel">수준</label>
+            <label className="mr-5" htmlFor="languageLevel">
+              수준
+            </label>
             <select id="languageLevel">
-              <option>상</option>
-              <option>중</option>
-              <option>하</option>
+              {LANGUAGELEVEL_OPTION.map((element) => {
+                return <option key={element}>{element}</option>;
+              })}
             </select>
           </div>
         </form>
-        <h3>수상내역</h3>
+        <h3 className="mb-5 text-xl font-bold">수상내역</h3>
         <form className="mb-20">
           <div>
-            <label htmlFor="awardsName">수상명</label>
+            <label className="mr-5" htmlFor="awardsName">
+              수상명
+            </label>
             <input
               type="text"
               id="awardsName"
@@ -182,7 +243,9 @@ const Application = () => {
             />
           </div>
           <div>
-            <label htmlFor="awardsCompany">수여기관</label>
+            <label className="mr-5" htmlFor="awardsCompany">
+              수여기관
+            </label>
             <input
               type="text"
               id="awardsCompany"
@@ -190,40 +253,33 @@ const Application = () => {
             />
           </div>
           <div>
-            <label htmlFor="awardsDate">수여기관</label>
+            <label className="mr-5" htmlFor="awardsDate">
+              수상공모일
+            </label>
             <input type="date" id="awardsDate" />
           </div>
         </form>
-        <h3>나의 성격 키워드(5개 필수)</h3>
-        <form className="mb-20">
-          {KEYWORDS.map((el) => {
+        <h3 className="mb-5 text-xl font-bold">나의 성격 키워드(5개 필수)</h3>
+        <form>
+          {KEYWORDS_CHECK.map((element) => {
             return (
-              <div key={el}>
-                <label htmlFor="1">{el}</label>
+              <span key={element} className="mr-10">
+                <label htmlFor="1">{element}</label>
                 <input type="checkbox" name="keywords" id="1" />
-              </div>
+              </span>
             );
           })}
         </form>
       </section>
       <PolicyTerms />
-      <button type="button" onClick={handleSubmitBtn}>
+      <button
+        className="mt-10 rounded-md bg-blue-500 py-3 px-5 text-white"
+        type="button"
+        onClick={handleSubmitBtn}
+      >
         작성완료
       </button>
     </div>
   );
 };
 export default Application;
-
-const KEYWORDS = [
-  "키워드1",
-  "키워드2",
-  "키워드3",
-  "키워드4",
-  "키워드5",
-  "키워드6",
-  "키워드7",
-  "키워드8",
-  "키워드9",
-  "키워드10",
-];

@@ -22,7 +22,7 @@ export const LANGUAGELEVEL_OPTION = ["상", "중", "하"];
 
 export const MILITARY_OPTION = ["선택", "군필", "미필", "면제"];
 
-export const KEYWORDS_OPTION = [
+export const KEYWORDS_CHECK = [
   "키워드1",
   "키워드2",
   "키워드3",

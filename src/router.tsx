@@ -104,7 +104,7 @@ import TalentStatus from "@pages/TalentStatus";
 //     isCompany: true,
 //   },
 //   {
-//     path: "/talent-pool",
+//     path: "/talent",
 //     label: "인재풀",
 //     isCompany: true,
 //     children: [
@@ -204,7 +204,7 @@ const router: RemixRouter = createBrowserRouter([
         element: <Notification />,
       },
       {
-        path: "/talent-pool",
+        path: "/talent",
         children: [
           {
             path: "management",

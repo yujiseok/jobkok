@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import GetFormInfo from "@pages/ApplicantAuth/getFormInfo";
 // import { applicantSubmit, emailAuth, submitApply } from "@/api/applicant";
 
-interface IForm {
+interface IAuthForm {
   name: string;
   tel: string;
   email: string;
@@ -16,11 +16,33 @@ const ApplicantAuth = () => {
   const [isToggled, setToggle] = useState(false);
   const {
     register,
+    watch,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<IForm>({ mode: "onChange" });
+  } = useForm<IAuthForm>({ mode: "onChange" });
 
-  const onSubmit = (data: IForm) => {
+  // 인증받기 버튼
+  const handleGetCodeBtn = () => {
+    // 이메일 값 없으면 확인창
+    if (watch().email === "") {
+      confirm("이메일을 입력해주세요");
+    } else {
+      setToggle(!isToggled);
+      confirm("이메일이 전송됐습니다. 메일함을 확인해주세요.");
+      // 이메일 인증 API
+    }
+  };
+
+  // 인증완료 버튼
+  const handelConfirmCode = () => {
+    // if (이메일 인증 api 반환값이 성공) 이면
+    setToggle(!isToggled);
+    // 실패면
+    // confirm("올바른 인증코드를 입력해주세요")
+  };
+
+  // 폼 제출
+  const onSubmit = (data: IAuthForm) => {
     console.log(data);
   };
 
@@ -105,7 +127,7 @@ const ApplicantAuth = () => {
             />
             <button
               type="button"
-              onClick={() => setToggle(!isToggled)}
+              onClick={handleGetCodeBtn}
               className="bg-slate-300"
             >
               인증받기
@@ -135,7 +157,7 @@ const ApplicantAuth = () => {
                 })}
               />
               {errors.number && <p>{errors.number.message}</p>}
-              <button type="button" onClick={() => setToggle(!isToggled)}>
+              <button type="button" onClick={handelConfirmCode}>
                 완료
               </button>
             </>

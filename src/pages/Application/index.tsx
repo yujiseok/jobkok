@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import FormDetail from "@pages/ApplicantAuth/formDetail";
+import FormDetail from "@pages/ApplicantAuth/getFormInfo";
 import PolicyTerms from "@pages/Application/policyTerms";
 
 const Application = () => {
@@ -60,6 +60,7 @@ const Application = () => {
           <div>
             <label htmlFor="eduLevel">년제</label>
             <select id="eduLevel">
+              <option>선택</option>
               <option>초등학교</option>
               <option>중학교</option>
               <option>고등학교</option>
@@ -71,6 +72,7 @@ const Application = () => {
           <div>
             <label htmlFor="eduStatus">졸업상태</label>
             <select id="eduStatus">
+              <option>선택</option>
               <option>재학</option>
               <option>중퇴</option>
               <option>휴학</option>
@@ -119,7 +121,29 @@ const Application = () => {
           </div>
         </form>
         <h3>취업우대사항</h3>
-        <form className="mb-20"></form>
+        <form className="mb-20">
+          <div>
+            <label>장애여부</label>
+            <input type="checkbox" />
+          </div>
+          <div>
+            <label>국가보훈여부</label>
+            <input type="checkbox" />
+          </div>
+          <div>
+            <label>고용지원금</label>
+            <input type="checkbox" />
+          </div>
+          <div>
+            <label htmlFor="eduStatus">병역사항</label>
+            <select id="eduStatus">
+              <option>선택</option>
+              <option>군필</option>
+              <option>미필</option>
+              <option>면제</option>
+            </select>
+          </div>
+        </form>
         <h3>포트폴리오</h3>
         <form className="mb-20">
           <input type="url" placeholder="링크를 입력해주세요." />

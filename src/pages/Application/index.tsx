@@ -273,11 +273,26 @@ const Application = () => {
       </section>
       <PolicyTerms />
       <button
+        className="mt-10 mr-10 rounded-md bg-blue-500 py-3 px-5 text-white"
+        type="button"
+        onClick={() => {
+          if (
+            confirm(
+              "작성했던 정보가 초기화됩니다. 이전 단계로 이동하시겠습니까?",
+            )
+          ) {
+            navigate(-1);
+          }
+        }}
+      >
+        이전
+      </button>
+      <button
         className="mt-10 rounded-md bg-blue-500 py-3 px-5 text-white"
         type="button"
         onClick={handleSubmitBtn}
       >
-        작성완료
+        제출하기
       </button>
     </div>
   );

@@ -1,10 +1,97 @@
+import { useState } from "react";
+import type { OnDragEndResponder } from "react-beautiful-dnd";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { Link } from "react-router-dom";
 import { Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/pagination";
 import "./index.css";
 
+const mockData = [
+  {
+    id: "서류 검토",
+    title: " 서류 검토",
+    tasks: [
+      {
+        id: "b",
+        title: "Learn JavaScript",
+      },
+      {
+        id: "c",
+        title: "Learn Next",
+      },
+      {
+        id: "d",
+        title: "Learn React",
+      },
+    ],
+  },
+  {
+    id: "면접 진행",
+    title: "면접 진행",
+    tasks: [
+      {
+        id: "f",
+        title: "Learn CSS",
+      },
+      {
+        id: "g",
+        title: "Learn TypeScript",
+      },
+    ],
+  },
+  {
+    id: "최종 조율",
+    title: "최종 조율",
+    tasks: [
+      {
+        id: "i",
+        title: "Learn HTML",
+      },
+    ],
+  },
+];
+
 const TalentManagement = () => {
+  const [data, setData] = useState(mockData);
+
+  const onDragEnd: OnDragEndResponder = (result) => {
+    if (!result.destination) return;
+
+    const { source, destination } = result;
+
+    if (source.droppableId !== destination.droppableId) {
+      const sourceColIndex = data.findIndex((e) => e.id === source.droppableId);
+      const destinationColIndex = data.findIndex(
+        (e) => e.id === destination.droppableId,
+      );
+
+      const sourceCol = data[sourceColIndex];
+      const destinationCol = data[destinationColIndex];
+
+      const sourceTask = [...sourceCol.tasks];
+      const destinationTask = [...destinationCol.tasks];
+
+      const [removed] = sourceTask.splice(source.index, 1);
+      destinationTask.splice(destination.index, 0, removed);
+
+      data[sourceColIndex].tasks = sourceTask;
+      data[destinationColIndex].tasks = destinationTask;
+
+      setData(data);
+    } else {
+      const sourceColIndex = data.findIndex((e) => e.id === source.droppableId);
+
+      const col = data[sourceColIndex];
+      const copiedItems = [...col.tasks];
+      const [removed] = copiedItems.splice(source.index, 1);
+      copiedItems.splice(destination.index, 0, removed);
+
+      data[sourceColIndex].tasks = copiedItems;
+      setData(data);
+    }
+  };
+
   return (
     <>
       {/* 헤더 */}
@@ -155,17 +242,17 @@ const TalentManagement = () => {
       <br />
 
       {/* 채용진행현황 */}
-      <section>
+      <section className="px-14">
         <h4>채용 진행 현황</h4>
         <div className="flex justify-between">
           <p>
             한 눈에 칸반보드에서 인재 현황을 확인해보세요. 인재카드를
             Drag&Drop을 통해 자유롭게 이동해보세요.
           </p>
-          <Link to="status">관리하기</Link>
+          <Link to="/talent-pool/status">관리하기</Link>
         </div>
 
-        <div className="flex">
+        {/* <div className="flex">
           <div>
             지원 접수 <span>0</span>
           </div>
@@ -175,7 +262,51 @@ const TalentManagement = () => {
           <div>
             면접 제안 <span>0</span>
           </div>
-        </div>
+        </div> */}
+        {/* 칸반 */}
+
+        <DragDropContext onDragEnd={onDragEnd}>
+          <div className="mt-8 grid grid-cols-3 gap-16">
+            {data.map((section) => (
+              <Droppable key={section.id} droppableId={section.id}>
+                {(provided) => (
+                  <div {...provided.droppableProps} ref={provided.innerRef}>
+                    <div>{section.title}</div>
+
+                    <div className="flex flex-col gap-4">
+                      {section.tasks.map((task, index) => (
+                        <Draggable
+                          key={task.id}
+                          draggableId={task.id}
+                          index={index}
+                        >
+                          {(provided, snapshot) => (
+                            <div
+                              className={`rounded-md py-4 ${
+                                snapshot.isDragging
+                                  ? "bg-slate-300/80"
+                                  : "bg-slate-300"
+                              }`}
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              style={{
+                                ...provided.draggableProps.style,
+                              }}
+                            >
+                              {task.title}
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </div>
+                  </div>
+                )}
+              </Droppable>
+            ))}
+          </div>
+        </DragDropContext>
       </section>
     </>
   );

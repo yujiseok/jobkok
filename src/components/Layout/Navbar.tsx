@@ -4,13 +4,13 @@ import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [profileIsOpen, setProfileIsOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   return (
     <LayoutGroup>
-      <nav className="min-h-16 relative flex flex-1 items-center justify-between bg-slate-100">
+      <nav className="min-h-16 relative flex items-center justify-between bg-slate-100">
         <div className="mx-12 flex items-center gap-4">
           <Link to="/" className="text-2xl">
-            <p>Jobkok</p>
+            <h1>Jobkok</h1>
           </Link>
           <ul className="flex cursor-pointer gap-8">
             {NavItems.map((item) =>
@@ -48,7 +48,7 @@ const Navbar = () => {
           </ul>
         </div>
         <div
-          onClick={() => setProfileIsOpen(!profileIsOpen)}
+          onClick={() => setIsProfileOpen(!isProfileOpen)}
           className="avatar mx-12 flex cursor-pointer items-center gap-2"
         >
           <div className="relative h-16 overflow-hidden rounded-full">
@@ -56,7 +56,7 @@ const Navbar = () => {
           </div>
           <p>
             잡콕 미술학원
-            {profileIsOpen ? (
+            {isProfileOpen ? (
               <ul className="absolute mt-6 rounded-md bg-base-100 p-2 shadow">
                 <li>
                   <Link to="/change-user-info">기업 정보 변경</Link>

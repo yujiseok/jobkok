@@ -8,7 +8,7 @@ interface IAuthForm {
   name: string;
   tel: string;
   email: string;
-  number: number;
+  authCode: string;
 }
 
 const ApplicantAuth = () => {
@@ -27,29 +27,33 @@ const ApplicantAuth = () => {
     if (watch().email === "") {
       confirm("이메일을 입력해주세요");
     } else {
+      // 이메일 중복확인 API, 성공이면 이하
       setToggle(!isToggled);
+      //// 이메일 인증 API
       confirm("이메일이 전송됐습니다. 메일함을 확인해주세요.");
-      // 이메일 인증 API
+      // 실패면 확인창('이미 지원을 완료한 지원자입니다. 중복지원이 불가합니다.')
     }
   };
 
   // 인증완료 버튼
   const handelConfirmCode = () => {
-    // if (이메일 인증 api 반환값이 성공) 이면
-    setToggle(!isToggled);
+    // 이메일 인증 api 반환값이 성공이고 아래 조건이면
+    if (watch().authCode !== "") {
+      setToggle(!isToggled);
+    }
     // 실패면
     // confirm("올바른 인증코드를 입력해주세요")
   };
 
   // 폼 제출
   const onSubmit = (data: IAuthForm) => {
-    console.log(data);
-  };
-
-  //지원서 작성 버튼 클릭시
-  const handleSubmitBtn = () => {
-    navigate("/applicant/application");
-    // 이메일 중복확인 api
+    if (watch().authCode !== "") {
+      //데이터 지원서로 가져와서, 한꺼번에 등록 api 호출해야함
+      console.log(data);
+      navigate("/applicant/application");
+    } else {
+      setToggle(true);
+    }
   };
 
   return (
@@ -135,13 +139,13 @@ const ApplicantAuth = () => {
             {errors.email && <p>{errors.email.message}</p>}
           </div>
           {isToggled ? (
-            <>
+            <div>
               <label>인증번호</label>
               <input
                 type="text"
                 maxLength={6}
                 placeholder="인증번호를 입력해주세요."
-                {...register("number", {
+                {...register("authCode", {
                   required: {
                     value: true,
                     message: "숫자 6자리를 입력해주세요",
@@ -156,11 +160,11 @@ const ApplicantAuth = () => {
                   },
                 })}
               />
-              {errors.number && <p>{errors.number.message}</p>}
+              {errors.authCode && <p>{errors.authCode.message}</p>}
               <button type="button" onClick={handelConfirmCode}>
                 완료
               </button>
-            </>
+            </div>
           ) : null}
           <input
             type="submit"

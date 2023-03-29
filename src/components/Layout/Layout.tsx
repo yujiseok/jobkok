@@ -1,14 +1,15 @@
-import { Outlet } from "react-router-dom";
-import Aside from "./Aside";
+import { Outlet, ScrollRestoration } from "react-router-dom";
+import Navbar from "./Navbar";
 
 const Layout = () => {
   return (
-    <div className="flex">
-      <Aside />
-      <main className="flex-1">
+    <>
+      <Navbar />
+      <main>
         <Outlet />
       </main>
-    </div>
+      <ScrollRestoration />
+    </>
   );
 };
 export default Layout;

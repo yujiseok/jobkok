@@ -21,7 +21,7 @@ const Notification = () => {
       <h1 className="text-3xl">알림 센터</h1>
       <p>어쩌궁 저쩌궁</p>
       <div className="mx-16 flex rounded-md border-2 border-solid bg-base-100 p-1 shadow">
-        <div className="w-1/2">
+        <div className="flex-1">
           <select className="select w-full max-w-xs">
             <option disabled>단계를 선택하세요</option>
             <option>면접 진행</option>
@@ -48,7 +48,7 @@ const Notification = () => {
                   </th>
                   <td>김잡콕</td>
                   <td>
-                    <div className="badge-secondary badge">면접 진행</div>
+                    <div className="badge ">면접 진행</div>
                   </td>
                   <td>2023.03.29</td>
                 </tr>
@@ -61,7 +61,7 @@ const Notification = () => {
                   </th>
                   <td>김잡콕</td>
                   <td>
-                    <div className="badge-secondary badge">면접 진행</div>
+                    <div className="badge">면접 진행</div>
                   </td>
                   <td>2023.03.29</td>
                 </tr>
@@ -74,7 +74,7 @@ const Notification = () => {
                   </th>
                   <td>김잡콕</td>
                   <td>
-                    <div className="badge-secondary badge">면접 진행</div>
+                    <div className="badge">면접 진행</div>
                   </td>
                   <td>2023.03.29</td>
                 </tr>
@@ -82,7 +82,7 @@ const Notification = () => {
             </table>
           </div>
         </div>
-        <div className="mx-4 my-6 w-1/2">
+        <div className="mx-4 my-6 flex-1">
           <div className="my-6 flex  items-center justify-between">
             <h2 className="text-xl font-bold">알림 보내기</h2>
             <select className="select w-full max-w-xs bg-blue-100 text-blue-600">

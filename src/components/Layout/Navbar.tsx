@@ -34,7 +34,7 @@ const Navbar = () => {
                   {isOpen ? (
                     <ul className="absolute mt-6 rounded-md bg-base-100 p-2 shadow">
                       <li>
-                        <Link to="/talent-pool/status">채용 진행 현황</Link>
+                        <Link to="/talent/status">채용 진행 현황</Link>
                       </li>
                     </ul>
                   ) : null}
@@ -73,8 +73,8 @@ const Navbar = () => {
 export default Navbar;
 
 const NavItems = [
-  { name: "인재 관리", href: "/talent-pool/management" },
-  { name: "탈락 인재 보관함", href: "/talent-pool/fail" },
+  { name: "인재 관리", href: "/talent/management" },
+  { name: "탈락 인재 보관함", href: "/talent/fail" },
   { name: "폼 링크 관리", href: "/form" },
   { name: "알림 센터", href: "/notification" },
 ];

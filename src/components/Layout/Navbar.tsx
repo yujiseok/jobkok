@@ -32,7 +32,7 @@ const Navbar = () => {
                       </svg>
                     </Link>
                     {isOpen ? (
-                      <ul className="absolute mt-6 rounded-md bg-base-100 p-2 shadow">
+                      <ul className="absolute z-20 mt-6 rounded-md bg-base-100 p-2 shadow">
                         <li>
                           <Link to="/talent/status">채용 진행 현황</Link>
                         </li>

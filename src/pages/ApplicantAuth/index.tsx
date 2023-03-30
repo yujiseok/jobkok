@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import GetFormInfo from "@components/Applicant/getFormInfo";
+import GetFormInfo from "@components/Applicant/GetFormInfo";
 // import { applicantSubmit, emailAuth, submitApply } from "@/api/applicant";
 
 interface IAuthForm {

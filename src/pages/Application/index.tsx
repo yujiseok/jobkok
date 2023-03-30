@@ -6,8 +6,8 @@ import {
   LANGUAGELEVEL_OPTION,
   MILITARY_OPTION,
 } from "@/constants/applicant";
-import FormDetail from "@components/Applicant/getFormInfo";
-import PolicyTerms from "@components/Applicant/policyTerms";
+import FormDetail from "@components/Applicant/GetFormInfo";
+import PolicyTerms from "@components/Applicant/PolicyTerms";
 
 const Application = () => {
   const navigate = useNavigate();

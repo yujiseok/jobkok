@@ -190,14 +190,14 @@ const ApplicantAuth = () => {
               )}
             </div>
           )}
-          <input
-            className="rounded-md bg-blue-500 py-3 px-5 text-white"
-            type="submit"
-            value="다음"
-            onSubmit={handleSubmit(onSubmit)}
-            disabled={isSubmitting}
-          />
         </form>
+        <button
+          className="rounded-md bg-blue-500 py-3 px-5 text-white"
+          type="submit"
+          value="다음"
+          onSubmit={handleSubmit(onSubmit)}
+          disabled={isSubmitting}
+        />
       </section>
     </div>
   );

@@ -18,7 +18,7 @@ const Application = () => {
   };
 
   return (
-    <div className="my-10 mx-auto w-8/12 flex-col">
+    <div className="container mx-auto max-w-[768px] flex-col py-10">
       <FormDetail />
       <form className="mb-10 rounded-md rounded-lg border border-solid p-10">
         <h2 className="mb-5 text-2xl font-bold">지원자 추가정보</h2>

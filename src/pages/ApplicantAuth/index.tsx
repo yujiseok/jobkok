@@ -57,15 +57,17 @@ const ApplicantAuth = () => {
   };
 
   return (
-    <div className="mx-auto flex-col content-center">
+    <div className="container mx-auto max-w-[768px] py-10">
       <GetFormInfo />
-      <section>
-        <h2 className="text-l mb-5 font-bold">지원자 기본 정보</h2>
+      <section className="rounded-md border border-solid p-10">
+        <h2 className="mb-10 text-2xl font-bold">지원자 기본 정보</h2>
         <form className="flex-col" onSubmit={handleSubmit(onSubmit)}>
-          <div>
-            <label htmlFor="name">이름(필수)</label>
+          <div className="mb-5">
+            <label htmlFor="name">
+              이름 <span className="text-sm text-red-500">필수</span>
+            </label>
             <input
-              className="ml-3 border-2 border-solid border-gray-600"
+              className="ml-3 rounded-md border border-solid p-1"
               type="text"
               id="name"
               placeholder="이름을 입력해주세요"
@@ -88,12 +90,18 @@ const ApplicantAuth = () => {
                 },
               })}
             />
-            {errors.name && <p>{errors.name.message}</p>}
+            {errors.name && (
+              <p className="mt-2 text-sm text-rose-500">
+                {errors.name.message}
+              </p>
+            )}
           </div>
-          <div>
-            <label htmlFor="tel">전화번호(필수)</label>
+          <div className="mb-5">
+            <label htmlFor="tel">
+              전화번호 <span className="text-sm text-red-500">필수</span>
+            </label>
             <input
-              className="ml-3 border-2 border-solid border-gray-600"
+              className="ml-3 rounded-md border border-solid p-1"
               type="tel"
               id="tel"
               placeholder="010-1234-5678"
@@ -108,12 +116,16 @@ const ApplicantAuth = () => {
                 },
               })}
             />
-            {errors.tel && <p>{errors.tel.message}</p>}
+            {errors.tel && (
+              <p className="mt-2 text-sm text-rose-500">{errors.tel.message}</p>
+            )}
           </div>
-          <div>
-            <label htmlFor="email">이메일(필수)</label>
+          <div className="mb-5">
+            <label htmlFor="email">
+              이메일 <span className="text-sm text-red-500">필수</span>
+            </label>
             <input
-              className="ml-3 border-2 border-solid border-gray-600"
+              className="mr-5 ml-3 rounded-md border border-solid p-1"
               type="email"
               id="email"
               placeholder="이메일을 입력해주세요."
@@ -132,17 +144,22 @@ const ApplicantAuth = () => {
             <button
               type="button"
               onClick={handleGetCodeBtn}
-              className="bg-slate-300"
+              className="rounded-md bg-blue-500 py-1 px-2 text-white"
             >
               인증받기
             </button>
-            {errors.email && <p>{errors.email.message}</p>}
+            {errors.email && (
+              <p className="mt-2 text-sm text-rose-500">
+                {errors.email.message}
+              </p>
+            )}
           </div>
           {isToggled ? (
-            <div>
+            <div className="mb-5">
               <label>인증번호</label>
               <input
                 type="text"
+                className="mr-5 ml-3 rounded-md border border-solid p-1"
                 maxLength={6}
                 placeholder="인증번호를 입력해주세요."
                 {...register("authCode", {
@@ -160,16 +177,24 @@ const ApplicantAuth = () => {
                   },
                 })}
               />
-              {errors.authCode && <p>{errors.authCode.message}</p>}
-              <button type="button" onClick={handelConfirmCode}>
+              <button
+                type="button"
+                className="rounded-md bg-blue-500 py-1 px-2 text-white"
+                onClick={handelConfirmCode}
+              >
                 완료
               </button>
+              {errors.authCode && (
+                <p className="mt-2 text-sm text-rose-500">
+                  {errors.authCode.message}
+                </p>
+              )}
             </div>
           ) : null}
           <input
             type="submit"
-            className="bg-slate-300"
-            value="지원서 작성"
+            className="rounded-md bg-blue-500 py-3 px-5 text-white"
+            value="다음"
             disabled={isSubmitting}
           />
         </form>

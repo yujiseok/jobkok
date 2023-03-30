@@ -52,6 +52,10 @@ const mockData = [
   },
 ];
 
+const numberArr = Array(9)
+  .fill(1)
+  .map((v, i) => i + 1);
+
 const TalentManagement = () => {
   const [data, onDragEnd] = useDnD(mockData);
 
@@ -124,33 +128,13 @@ const TalentManagement = () => {
               slidesPerGroup={3}
               className="flex-1"
             >
-              <SwiperSlide className="h-48 rounded-xl bg-slate-300 shadow-job">
-                Slide 1
-              </SwiperSlide>
-              <SwiperSlide className="h-48 rounded-xl bg-slate-300 shadow-job">
-                Slide 2
-              </SwiperSlide>
-              <SwiperSlide className="h-48 rounded-xl bg-slate-300 shadow-job">
-                Slide 3
-              </SwiperSlide>
-              <SwiperSlide className="h-48 rounded-xl bg-slate-300 shadow-job">
-                Slide 4
-              </SwiperSlide>
-              <SwiperSlide className="h-48 rounded-xl bg-slate-300 shadow-job">
-                Slide 5
-              </SwiperSlide>
-              <SwiperSlide className="h-48 rounded-xl bg-slate-300 shadow-job">
-                Slide 6
-              </SwiperSlide>
-              <SwiperSlide className="h-48 rounded-xl bg-slate-300 shadow-job">
-                Slide 7
-              </SwiperSlide>
-              <SwiperSlide className="h-48 rounded-xl bg-slate-300 shadow-job">
-                Slide 8
-              </SwiperSlide>
-              <SwiperSlide className="h-48 rounded-xl bg-slate-300 shadow-job">
-                Slide 9
-              </SwiperSlide>
+              {numberArr.map((value) => (
+                <SwiperSlide key={value}>
+                  <div className="h-48 rounded-xl bg-slate-300 shadow-job">
+                    Slide {value}
+                  </div>
+                </SwiperSlide>
+              ))}
             </Swiper>
           </div>
           <div className="relative flex gap-4">
@@ -168,33 +152,13 @@ const TalentManagement = () => {
               slidesPerGroup={3}
               className="flex-1"
             >
-              <SwiperSlide className="h-48 rounded-xl bg-slate-300 shadow-job">
-                Slide 1
-              </SwiperSlide>
-              <SwiperSlide className="h-48 rounded-xl bg-slate-300 shadow-job">
-                Slide 2
-              </SwiperSlide>
-              <SwiperSlide className="h-48 rounded-xl bg-slate-300 shadow-job">
-                Slide 3
-              </SwiperSlide>
-              <SwiperSlide className="h-48 rounded-xl bg-slate-300 shadow-job">
-                Slide 4
-              </SwiperSlide>
-              <SwiperSlide className="h-48 rounded-xl bg-slate-300 shadow-job">
-                Slide 5
-              </SwiperSlide>
-              <SwiperSlide className="h-48 rounded-xl bg-slate-300 shadow-job">
-                Slide 6
-              </SwiperSlide>
-              <SwiperSlide className="h-48 rounded-xl bg-slate-300 shadow-job">
-                Slide 7
-              </SwiperSlide>
-              <SwiperSlide className="h-48 rounded-xl bg-slate-300 shadow-job">
-                Slide 8
-              </SwiperSlide>
-              <SwiperSlide className="h-48 rounded-xl bg-slate-300 shadow-job">
-                Slide 9
-              </SwiperSlide>
+              {numberArr.map((value) => (
+                <SwiperSlide key={value}>
+                  <div className="h-48 rounded-xl bg-slate-300 shadow-job">
+                    Slide {value}
+                  </div>
+                </SwiperSlide>
+              ))}
             </Swiper>
           </div>
         </div>
@@ -251,7 +215,7 @@ const TalentManagement = () => {
                         >
                           {(provided, snapshot) => (
                             <div
-                              className={`rounded-md py-4 ${
+                              className={`rounded-md py-12 ${
                                 snapshot.isDragging
                                   ? "bg-slate-300/80"
                                   : "bg-slate-300"

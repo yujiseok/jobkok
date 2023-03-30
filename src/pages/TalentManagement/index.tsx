@@ -1,11 +1,11 @@
-import { useState } from "react";
-import type { OnDragEndResponder } from "react-beautiful-dnd";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { Link } from "react-router-dom";
 import { Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/pagination";
 import "./index.css";
+import useDnD from "@/lib/hooks/useDnD";
+import Heading from "@components/Talent/Heading";
 
 const mockData = [
   {
@@ -52,52 +52,16 @@ const mockData = [
   },
 ];
 
+const numberArr = Array(9)
+  .fill(1)
+  .map((v, i) => i + 1);
+
 const TalentManagement = () => {
-  const [data, setData] = useState(mockData);
-
-  const onDragEnd: OnDragEndResponder = (result) => {
-    if (!result.destination) return;
-
-    const { source, destination } = result;
-
-    if (source.droppableId !== destination.droppableId) {
-      const sourceColIndex = data.findIndex((e) => e.id === source.droppableId);
-      const destinationColIndex = data.findIndex(
-        (e) => e.id === destination.droppableId,
-      );
-
-      const sourceCol = data[sourceColIndex];
-      const destinationCol = data[destinationColIndex];
-
-      const sourceTask = [...sourceCol.tasks];
-      const destinationTask = [...destinationCol.tasks];
-
-      const [removed] = sourceTask.splice(source.index, 1);
-      destinationTask.splice(destination.index, 0, removed);
-
-      data[sourceColIndex].tasks = sourceTask;
-      data[destinationColIndex].tasks = destinationTask;
-
-      setData(data);
-    } else {
-      const sourceColIndex = data.findIndex((e) => e.id === source.droppableId);
-
-      const col = data[sourceColIndex];
-      const copiedItems = [...col.tasks];
-      const [removed] = copiedItems.splice(source.index, 1);
-      copiedItems.splice(destination.index, 0, removed);
-
-      data[sourceColIndex].tasks = copiedItems;
-      setData(data);
-    }
-  };
+  const [data, onDragEnd] = useDnD(mockData);
 
   return (
     <>
-      {/* 헤더 */}
-      <h2>인재 관리</h2>
-
-      <section className="flex flex-col gap-8 bg-red-100 px-14 py-12">
+      <section className="absolute top-16 left-0 flex w-full flex-col gap-8 bg-red-100 py-12">
         <div className="flex items-center justify-between ">
           <select className="appearance-none outline-none">
             <option selected>스마트스토어 상세페이지 디자이너 지원서 폼</option>
@@ -141,16 +105,16 @@ const TalentManagement = () => {
         </div>
       </section>
 
-      <section className="px-14">
-        <div className="mt-20 mb-12">
-          <h4>
+      <section className="mt-96">
+        <div>
+          <Heading className="mb-12">
             <span>📌</span>잡콕에서 추천하는 엄선한 인재들 입니다!
-          </h4>
+          </Heading>
         </div>
 
-        <div className="flex flex-col gap-4">
-          <div className="relative flex w-[1200px] gap-4">
-            <div className="w-72 rounded-xl bg-slate-300 shadow-job">
+        <div className="flex flex-col gap-8">
+          <div className="relative flex  gap-4">
+            <div className="flex-[0.3] rounded-xl bg-slate-300 shadow-job">
               아아아아
             </div>
             <Swiper
@@ -162,39 +126,19 @@ const TalentManagement = () => {
               speed={1000}
               modules={[Pagination]}
               slidesPerGroup={3}
-              className="w-4/6"
+              className="flex-1"
             >
-              <SwiperSlide className="h-48 rounded-xl bg-slate-300 shadow-job">
-                Slide 1
-              </SwiperSlide>
-              <SwiperSlide className="h-48 rounded-xl bg-slate-300 shadow-job">
-                Slide 2
-              </SwiperSlide>
-              <SwiperSlide className="h-48 rounded-xl bg-slate-300 shadow-job">
-                Slide 3
-              </SwiperSlide>
-              <SwiperSlide className="h-48 rounded-xl bg-slate-300 shadow-job">
-                Slide 4
-              </SwiperSlide>
-              <SwiperSlide className="h-48 rounded-xl bg-slate-300 shadow-job">
-                Slide 5
-              </SwiperSlide>
-              <SwiperSlide className="h-48 rounded-xl bg-slate-300 shadow-job">
-                Slide 6
-              </SwiperSlide>
-              <SwiperSlide className="h-48 rounded-xl bg-slate-300 shadow-job">
-                Slide 7
-              </SwiperSlide>
-              <SwiperSlide className="h-48 rounded-xl bg-slate-300 shadow-job">
-                Slide 8
-              </SwiperSlide>
-              <SwiperSlide className="h-48 rounded-xl bg-slate-300 shadow-job">
-                Slide 9
-              </SwiperSlide>
+              {numberArr.map((value) => (
+                <SwiperSlide key={value}>
+                  <div className="h-48 rounded-xl bg-slate-300 shadow-job">
+                    Slide {value}
+                  </div>
+                </SwiperSlide>
+              ))}
             </Swiper>
           </div>
-          <div className="relative flex w-[1200px] gap-4">
-            <div className="w-72 rounded-xl bg-slate-300 shadow-job">
+          <div className="relative flex gap-4">
+            <div className="flex-[0.3] rounded-xl bg-slate-300 shadow-job">
               아아아아
             </div>
             <Swiper
@@ -206,35 +150,15 @@ const TalentManagement = () => {
               speed={1000}
               modules={[Pagination]}
               slidesPerGroup={3}
-              className="w-4/6"
+              className="flex-1"
             >
-              <SwiperSlide className="h-48 rounded-xl bg-slate-300 shadow-job">
-                Slide 1
-              </SwiperSlide>
-              <SwiperSlide className="h-48 rounded-xl bg-slate-300 shadow-job">
-                Slide 2
-              </SwiperSlide>
-              <SwiperSlide className="h-48 rounded-xl bg-slate-300 shadow-job">
-                Slide 3
-              </SwiperSlide>
-              <SwiperSlide className="h-48 rounded-xl bg-slate-300 shadow-job">
-                Slide 4
-              </SwiperSlide>
-              <SwiperSlide className="h-48 rounded-xl bg-slate-300 shadow-job">
-                Slide 5
-              </SwiperSlide>
-              <SwiperSlide className="h-48 rounded-xl bg-slate-300 shadow-job">
-                Slide 6
-              </SwiperSlide>
-              <SwiperSlide className="h-48 rounded-xl bg-slate-300 shadow-job">
-                Slide 7
-              </SwiperSlide>
-              <SwiperSlide className="h-48 rounded-xl bg-slate-300 shadow-job">
-                Slide 8
-              </SwiperSlide>
-              <SwiperSlide className="h-48 rounded-xl bg-slate-300 shadow-job">
-                Slide 9
-              </SwiperSlide>
+              {numberArr.map((value) => (
+                <SwiperSlide key={value}>
+                  <div className="h-48 rounded-xl bg-slate-300 shadow-job">
+                    Slide {value}
+                  </div>
+                </SwiperSlide>
+              ))}
             </Swiper>
           </div>
         </div>
@@ -242,8 +166,8 @@ const TalentManagement = () => {
       <br />
 
       {/* 채용진행현황 */}
-      <section className="px-14">
-        <h4>채용 진행 현황</h4>
+      <section>
+        <Heading className="mb-6">채용 진행 현황</Heading>
         <div className="flex justify-between">
           <p>
             한 눈에 칸반보드에서 인재 현황을 확인해보세요. 인재카드를
@@ -270,12 +194,19 @@ const TalentManagement = () => {
             {data.map((section) => (
               <Droppable key={section.id} droppableId={section.id}>
                 {(provided) => (
-                  <div {...provided.droppableProps} ref={provided.innerRef}>
+                  <div
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
+                    className="bg-slate-400 p-4"
+                  >
                     <div>
                       {section.title} <span>{section.tasks.length}</span>
                     </div>
 
-                    <div className="flex flex-col gap-4">
+                    <div
+                      className="flex max-h-40 flex-col gap-4 overflow-y-auto overflow-x-hidden bg-amber-300 p-4 
+                    "
+                    >
                       {section.tasks.map((task, index) => (
                         <Draggable
                           key={task.id}
@@ -284,7 +215,7 @@ const TalentManagement = () => {
                         >
                           {(provided, snapshot) => (
                             <div
-                              className={`rounded-md py-4 ${
+                              className={`rounded-md py-12 ${
                                 snapshot.isDragging
                                   ? "bg-slate-300/80"
                                   : "bg-slate-300"
@@ -296,7 +227,7 @@ const TalentManagement = () => {
                                 ...provided.draggableProps.style,
                               }}
                             >
-                              {task.title}{" "}
+                              {task.title}
                               <span>
                                 {
                                   data[
@@ -322,4 +253,5 @@ const TalentManagement = () => {
     </>
   );
 };
+
 export default TalentManagement;

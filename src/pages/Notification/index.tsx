@@ -1,15 +1,7 @@
-import type { ChangeEvent } from "react";
-import { useState } from "react";
+import useInputLength from "@/lib/hooks/useInputLength";
 
 const Notification = () => {
-  const [inputCount, setInputCount] = useState(0);
-
-  const handleInput = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    if (e.target.value.length > MAX_LENGTH) {
-      e.target.value = e.target.value.slice(0, MAX_LENGTH);
-    }
-    setInputCount(e.target.value.length);
-  };
+  const [inputCount, handleInput] = useInputLength(MAX_LENGTH);
   return (
     <>
       <div className="min-h-16">
@@ -122,4 +114,4 @@ const Notification = () => {
 };
 export default Notification;
 
-const MAX_LENGTH = 1000;
+const MAX_LENGTH = 10;

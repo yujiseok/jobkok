@@ -235,7 +235,8 @@ swiper-container:not(.swiper-watch-progress) .swiper-lazy-preloader,
 }
 
 .swiper-pagination {
-  top: -25px !important;
+  top: -20px !important;
   display: flex;
   justify-content: flex-end;
+  z-index: 1 !important;
 }

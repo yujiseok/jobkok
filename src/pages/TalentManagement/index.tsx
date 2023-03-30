@@ -94,10 +94,7 @@ const TalentManagement = () => {
 
   return (
     <>
-      {/* 헤더 */}
-      <h2>인재 관리</h2>
-
-      <section className="flex flex-col gap-8 bg-red-100 px-14 py-12">
+      <section className="absolute top-16 left-0 flex w-full flex-col gap-8 bg-red-100 py-12">
         <div className="flex items-center justify-between ">
           <select className="appearance-none outline-none">
             <option selected>스마트스토어 상세페이지 디자이너 지원서 폼</option>
@@ -141,16 +138,16 @@ const TalentManagement = () => {
         </div>
       </section>
 
-      <section className="px-14">
-        <div className="mt-20 mb-12">
+      <section className="mt-96">
+        <div className="mb-12">
           <h4>
             <span>📌</span>잡콕에서 추천하는 엄선한 인재들 입니다!
           </h4>
         </div>
 
-        <div className="flex flex-col gap-4">
-          <div className="relative flex w-[1200px] gap-4">
-            <div className="w-72 rounded-xl bg-slate-300 shadow-job">
+        <div className="flex flex-col gap-8">
+          <div className="relative flex  gap-4">
+            <div className="flex-[0.3] rounded-xl bg-slate-300 shadow-job">
               아아아아
             </div>
             <Swiper
@@ -162,7 +159,7 @@ const TalentManagement = () => {
               speed={1000}
               modules={[Pagination]}
               slidesPerGroup={3}
-              className="w-4/6"
+              className="flex-1"
             >
               <SwiperSlide className="h-48 rounded-xl bg-slate-300 shadow-job">
                 Slide 1
@@ -193,8 +190,8 @@ const TalentManagement = () => {
               </SwiperSlide>
             </Swiper>
           </div>
-          <div className="relative flex w-[1200px] gap-4">
-            <div className="w-72 rounded-xl bg-slate-300 shadow-job">
+          <div className="relative flex gap-4">
+            <div className="flex-[0.3] rounded-xl bg-slate-300 shadow-job">
               아아아아
             </div>
             <Swiper
@@ -206,7 +203,7 @@ const TalentManagement = () => {
               speed={1000}
               modules={[Pagination]}
               slidesPerGroup={3}
-              className="w-4/6"
+              className="flex-1"
             >
               <SwiperSlide className="h-48 rounded-xl bg-slate-300 shadow-job">
                 Slide 1
@@ -242,7 +239,7 @@ const TalentManagement = () => {
       <br />
 
       {/* 채용진행현황 */}
-      <section className="px-14">
+      <section>
         <h4>채용 진행 현황</h4>
         <div className="flex justify-between">
           <p>
@@ -270,12 +267,19 @@ const TalentManagement = () => {
             {data.map((section) => (
               <Droppable key={section.id} droppableId={section.id}>
                 {(provided) => (
-                  <div {...provided.droppableProps} ref={provided.innerRef}>
+                  <div
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
+                    className="bg-slate-400 p-4"
+                  >
                     <div>
                       {section.title} <span>{section.tasks.length}</span>
                     </div>
 
-                    <div className="flex flex-col gap-4">
+                    <div
+                      className="flex max-h-40 flex-col gap-4 overflow-y-auto overflow-x-hidden bg-amber-300 px-4 
+                    "
+                    >
                       {section.tasks.map((task, index) => (
                         <Draggable
                           key={task.id}
@@ -322,4 +326,5 @@ const TalentManagement = () => {
     </>
   );
 };
+
 export default TalentManagement;

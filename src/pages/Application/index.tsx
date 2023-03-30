@@ -20,12 +20,12 @@ const Application = () => {
   return (
     <div className="my-10 mx-auto w-8/12 flex-col">
       <FormDetail />
-      <section className="mb-10 rounded-md rounded-lg border border-solid p-10">
+      <form className="mb-10 rounded-md rounded-lg border border-solid p-10">
         <h2 className="mb-5 text-2xl font-bold">지원자 추가정보</h2>
-        <h3 className="mb-5 text-xl font-bold">
-          경력 <span className="text-sm text-red-500">필수</span>
-        </h3>
-        <form className="mb-20">
+        <fieldset className="mb-20">
+          <legend className="mb-5 text-xl font-bold">
+            경력 <span className="text-sm text-red-500">필수</span>
+          </legend>
           <div>
             <label className="mr-5" htmlFor="careerName">
               일한곳
@@ -53,11 +53,11 @@ const Application = () => {
               placeholder="어떤 일을 하셨는지 설명해주세요."
             ></textarea>
           </div>
-        </form>
-        <h3 className="mb-5 text-xl font-bold">
-          자기소개 <span className="text-sm text-red-500">필수</span>
-        </h3>
-        <form className="mb-20">
+        </fieldset>
+        <fieldset className="mb-20">
+          <legend className="mb-5 text-xl font-bold">
+            자기소개 <span className="text-sm text-red-500">필수</span>
+          </legend>
           <div>
             <label className="mr-5" htmlFor="resumeSubject">
               주제
@@ -76,9 +76,9 @@ const Application = () => {
           <div>
             <span>문항 답변 글자수 : 1000자</span>
           </div>
-        </form>
-        <h3 className="mb-5 text-xl font-bold">최종학력</h3>
-        <form className="mb-20">
+        </fieldset>
+        <fieldset className="mb-20">
+          <legend className="mb-5 text-xl font-bold">최종학력</legend>
           <div>
             <label className="mr-5" htmlFor="eduName">
               학교명
@@ -127,9 +127,9 @@ const Application = () => {
               })}
             </select>
           </div>
-        </form>
-        <h3 className="mb-5 text-xl font-bold">자격증</h3>
-        <form className="mb-20">
+        </fieldset>
+        <fieldset className="mb-20">
+          <legend className="mb-5 text-xl font-bold">자격증</legend>
           <div>
             <label className="mr-5" htmlFor="certificateName">
               자격증 이름
@@ -156,9 +156,9 @@ const Application = () => {
             </label>
             <input type="date" id="certificateDate" />
           </div>
-        </form>
-        <h3 className="mb-5 text-xl font-bold">취업우대사항</h3>
-        <form className="mb-20">
+        </fieldset>
+        <fieldset className="mb-20">
+          <legend className="mb-5 text-xl font-bold">취업우대사항</legend>
           <div>
             <label className="mr-5" htmlFor="disability">
               장애여부
@@ -187,9 +187,9 @@ const Application = () => {
               })}
             </select>
           </div>
-        </form>
-        <h3 className="mb-5 text-xl font-bold">기타 이력서</h3>
-        <form className="mb-20">
+        </fieldset>
+        <fieldset className="mb-20">
+          <legend className="mb-5 text-xl font-bold">기타 이력서</legend>
           <div>
             <label className="mr-5" htmlFor="portfolio">
               포트폴리오
@@ -206,9 +206,10 @@ const Application = () => {
             </label>
             <input type="url" id="resume" placeholder="링크를 입력해주세요." />
           </div>
-        </form>
-        <h3 className="mb-5 text-xl font-bold">어학능력</h3>
-        <form className="mb-20">
+        </fieldset>
+
+        <fieldset className="mb-20">
+          <legend className="mb-5 text-xl font-bold">어학능력</legend>
           <div>
             <label className="mr-5" htmlFor="languageName">
               언어
@@ -229,9 +230,10 @@ const Application = () => {
               })}
             </select>
           </div>
-        </form>
-        <h3 className="mb-5 text-xl font-bold">수상내역</h3>
-        <form className="mb-20">
+        </fieldset>
+
+        <fieldset className="mb-20">
+          <legend className="mb-5 text-xl font-bold">수상내역</legend>
           <div>
             <label className="mr-5" htmlFor="awardsName">
               수상명
@@ -258,9 +260,12 @@ const Application = () => {
             </label>
             <input type="date" id="awardsDate" />
           </div>
-        </form>
-        <h3 className="mb-5 text-xl font-bold">나의 성격 키워드(5개 필수)</h3>
-        <form>
+        </fieldset>
+
+        <fieldset>
+          <legend className="mb-5 text-xl font-bold">
+            나의 성격 키워드(5개 필수)
+          </legend>
           {KEYWORDS_CHECK.map((element) => {
             return (
               <span key={element} className="mr-10">
@@ -269,8 +274,8 @@ const Application = () => {
               </span>
             );
           })}
-        </form>
-      </section>
+        </fieldset>
+      </form>
       <PolicyTerms />
       <button
         className="mt-10 mr-10 rounded-md bg-blue-500 py-3 px-5 text-white"

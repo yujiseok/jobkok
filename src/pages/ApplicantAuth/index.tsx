@@ -17,7 +17,7 @@ const schema = z.object({
     .string()
     .nonempty("전화번호를 입력해주세요.")
     .regex(
-      /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/,
+      /^01([0|1|6|7|8|9])-([0-9]{4})-([0-9]{4})$/,
       "전화번호가 올바르지 않습니다.",
     ),
   email: z
@@ -28,10 +28,7 @@ const schema = z.object({
       /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i,
       "이메일 형식이 올바르지 않습니다.",
     ),
-  authCode: z.union([
-    z.string().min(6, "인증코드 6자리를 입력해주세요"),
-    z.undefined(),
-  ]),
+  authCode: z.string().min(6, "인증코드 6자리를 입력해주세요").optional(),
 });
 
 type IAuthForm = z.infer<typeof schema>;
@@ -39,63 +36,51 @@ type IAuthForm = z.infer<typeof schema>;
 const ApplicantAuth = () => {
   const navigate = useNavigate();
   const [isToggled, setToggle] = useState(false);
-  const [isDone, setDone] = useState(false);
+  const [isDone, setIsDone] = useState(false);
   const {
     register,
-    watch,
     handleSubmit,
     setFocus,
     formState: { errors, isSubmitting },
   } = useForm<IAuthForm>({
-    mode: "onChange",
     resolver: zodResolver(schema),
   });
 
-  // 인증받기 버튼
+  // 인증받기 토글 : 유효성 통과, 중복없음, 인증미완료시에만 열림
   const handleGetCodeBtn = async () => {
     if (errors.email) {
       setFocus("email");
+      // 중복없음 분기 추가 필요 : 중복시 confirm("이미 지원됐습니다. 중복지원이 불가합니다.")
     } else if (isDone) {
-      confirm("인증이 완료됐습니다.");
+      confirm("이미 이메일 인증이 완료됐습니다.");
     } else {
-      try {
-        // 이메일 중복확인 API, 성공이면 이하
-        setToggle(true);
-        //// 이메일 인증 API
-        confirm("이메일이 전송됐습니다. 메일함을 확인해주세요.");
-      } catch (error) {
-        // 실패면 확인창('이미 지원을 완료한 지원자입니다. 중복지원이 불가합니다.')
-      }
+      setToggle(true);
+      // 이메일 인증 API
+      confirm("이메일이 전송됐습니다. 메일함을 확인해주세요.");
     }
   };
 
   // 인증완료 버튼
   const handelConfirmCode = async () => {
-    if (
-      watch().authCode === undefined ||
-      watch().authCode === "" ||
-      errors.authCode
-    ) {
+    if (errors.authCode) {
       setFocus("authCode");
+      // 이메일 인증 API 성공값 추가 필요 : 실패시 confirm("올바른 인증코드를 입력해주세요")
     } else {
-      // 이메일인증 api 도 성공이면
       setToggle(false);
-      setDone(true);
-      // 실패면
-      // confirm("올바른 인증코드를 입력해주세요")
+      setIsDone(true);
     }
   };
 
-  // 폼 제출
+  // 폼 제출 : 인증됐으면 페이지이동, 안됐으면 인증코드에 focus
   const onSubmit = async (data: IAuthForm) => {
-    if (!isDone) {
-      setToggle(true);
-      setFocus("authCode");
-    } else {
+    if (isDone) {
       //데이터 지원서로 가져와서, 한꺼번에 등록 api 호출해야함
-      //리덕스에 data 저장
+      //리덕스에 data 저장?
       console.log(data);
       navigate("/applicant/application");
+    } else {
+      setToggle(true);
+      setFocus("authCode");
     }
   };
 
@@ -113,14 +98,10 @@ const ApplicantAuth = () => {
               className="ml-3 rounded-md border border-solid p-1"
               type="text"
               id="name"
-              placeholder="이름을 입력해주세요"
+              placeholder="홍길동"
               {...register("name")}
             />
-            {errors.name && (
-              <p className="mt-2 text-sm text-rose-500">
-                {errors.name.message}
-              </p>
-            )}
+            <p className="mt-2 text-sm text-rose-500">{errors.name?.message}</p>
           </div>
           <div className="mb-5">
             <label htmlFor="tel">
@@ -133,9 +114,7 @@ const ApplicantAuth = () => {
               placeholder="010-1234-5678"
               {...register("tel")}
             />
-            {errors.tel && (
-              <p className="mt-2 text-sm text-rose-500">{errors.tel.message}</p>
-            )}
+            <p className="mt-2 text-sm text-rose-500">{errors.tel?.message}</p>
           </div>
           <div className="mb-5">
             <label htmlFor="email">
@@ -145,7 +124,7 @@ const ApplicantAuth = () => {
               className="mr-5 ml-3 rounded-md border border-solid p-1"
               type="email"
               id="email"
-              placeholder="이메일을 입력해주세요."
+              placeholder="user@user.com"
               {...register("email")}
             />
             <button
@@ -155,11 +134,9 @@ const ApplicantAuth = () => {
             >
               인증받기
             </button>
-            {errors.email && (
-              <p className="mt-2 text-sm text-rose-500">
-                {errors.email.message}
-              </p>
-            )}
+            <p className="mt-2 text-sm text-rose-500">
+              {errors.email?.message}
+            </p>
           </div>
           {isToggled && (
             <div className="mb-5">
@@ -183,21 +160,20 @@ const ApplicantAuth = () => {
               >
                 인증완료
               </button>
-              {errors.authCode && (
-                <p className="mt-2 text-sm text-rose-500">
-                  {errors.authCode.message}
-                </p>
-              )}
+              <p className="mt-2 text-sm text-rose-500">
+                {errors.authCode?.message}
+              </p>
             </div>
           )}
         </form>
         <button
           className="rounded-md bg-blue-500 py-3 px-5 text-white"
           type="submit"
-          value="다음"
-          onSubmit={handleSubmit(onSubmit)}
+          onClick={handleSubmit(onSubmit)}
           disabled={isSubmitting}
-        />
+        >
+          다음
+        </button>
       </section>
     </div>
   );

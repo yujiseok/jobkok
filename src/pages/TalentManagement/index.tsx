@@ -257,8 +257,8 @@ const TalentManagement = () => {
 
         <DragDropContext onDragEnd={onDragEnd}>
           <div className="mt-8 grid grid-cols-3 gap-6">
-            {data.map(({ id, title, tasks }) => (
-              <Droppable key={id} droppableId={id}>
+            {data.map((section) => (
+              <Droppable key={section.id} droppableId={section.id}>
                 {(provided) => (
                   <div
                     {...provided.droppableProps}
@@ -270,14 +270,18 @@ const TalentManagement = () => {
                     "
                     >
                       <div className="flex items-center py-5">
-                        <span className="SubHead1Semibold">{title}</span>{" "}
-                        <NumberBadge id={id}>{tasks.length}</NumberBadge>
+                        <span className="SubHead1Semibold">
+                          {section.title}
+                        </span>{" "}
+                        <NumberBadge id={section.id}>
+                          {section.tasks.length}
+                        </NumberBadge>
                       </div>
-                      {id === "서류 검토" ? (
+                      {section.id === "서류 검토" ? (
                         <button>
                           <Calendar />
                         </button>
-                      ) : id === "최종 조율" ? (
+                      ) : section.id === "최종 조율" ? (
                         <button className="rounded-md border border-blue-500 bg-gray-0 px-5 py-[0.3438rem] text-blue-500">
                           채용 확정
                         </button>
@@ -288,7 +292,7 @@ const TalentManagement = () => {
                       className="flex max-h-40 flex-col gap-4 overflow-y-auto overflow-x-hidden  pr-3
                     "
                     >
-                      {tasks.map((task, index) => (
+                      {section.tasks.map((task, index) => (
                         <Draggable
                           key={task.id}
                           draggableId={task.id}

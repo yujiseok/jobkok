@@ -1,4 +1,4 @@
-import { ReactComponent as Smile } from "@/assets/svg/Smile.svg";
+import { ReactComponent as Smile } from "@/assets/svg/smile.svg";
 
 // 분기처리 해야함
 

@@ -9,7 +9,6 @@ import { ReactComponent as ChevronRight } from "@/assets/svg/chevron-right.svg";
 import { ReactComponent as HeartMemoji } from "@/assets/svg/heart-memoji.svg";
 import { ReactComponent as Pin } from "@/assets/svg/pin.svg";
 import { ReactComponent as Rocket } from "@/assets/svg/rocket.svg";
-import { ReactComponent as Smile } from "@/assets/svg/Smile.svg";
 import { ReactComponent as Stats } from "@/assets/svg/stats.svg";
 import useDnD from "@/lib/hooks/useDnD";
 import NumberBadge from "@components/Talent/NumberBadge";

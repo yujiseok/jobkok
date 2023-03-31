@@ -335,7 +335,7 @@ const TalentManagement = () => {
                                   키워드 <span>2</span>/<span>5</span>
                                 </PreferentialBadge>
                               </div>
-                              <div className="flex justify-between">
+                              <div className="flex items-center justify-between">
                                 <time
                                   className="Caption1Medium text-gray-300"
                                   dateTime={new Date().toLocaleDateString()}

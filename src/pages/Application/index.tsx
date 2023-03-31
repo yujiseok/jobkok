@@ -43,8 +43,8 @@ const schema = z.object({
   agree: z.boolean().refine((val) => val),
 
   // 기타이력서
-  portfolio: z.string().url(),
-  resume: z.string().url(),
+  portfolio: z.string().url("올바른 링크를 입력해주세요."),
+  resume: z.string().url("올바른 링크를 입력해주세요."),
 
   // 어학능력
   languageName: z.string().nonempty(),
@@ -56,6 +56,8 @@ const schema = z.object({
   awardsDate: z.string().nonempty(),
 
   // 나의 성격 키워드
+
+  // 약관
 });
 
 type IApplicationForm = z.infer<typeof schema>;
@@ -64,11 +66,10 @@ const Application = () => {
   const navigate = useNavigate();
   const {
     register,
-    watch,
+    getValues,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<IApplicationForm>({
-    mode: "onChange",
     resolver: zodResolver(schema),
   });
 
@@ -79,21 +80,8 @@ const Application = () => {
 
   // 폼 제출
   const onSubmit = async (data: IApplicationForm) => {
-    // navigate("/applicant/completion");
-    // 폼 제출 시 폼 내 모든 에러를 수집
-    const errorFields = Object.keys(errors);
-
-    // 만약 에러가 있는 필드가 있다면, 첫 번째 에러가 발생한 필드로 포커스 이동
-    if (errorFields.length > 0) {
-      const field = errorFields[0];
-      const input = document.getElementById(field);
-      if (input) {
-        input.focus();
-      }
-    } else {
-      // 에러가 없는 경우 폼 제출 처리
-      console.log(data);
-    }
+    console.log(data);
+    navigate("/applicant/completion");
   };
 
   return (
@@ -153,7 +141,7 @@ const Application = () => {
               {...register("careerDetail")}
             ></textarea>
             <div>
-              문항 답변 글자수 : {watch().careerDetail?.length}
+              문항 답변 글자수 : {getValues().careerDetail?.length}
               /1000자(공백포함)
             </div>
           </div>
@@ -180,8 +168,8 @@ const Application = () => {
             ></textarea>
           </div>
           <div>
-            문항 답변 글자수 : {watch().resumeContent?.length}
-            /1000자(공백포함)
+            문항 답변 글자수 : {getValues().resumeContent?.length}
+            /1000자(공백포함, 20자 이상)
           </div>
         </fieldset>
         <fieldset className="mb-20">
@@ -236,10 +224,10 @@ const Application = () => {
               년제
             </label>
             <select id="eduLevel" {...register("eduLevel")}>
-              {EDULEVEL_OPTION.map((element) => {
+              {EDULEVEL_OPTION.map((level) => {
                 return (
-                  <option key={element.value} value={element.value}>
-                    {element.keywords}
+                  <option key={level.value} value={level.value}>
+                    {level.keywords}
                   </option>
                 );
               })}
@@ -250,10 +238,10 @@ const Application = () => {
               졸업상태
             </label>
             <select id="eduStatus" {...register("eduStatus")}>
-              {EDUSTATUS_OPTION.map((element) => {
+              {EDUSTATUS_OPTION.map((status) => {
                 return (
-                  <option key={element.value} value={element.value}>
-                    {element.keywords}
+                  <option key={status.value} value={status.value}>
+                    {status.keywords}
                   </option>
                 );
               })}
@@ -298,7 +286,6 @@ const Application = () => {
             />
           </div>
         </fieldset>
-
         <fieldset className="mb-20">
           <legend className="mb-5 text-xl font-bold">기타 이력서</legend>
           <div>
@@ -312,6 +299,9 @@ const Application = () => {
               {...register("portfolio")}
             />
           </div>
+          <p className="mt-2 text-sm text-rose-500">
+            {errors.portfolio?.message}
+          </p>
           <div>
             <label className="mr-5" htmlFor="resume">
               기타 이력서
@@ -323,6 +313,7 @@ const Application = () => {
               {...register("resume")}
             />
           </div>
+          <p className="mt-2 text-sm text-rose-500">{errors.resume?.message}</p>
         </fieldset>
         <fieldset className="mb-20">
           <legend className="mb-5 text-xl font-bold">어학능력</legend>
@@ -343,10 +334,10 @@ const Application = () => {
               수준
             </label>
             <select id="languageLevel" {...register("languageLevel")}>
-              {LANGUAGELEVEL_OPTION.map((element) => {
+              {LANGUAGELEVEL_OPTION.map((level) => {
                 return (
-                  <option key={element.value} value={element.value}>
-                    {element.keywords}
+                  <option key={level.value} value={level.value}>
+                    {level.keywords}
                   </option>
                 );
               })}
@@ -420,10 +411,10 @@ const Application = () => {
               병역사항
             </label>
             <select id="military" {...register("military")}>
-              {MILITARY_OPTION.map((element) => {
+              {MILITARY_OPTION.map((status) => {
                 return (
-                  <option key={element.value} value={element.value}>
-                    {element.keywords}
+                  <option key={status.value} value={status.value}>
+                    {status.keywords}
                   </option>
                 );
               })}
@@ -473,19 +464,17 @@ const Application = () => {
           className="mt-10 mr-10 rounded-md bg-blue-500 py-3 px-5 text-white"
           type="button"
           onClick={() => {
-            if (
-              confirm(
-                "작성했던 정보가 초기화됩니다. 이전 단계로 이동하시겠습니까?",
-              )
-            ) {
-              navigate(-1);
-            }
+            confirm(
+              "작성했던 정보가 초기화됩니다. 이전 단계로 이동하시겠습니까?",
+            )
+              ? navigate(-1)
+              : null;
           }}
         >
           이전
         </button>
         <button
-          className="fixed top-0 right-0 mt-10 rounded-md bg-blue-500 py-3 px-5 text-white"
+          className="right-0 mt-10 rounded-md bg-blue-500 py-3 px-5 text-white"
           type="button"
           onClick={handleSubmit(onSubmit)}
           disabled={isSubmitting}

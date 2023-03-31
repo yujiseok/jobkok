@@ -47,7 +47,6 @@ const ApplicantAuth = () => {
     setFocus,
     formState: { errors, isSubmitting },
   } = useForm<IAuthForm>({
-    mode: "onChange",
     resolver: zodResolver(schema),
   });
 
@@ -116,11 +115,9 @@ const ApplicantAuth = () => {
               placeholder="이름을 입력해주세요"
               {...register("name")}
             />
-            {errors.name && (
-              <p className="mt-2 text-sm text-rose-500">
-                {errors.name.message}
-              </p>
-            )}
+            <p className="mt-2 text-sm text-rose-500">
+              {errors?.name?.message}
+            </p>
           </div>
           <div className="mb-5">
             <label htmlFor="tel">
@@ -133,9 +130,7 @@ const ApplicantAuth = () => {
               placeholder="010-1234-5678"
               {...register("tel")}
             />
-            {errors.tel && (
-              <p className="mt-2 text-sm text-rose-500">{errors.tel.message}</p>
-            )}
+            <p className="mt-2 text-sm text-rose-500">{errors?.tel?.message}</p>
           </div>
           <div className="mb-5">
             <label htmlFor="email">
@@ -155,11 +150,9 @@ const ApplicantAuth = () => {
             >
               인증받기
             </button>
-            {errors.email && (
-              <p className="mt-2 text-sm text-rose-500">
-                {errors.email.message}
-              </p>
-            )}
+            <p className="mt-2 text-sm text-rose-500">
+              {errors?.email?.message}
+            </p>
           </div>
           {isToggled && (
             <div className="mb-5">
@@ -183,21 +176,20 @@ const ApplicantAuth = () => {
               >
                 인증완료
               </button>
-              {errors.authCode && (
-                <p className="mt-2 text-sm text-rose-500">
-                  {errors.authCode.message}
-                </p>
-              )}
+              <p className="mt-2 text-sm text-rose-500">
+                {errors?.authCode?.message}
+              </p>
             </div>
           )}
         </form>
         <button
           className="rounded-md bg-blue-500 py-3 px-5 text-white"
           type="submit"
-          value="다음"
           onSubmit={handleSubmit(onSubmit)}
           disabled={isSubmitting}
-        />
+        >
+          다음
+        </button>
       </section>
     </div>
   );

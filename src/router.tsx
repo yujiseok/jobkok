@@ -196,10 +196,6 @@ const router: RemixRouter = createBrowserRouter([
         ],
       },
       {
-        path: "/applicant-detail/:id",
-        element: <ApplicantDetail />,
-      },
-      {
         path: "/notification",
         element: <Notification />,
       },
@@ -213,6 +209,10 @@ const router: RemixRouter = createBrowserRouter([
           {
             path: "status",
             element: <TalentStatus />,
+          },
+          {
+            path: "detail/:id",
+            element: <ApplicantDetail />,
           },
           {
             path: "fail",

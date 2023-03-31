@@ -17,6 +17,7 @@ body {
   font-style: normal; */
   line-height: 1.36;
   letter-spacing: -0.32px;
+  @apply bg-blue-25;
 }
 
 a {

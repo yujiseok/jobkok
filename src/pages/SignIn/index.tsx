@@ -5,10 +5,24 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import * as z from "zod";
 
-interface ShowPw {
+export interface ShowPw {
   type: "password" | "text";
   visible: boolean;
 }
+
+// schema 유효성 검사
+const userSchema = z.object({
+  useremail: z
+    .string()
+    .min(1, "이메일을 입력해 주세요.")
+    .email("이메일 주소를 확인해 주세요."),
+  password: z
+    .string()
+    .min(8, "비밀번호는 8자 이상 20자 이하로 입력해 주세요.")
+    .max(20, "비밀번호는 8자 이상 20자 이하로 입력해 주세요."),
+});
+
+export type User = z.infer<typeof userSchema>;
 
 const SignIn = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["rememberEmail"]);
@@ -47,20 +61,6 @@ const SignIn = () => {
       removeCookie("rememberEmail");
     }
   };
-
-  // schema 유효성 검사
-  const userSchema = z.object({
-    useremail: z
-      .string()
-      .min(1, "이메일을 입력해 주세요.")
-      .email("이메일 주소를 확인해 주세요."),
-    password: z
-      .string()
-      .min(8, "비밀번호는 8자 이상 20자 이하로 입력해 주세요.")
-      .max(20, "비밀번호는 8자 이상 20자 이하로 입력해 주세요."),
-  });
-
-  type User = z.infer<typeof userSchema>;
 
   const {
     register,
@@ -130,8 +130,9 @@ const SignIn = () => {
             className="my-5 h-10 w-36 self-center border border-solid border-black"
             type="submit"
             disabled={isSubmitting}
-            value="로그인"
-          />
+          >
+            로그인
+          </button>
         </form>
         <div className="flex justify-center">
           <Link to="/sign-up" className="mx-2">

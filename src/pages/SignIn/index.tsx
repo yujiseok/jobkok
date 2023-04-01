@@ -4,8 +4,9 @@ import { useCookies } from "react-cookie";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import * as z from "zod";
+import { PW_REGEX } from "@/constants/signup";
 
-export interface ShowPw {
+export interface IShowPw {
   type: "password" | "text";
   visible: boolean;
 }
@@ -19,7 +20,8 @@ const userSchema = z.object({
   password: z
     .string()
     .min(8, "비밀번호는 8자 이상 20자 이하로 입력해 주세요.")
-    .max(20, "비밀번호는 8자 이상 20자 이하로 입력해 주세요."),
+    .max(20, "비밀번호는 8자 이상 20자 이하로 입력해 주세요.")
+    .regex(PW_REGEX, "올바른 비밀번호 형식을 입력해 주세요."),
 });
 
 export type User = z.infer<typeof userSchema>;
@@ -27,7 +29,7 @@ export type User = z.infer<typeof userSchema>;
 const SignIn = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["rememberEmail"]);
   const [isRemember, setIsRemember] = useState(false);
-  const [showPw, setShowPw] = useState<ShowPw>({
+  const [showPw, setShowPw] = useState<IShowPw>({
     type: "password",
     visible: false,
   });
@@ -69,6 +71,7 @@ const SignIn = () => {
     getValues,
     formState: { errors, isSubmitting },
   } = useForm<User>({
+    mode: "onChange",
     resolver: zodResolver(userSchema),
   });
   const onSubmit = (data: User) => {
@@ -87,6 +90,7 @@ const SignIn = () => {
             <label className="px-2">Email</label>
             <input
               className="outline-none"
+              type="text"
               {...register("useremail", {
                 required: true,
               })}
@@ -108,9 +112,8 @@ const SignIn = () => {
             <label className="px-2">PW</label>
             <input
               type={showPw.type}
-              maxLength={20}
               className="outline-none"
-              {...register("password", { required: true })}
+              {...register("password", { required: true, maxLength: 20 })}
             />
             <button className="ml-auto px-5" onClick={handleToggle}>
               {showPw.visible ? <span>눈감기</span> : <span>눈뜨기</span>}

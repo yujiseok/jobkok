@@ -2,17 +2,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import type { ShowPw } from "@pages/SignIn";
-
-// 비밀번호 유효성 검사 정규표현식
-const PW_REGEX =
-  /^(?!((?:[A-Za-z]+)|(?:[~!@#$%^&*()_+=]+)|(?:[0-9]+))$)[A-Za-z\d~!@#$%^&*()_+=]{8,20}$/;
-
-// 휴대폰 번호 유효성 검사 정규표현식
-const PHONE_REGEX = /^\d{3}-\d{3,4}-\d{4}$/;
-
-// 사업자 등록 번호 정규 표현식
-const REGISTRATION_REGEX = /^\d{3}-\d{2}-\d{5}$/;
+import {
+  CEO_REGEX,
+  PHONE_REGEX,
+  PW_REGEX,
+  REGISTRATION_REGEX,
+} from "@/constants/signup";
+import type { IShowPw } from "@pages/SignIn";
 
 // schema 유효성 검사
 const schema = z
@@ -24,14 +20,21 @@ const schema = z
     password: z
       .string()
       .min(8, "비밀번호는 8자 이상 20자 이하로 입력해 주세요.")
+      .max(20, "비밀번호는 8자 이상 20자 이하로 입력해 주세요.")
       .regex(PW_REGEX, "올바른 비밀번호 형식을 입력해 주세요."),
     confirmPassword: z
       .string()
       .min(8, "비밀번호는 8자 이상 20자 이하로 입력해 주세요.")
+      .max(20, "비밀번호는 8자 이상 20자 이하로 입력해 주세요.")
       .regex(PW_REGEX, "올바른 비밀번호 형식을 입력해 주세요."),
     phone: z
       .string()
       .regex(PHONE_REGEX, "올바른 전화번호 형식을 입력해 주세요."),
+    companyName: z.string().min(1, "회사명을 입력해 주세요."),
+    ceo: z
+      .string()
+      .min(1, "대표자명을 입력해 주세요.")
+      .regex(CEO_REGEX, "대표자명을 확인해 주세요."),
     registration: z
       .string()
       .regex(REGISTRATION_REGEX, "올바른 사업자 등록 번호를 입력해 주세요."),
@@ -44,7 +47,7 @@ const schema = z
 type NewUser = z.infer<typeof schema>;
 
 const SignUp = () => {
-  const [showPw, setShowPw] = useState<ShowPw>({
+  const [showPw, setShowPw] = useState<IShowPw>({
     type: "password",
     visible: false,
   });
@@ -114,6 +117,7 @@ const SignUp = () => {
     getValues,
     formState: { errors, isSubmitting },
   } = useForm<NewUser>({
+    mode: "onChange",
     resolver: zodResolver(schema),
   });
   const onSubmit = (data: NewUser) => {
@@ -134,8 +138,8 @@ const SignUp = () => {
               <label className="px-2">Email</label>
               <input
                 className="outline-none"
-                {...register("useremail")}
-                required={true}
+                type="text"
+                {...register("useremail", { required: true })}
               />
               <button
                 className="ml-auto px-5"
@@ -161,8 +165,7 @@ const SignUp = () => {
               type={showPw.type}
               maxLength={20}
               className="outline-none"
-              {...register("password")}
-              required={true}
+              {...register("password", { required: true })}
             />
             <button className="ml-auto px-5" onClick={handleToggle}>
               {showPw.visible ? <span>눈감기</span> : <span>눈뜨기</span>}
@@ -176,8 +179,9 @@ const SignUp = () => {
               type={showPw.type}
               maxLength={20}
               className="outline-none"
-              {...register("confirmPassword")}
-              required={true}
+              {...register("confirmPassword", {
+                required: true,
+              })}
             />
             <button className="ml-auto px-5" onClick={handleToggle}>
               {showPw.visible ? <span>눈감기</span> : <span>눈뜨기</span>}
@@ -185,7 +189,7 @@ const SignUp = () => {
           </div>
           {/* 오류 메세지 띄우기 */}
           <span className="text-red-600">
-            {errors?.confirmPassword?.message}
+            {errors.password?.message || errors?.confirmPassword?.message}
           </span>
           {/* 휴대전화 정보 입력 칸 */}
           <span className="mt-9">휴대전화 정보</span>
@@ -193,10 +197,10 @@ const SignUp = () => {
             <label className="px-2">전화번호</label>
             <input
               className="outline-none"
+              type="text"
               value={phoneValue}
-              {...register("phone")}
+              {...register("phone", { required: true })}
               onChange={handlePhoneChange}
-              required={true}
             />
           </div>
           {/* 오류 메세지 띄우기 */}
@@ -207,26 +211,38 @@ const SignUp = () => {
               <div>회사명</div>
               <div className="mt-2 flex h-10 items-center border border-solid border-black">
                 <label className="px-2">회사명</label>
-                <input type="text" required={true} className="outline-none" />
+                <input
+                  type="text"
+                  className="outline-none"
+                  {...register("companyName", { required: true })}
+                />
               </div>
             </div>
             <div>
               <div>대표자명</div>
               <div className="mt-2 flex h-10 items-center border border-solid border-black">
                 <label className="px-2">대표자명</label>
-                <input type="text" required={true} className="outline-none" />
+                <input
+                  type="text"
+                  className="outline-none"
+                  {...register("ceo", { required: true })}
+                />
               </div>
             </div>
           </div>
+          {/* 오류메세지 띄우기 */}
+          <span className="text-red-600">
+            {errors?.companyName?.message || errors.ceo?.message}
+          </span>
           <span className="mt-5">사업자 등록 번호</span>
           <div className="mt-3 flex h-10 items-center border border-solid border-black">
             <label className="px-2">사업자 등록 번호</label>
             <input
               className="outline-none"
+              type="text"
               value={companyNumber}
-              {...register("registration")}
+              {...register("registration", { required: true })}
               onChange={handleCompanyNumberChange}
-              required={true}
             />
           </div>
           {/* 오류 메세지 띄우기 */}

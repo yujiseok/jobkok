@@ -4,6 +4,7 @@ const ChangeUserInfo = () => {
   const [changeTel, setChangeTel] = useState(true);
   const [changePassword, setChangePassword] = useState(true);
 
+  // 전화번호 변경
   const handleChangeTelBtn = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     setChangeTel((prev) => !prev);
@@ -12,6 +13,7 @@ const ChangeUserInfo = () => {
     }
   };
 
+  // 비밀번호 변경
   const handleChangePasswordBtn = (
     event: React.MouseEvent<HTMLButtonElement>,
   ) => {
@@ -20,6 +22,15 @@ const ChangeUserInfo = () => {
     if (event.currentTarget.type === "submit") {
       console.log("사용자 정보변경 api 호출");
     }
+  };
+
+  const handleDelUserBtn = () => {
+    if (
+      confirm(
+        "계정을 삭제하시겠습니까? 신중히 고민해주세요! 되돌릴 수 없습니다. (기획중...)",
+      )
+    )
+      console.log("계정삭제 api 호출");
   };
 
   return (
@@ -112,7 +123,9 @@ const ChangeUserInfo = () => {
           </fieldset>
         </form>
       </section>
-      <button type="button">계정삭제</button>
+      <button type="button" onClick={handleDelUserBtn}>
+        계정삭제
+      </button>
     </div>
   );
 };

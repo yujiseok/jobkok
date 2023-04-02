@@ -1,11 +1,64 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { ReactComponent as Tick } from "@/assets/svg/archive-tick.svg";
 import { ReactComponent as Back } from "@/assets/svg/backspace.svg";
 import { ReactComponent as Profile } from "@/assets/svg/profile-detail.svg";
 
 import useInputLength from "@/lib/hooks/useInputLength";
+import type { ITalentDetail } from "@/types/talentDetail";
+
+const data: ITalentDetail = {
+  state: "200",
+  result: "success",
+  data: {
+    recruitId: "1",
+    applyName: "홍길동",
+    applyPhone: "010-1111-1111",
+    applyEmail: "applyTest@test.com",
+    resumeContent: "저는 홍길동 입니다 !",
+    applyPortfolio: "https://portfolio.portfolio",
+    applyProcedure: "면접",
+    evaluation: "나쁘지 않음",
+    pass: "false",
+    creationTime: "2023-03-21T13:04:30",
+    applyDelete: "false",
+    keywordSelect: "센스 있어요",
+    wish: "true",
+    careerName: "패스트캠퍼스",
+    careerStart: "2022-01-01T00:00:00",
+    careerEnd: "2023-01-01T00:00:00",
+    careerDetail: "패캠 매니저 역할 수행했습니다.",
+    eduName: "패캠대",
+    eduYear: "4",
+    eduMajor: "컴퓨터공학과",
+    eduStatus: "졸업",
+    eduStart: "2014-03-02T00:00:00",
+    eduEnd: "2020-02-16T00:00:00",
+    languageName: "영어",
+    languageLevel: "중",
+    languageDate: "2021-09-25T00:00:00",
+    militaryStart: "2015-02-26T00:00:00",
+    militaryEnd: "2017-02-25T00:00:00",
+    militaryDivision: "만기제대",
+    militaryCategory: "육군",
+    militaryClass: "병장",
+    militaryExemption: null,
+    certificateName: "정보처리기사",
+    certificateDate: "2022-05-25T00:00:00",
+    certificatePublisher: "한국산업인력공단",
+    activitesTitle:
+      "패스트 캠퍼스 메가바이트 스쿨: 핀테크 서비스 백엔드 개발자 양성과정",
+    activitesContent: "자바 및 스프링 교육",
+    activitesStart: "2022-09-13T00:00:00",
+    activitesEnd: "2023-04-14T00:00:00",
+    awardsName: "패캠 해커톤 금상",
+    awardsDate: "2023-01-20T00:00:00",
+    awardsCompany: "패스트캠퍼스",
+  },
+};
 
 const ApplicantDetail = () => {
   const [inputCount, handleInput] = useInputLength(MAX_LENGTH);
+  const navigate = useNavigate();
   return (
     <>
       <div className="breadcrumbs flex justify-end pb-16 pt-7 text-sm">
@@ -23,7 +76,7 @@ const ApplicantDetail = () => {
       <div className="flex justify-between">
         <div>
           <div className="relative mb-3 flex items-center gap-6">
-            <Back />
+            <Back className="cursor-pointer" onClick={() => navigate(-1)} />
             <h2 className="Head2Semibold">인재 상세페이지</h2>
           </div>
           <p className="Head4Semibold ml-9 text-gray-500">
@@ -32,10 +85,10 @@ const ApplicantDetail = () => {
           </p>
         </div>
         <div className="flex items-start gap-4">
-          <button className="SubHead2Semibold rounded-md bg-error-50 px-6 py-3 text-error-400">
+          <button className="SubHead2Semibold cursor-pointer rounded-md bg-error-50 px-6 py-3 text-error-400">
             탈락 처리
           </button>
-          <button className="SubHead2Semibold rounded-md bg-blue-500 px-6 py-3 text-white">
+          <button className="SubHead2Semibold cursor-pointer rounded-md bg-blue-500 px-6 py-3 text-white">
             개별 알림 보내기
           </button>
         </div>
@@ -52,17 +105,31 @@ const ApplicantDetail = () => {
             <div className="flex flex-1 flex-col">
               <div className="applicant-detail flex items-start justify-between">
                 <div className="flex flex-col">
-                  <p className="Head4Semibold mb-1">김잡콕</p>
-                  <p className="SubHead2Medium text-gray-600">010-1234-4567</p>
+                  <div className="flex items-center">
+                    <p className="Head4Semibold mb-1 mr-[0.625rem]">
+                      {data.data.applyName}
+                    </p>
+                    <Tick className="cursor-pointer" />
+                  </div>
                   <p className="SubHead2Medium text-gray-600">
-                    jobkokman@jobkok.com
+                    {data.data.applyPhone}
+                  </p>
+                  <p className="SubHead2Medium text-gray-600">
+                    {data.data.applyEmail}
                   </p>
                 </div>
-                <button className="SubHead2Semibold rounded-md bg-blue-50 px-6 py-3 text-blue-400">
+                <button className="SubHead2Semibold cursor-pointer rounded-md bg-blue-50 px-6 py-3 text-blue-400">
                   채용 확정
                 </button>
               </div>
-              <div className="badge-container mt-10">센스있어요</div>
+              <div className="badge-container mt-10 flex">
+                <div className="mx-[0.375rem] my-1 rounded-sm bg-gray-200 text-blue-25">
+                  # {data.data.keywordSelect}
+                </div>
+                <div className="mx-[0.375rem] my-1 rounded-sm bg-gray-200 text-blue-25">
+                  # {data.data.keywordSelect}
+                </div>
+              </div>
             </div>
           </div>
 
@@ -105,7 +172,9 @@ const ApplicantDetail = () => {
                 <span className="BodyBody2">미정</span>
               </div>
             </div>
-            <button className="SubHead2Medium text-gray-400">수정하기</button>
+            <button className="SubHead2Medium cursor-pointer text-gray-400">
+              수정하기
+            </button>
           </div>
 
           <div className="feedback-note flex-1 rounded-md border-2 border-gray-50 bg-white p-7">

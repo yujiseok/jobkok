@@ -1,6 +1,9 @@
-export interface ITalentDetail {
+export interface ITalentBase {
   state: string;
   result: string;
+}
+
+export interface ITalentDetail extends ITalentBase {
   data: {
     recruitId: string;
     applyName: string;
@@ -46,12 +49,6 @@ export interface ITalentDetail {
     awardsCompany: string;
   };
 }
-
-export interface ITalent {
-  state: number;
-  result: string;
-}
-
-export interface IAddComment extends ITalent {
+export interface IAddComment extends ITalentBase {
   message: string;
 }

@@ -11,6 +11,7 @@ import { ReactComponent as Pin } from "@/assets/svg/pin.svg";
 import { ReactComponent as Rocket } from "@/assets/svg/rocket.svg";
 import { ReactComponent as Stats } from "@/assets/svg/stats.svg";
 import useDnD from "@/lib/hooks/useDnD";
+import Banner from "@components/Common/Banner";
 import InterviewBadge from "@components/Talent/InterviewBadge";
 import KeywordBadge from "@components/Talent/KeywordBadge";
 import NumberBadge from "@components/Talent/NumberBadge";
@@ -74,7 +75,7 @@ const TalentManagement = () => {
 
   return (
     <>
-      <section className="absolute top-16 left-0 h-[25rem] w-full bg-blue-400 py-12 text-gray-0">
+      <Banner className="h-[25rem]">
         <div className="mx-auto flex max-w-7xl flex-col gap-8">
           <div className="flex items-center justify-between ">
             <select className="SubHead2Semibold appearance-none bg-transparent outline-none">
@@ -107,7 +108,7 @@ const TalentManagement = () => {
               <div>오늘의 인재수</div>
             </div>
 
-            <div className="border-r border-l border-gray-0 px-36">
+            <div className="border-r-2 border-l-2 border-gray-0 px-36">
               <div className="Head1Bold mb-1">
                 D-<span>9</span>
               </div>
@@ -122,7 +123,7 @@ const TalentManagement = () => {
             </div>
           </div>
         </div>
-      </section>
+      </Banner>
 
       <section className="pt-[26rem]">
         <div>
@@ -157,12 +158,21 @@ const TalentManagement = () => {
                 <SwiperSlide key={value}>
                   <div className="relative h-48 rounded-xl bg-gray-0 px-4 py-6 shadow-job">
                     <div className="mb-3 flex justify-between">
-                      <div className="flex items-center gap-[0.375rem]">
+                      <Link
+                        to="/talent/detail/1"
+                        className="flex items-center gap-6px"
+                      >
                         <div className="SubHead1Semibold">김잡콕 {value}</div>
                         <ProcedureBadge>서류검토</ProcedureBadge>
+                        <ChevronRight className="ml-1" />
+                      </Link>
+                      <div>
+                        <button>
+                          <ArchiveTick className="text-gray-300" />
+                        </button>
                       </div>
                     </div>
-                    <div className="flex max-w-[7.8125rem] flex-wrap gap-[0.375rem]">
+                    <div className="flex max-w-[7.8125rem] flex-wrap gap-6px">
                       <KeywordBadge>경력</KeywordBadge>
                       <KeywordBadge>자격증</KeywordBadge>
                       <KeywordBadge>경력</KeywordBadge>
@@ -212,12 +222,21 @@ const TalentManagement = () => {
                 >
                   <div className="relative h-48 px-4 py-6">
                     <div className="mb-3 flex justify-between">
-                      <div className="flex items-center gap-[0.375rem]">
+                      <Link
+                        to="/talent/detail/1"
+                        className="flex items-center gap-6px"
+                      >
                         <div className="SubHead1Semibold">김잡콕 {value}</div>
                         <ProcedureBadge>서류검토</ProcedureBadge>
+                        <ChevronRight className="ml-1" />
+                      </Link>
+                      <div>
+                        <button>
+                          <ArchiveTick className="text-gray-300" />
+                        </button>
                       </div>
                     </div>
-                    <div className="flex max-w-[7.8125rem] flex-wrap gap-[0.375rem]">
+                    <div className="flex max-w-[7.8125rem] flex-wrap gap-6px">
                       <KeywordBadge>경력</KeywordBadge>
                       <KeywordBadge>자격증</KeywordBadge>
                       <KeywordBadge>경력</KeywordBadge>
@@ -316,7 +335,7 @@ const TalentManagement = () => {
                             >
                               <div className="flex items-center justify-between">
                                 <Link
-                                  to="/talent/detail/111"
+                                  to="/talent/detail/1"
                                   className="flex items-center gap-2"
                                 >
                                   <div className="rounded-md bg-blue-50">
@@ -329,10 +348,10 @@ const TalentManagement = () => {
                                 </Link>
 
                                 <button>
-                                  <ArchiveTick />
+                                  <ArchiveTick className="text-gray-300" />
                                 </button>
                               </div>
-                              <div className="Caption1Semibold flex gap-[0.375rem] pt-4 pb-8">
+                              <div className="Caption1Semibold flex gap-6px pt-4 pb-8">
                                 <PreferentialBadge>
                                   우대사항 <span>2</span>/<span>5</span>
                                 </PreferentialBadge>

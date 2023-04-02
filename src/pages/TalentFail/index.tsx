@@ -11,10 +11,10 @@ import usePagination from "@/lib/hooks/usePagination";
 import formatDate from "@/lib/utils/formatDate";
 import makeString from "@/lib/utils/makeString";
 import type { IFailedTalent } from "@/types/talentPool";
+import Banner from "@components/Common/Banner";
 import FailKeywordBadge from "@components/Talent/FailKeywordBadge";
 import FailProcedureBadge from "@components/Talent/FailProcedureBadge";
 import Heading from "@components/Talent/Heading";
-
 interface IData {
   userId: number;
   id: number;
@@ -77,7 +77,7 @@ const TalentFail = () => {
 
   return (
     <>
-      <section className="x absolute top-16 left-0 h-16 w-full  bg-blue-400 py-12 text-gray-0">
+      <Banner className="h-16">
         <div className="mx-auto flex h-full max-w-7xl items-center">
           <select className="">
             <option>스마트스토어 상세페이지 디자이너 지원서 폼</option>
@@ -85,7 +85,7 @@ const TalentFail = () => {
             <option>영구삭제 인재</option>
           </select>
         </div>
-      </section>
+      </Banner>
       <header className="pt-[6.25rem]">
         <Heading>탈락 인재 보관함</Heading>
         <p className="SubHead1Semibold mt-6 mb-12 text-gray-500">

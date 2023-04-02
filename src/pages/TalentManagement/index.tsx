@@ -18,58 +18,6 @@ import NumberBadge from "@components/Talent/NumberBadge";
 import PreferentialBadge from "@components/Talent/PreferentialBadge";
 import ProcedureBadge from "@components/Talent/ProcedureBadge";
 
-const mockData = [
-  {
-    id: "서류 검토",
-    title: " 서류 검토",
-    tasks: [
-      {
-        id: "b",
-        title: "Learn JavaScript",
-      },
-      {
-        id: "c",
-        title: "Learn Next",
-      },
-      {
-        id: "d",
-        title: "Learn React",
-      },
-    ],
-  },
-  {
-    id: "면접 진행",
-    title: "면접 진행",
-    tasks: [
-      {
-        id: "f",
-        title: "Learn CSS",
-      },
-      {
-        id: "g",
-        title: "Learn TypeScript",
-      },
-    ],
-  },
-  {
-    id: "최종 조율",
-    title: "최종 조율",
-    tasks: [
-      {
-        id: "i",
-        title: "Learn HTML",
-      },
-    ],
-  },
-];
-
-const numberArr = Array(6)
-  .fill(1)
-  .map((v, i) => i + 1);
-
-const randomNumber1 = [...numberArr].sort(() => 0.5 - Math.random());
-const randomNumber2 = [...numberArr].sort(() => 0.5 - Math.random());
-
 const TalentManagement = () => {
   const [data, onDragEnd] = useDnD(mockData);
 
@@ -265,7 +213,7 @@ const TalentManagement = () => {
       {/* 채용진행현황 */}
       <section className="mt-20">
         <h4 className="Head3Semibold mb-6">채용 진행 현황</h4>
-        <div className="flex justify-between">
+        <div className="mt-6 mb-12 flex justify-between">
           <p className="SubHead1Semibold text-gray-400">
             한 눈에 칸반보드에서 인재 현황을 확인해보세요. 인재카드를
             Drag&Drop을 통해 자유롭게 이동해보세요.
@@ -281,7 +229,7 @@ const TalentManagement = () => {
 
         <DragDropContext onDragEnd={onDragEnd}>
           {/* grid grid-cols-3 grid-rows-1 */}
-          <div className="mt-8 flex items-start justify-between gap-6">
+          <div className="flex items-start justify-between gap-6">
             {data.map((section) => (
               <Droppable key={section.id} droppableId={section.id}>
                 {(provided) => (
@@ -393,5 +341,57 @@ const TalentManagement = () => {
     </>
   );
 };
+
+const mockData = [
+  {
+    id: "서류 검토",
+    title: " 서류 검토",
+    tasks: [
+      {
+        id: "b",
+        title: "Learn JavaScript",
+      },
+      {
+        id: "c",
+        title: "Learn Next",
+      },
+      {
+        id: "d",
+        title: "Learn React",
+      },
+    ],
+  },
+  {
+    id: "면접 진행",
+    title: "면접 진행",
+    tasks: [
+      {
+        id: "f",
+        title: "Learn CSS",
+      },
+      {
+        id: "g",
+        title: "Learn TypeScript",
+      },
+    ],
+  },
+  {
+    id: "최종 조율",
+    title: "최종 조율",
+    tasks: [
+      {
+        id: "i",
+        title: "Learn HTML",
+      },
+    ],
+  },
+];
+
+const numberArr = Array(6)
+  .fill(1)
+  .map((v, i) => i + 1);
+
+const randomNumber1 = [...numberArr].sort(() => 0.5 - Math.random());
+const randomNumber2 = [...numberArr].sort(() => 0.5 - Math.random());
 
 export default TalentManagement;

@@ -56,7 +56,7 @@ const data: ITalentDetail = {
   },
 };
 
-const ApplicantDetail = () => {
+const TalentDetail = () => {
   const [inputCount, handleInput] = useInputLength(MAX_LENGTH);
   const navigate = useNavigate();
   return (
@@ -217,6 +217,6 @@ const ApplicantDetail = () => {
     </>
   );
 };
-export default ApplicantDetail;
+export default TalentDetail;
 
 const MAX_LENGTH = 1000;

@@ -57,6 +57,9 @@ module.exports = {
       boxShadow: {
         job: " 0px 2px 5px rgba(0, 19, 51, 0.1), 0px 0px 0px rgba(0, 19, 51, 0.1);",
       },
+      spacing: {
+        "6px": "0.375rem",
+      },
     },
   },
   daisyui: {

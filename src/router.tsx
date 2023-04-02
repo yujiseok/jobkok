@@ -1,7 +1,9 @@
 import type { Router as RemixRouter } from "@remix-run/router/dist/router";
+import { Suspense } from "react";
 import type { RouteObject } from "react-router-dom";
 import { createBrowserRouter } from "react-router-dom";
 import Layout from "@components/Layout/Layout";
+import Spinner from "@components/Talent/Spinner";
 import ApplicantAuth from "@pages/ApplicantAuth";
 import ApplicantDetail from "@pages/ApplicantDetail";
 import Application from "@pages/Application";
@@ -216,7 +218,11 @@ const router: RemixRouter = createBrowserRouter([
           },
           {
             path: "fail",
-            element: <TalentFail />,
+            element: (
+              <Suspense fallback={<Spinner />}>
+                <TalentFail />
+              </Suspense>
+            ),
           },
         ],
       },

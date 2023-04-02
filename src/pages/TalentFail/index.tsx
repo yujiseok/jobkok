@@ -14,7 +14,6 @@ import type { IFailedTalent } from "@/types/talentPool";
 import Banner from "@components/Common/Banner";
 import FailKeywordBadge from "@components/Talent/FailKeywordBadge";
 import FailProcedureBadge from "@components/Talent/FailProcedureBadge";
-import Heading from "@components/Talent/Heading";
 interface IData {
   userId: number;
   id: number;
@@ -29,39 +28,6 @@ const getData = async () => {
 
   return data;
 };
-
-const data: IFailedTalent[] = [
-  {
-    recruitId: 2,
-    recruitTitle: "제목1",
-    applyId: 2,
-    applyName: "지원자1",
-    applyPhone: "010-2222-3333",
-    applyEmail: "a@test.com",
-    applyProcedure: "서류제출",
-    applyDelete: false,
-    failApply: true,
-    wish: true,
-    createdTime: "2023-02-16T15:59:46.803305",
-    recentMessageTime: "2023-02-20T15:59:46.803305",
-    keywords: ["keyword1", "keyword2", "keyword3"],
-  },
-  {
-    recruitId: 2,
-    recruitTitle: "제목1",
-    applyId: 8,
-    applyName: "홍길동",
-    applyPhone: "010-1111-1111",
-    applyEmail: "applyTest2@test.com",
-    applyProcedure: null,
-    applyDelete: false,
-    failApply: true,
-    wish: false,
-    createdTime: "2023-03-27T20:48:44.871229",
-    recentMessageTime: null,
-    keywords: ["keyword1", "keyword4", "keyword6", "keyword8"],
-  },
-];
 
 const TalentFail = () => {
   const { data: test } = useQuery({
@@ -86,12 +52,12 @@ const TalentFail = () => {
           </select>
         </div>
       </Banner>
-      <header className="pt-[6.25rem]">
-        <Heading>탈락 인재 보관함</Heading>
+      <section className="pt-[6.25rem]">
+        <h4 className="Head3Semibold">탈락 인재 보관함</h4>
         <p className="SubHead1Semibold mt-6 mb-12 text-gray-500">
           아쉽게 탈락했던 인재와 다시 함께할 수 있도록 모아놓은 보관함이에요
         </p>
-      </header>
+      </section>
       <section className="rounded-[20px] border bg-gray-0 p-11">
         <div className="flex gap-4">
           <select className="">
@@ -210,5 +176,36 @@ const TalentFail = () => {
 };
 
 const TH_ITEMS = ["인재", "키워드", "탈락시점", "지원일", "최근알림일", "액션"];
-
+const data: IFailedTalent[] = [
+  {
+    recruitId: 2,
+    recruitTitle: "제목1",
+    applyId: 2,
+    applyName: "지원자1",
+    applyPhone: "010-2222-3333",
+    applyEmail: "a@test.com",
+    applyProcedure: "서류제출",
+    applyDelete: false,
+    failApply: true,
+    wish: true,
+    createdTime: "2023-02-16T15:59:46.803305",
+    recentMessageTime: "2023-02-20T15:59:46.803305",
+    keywords: ["keyword1", "keyword2", "keyword3"],
+  },
+  {
+    recruitId: 2,
+    recruitTitle: "제목1",
+    applyId: 8,
+    applyName: "홍길동",
+    applyPhone: "010-1111-1111",
+    applyEmail: "applyTest2@test.com",
+    applyProcedure: null,
+    applyDelete: false,
+    failApply: true,
+    wish: false,
+    createdTime: "2023-03-27T20:48:44.871229",
+    recentMessageTime: null,
+    keywords: ["keyword1", "keyword4", "keyword6", "keyword8"],
+  },
+];
 export default TalentFail;

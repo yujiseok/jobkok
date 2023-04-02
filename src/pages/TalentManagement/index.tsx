@@ -271,7 +271,7 @@ const TalentManagement = () => {
                     ref={provided.innerRef}
                     className="flex-1 rounded-xl border border-gray-50 bg-gray-0 pl-8 pr-4 pb-12"
                   >
-                    <div className="flex items-center justify-between pr-8">
+                    <div className="flex items-center justify-between pr-4">
                       <div className="flex items-center py-5">
                         <span className="SubHead1Semibold">
                           {section.title}

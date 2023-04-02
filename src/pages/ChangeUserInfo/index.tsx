@@ -1,8 +1,43 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { PHONE_REGEX, PW_REGEX } from "@/constants/signup";
+
+const schema = z
+  .object({
+    password: z
+      .string()
+      .min(8, "8~20자의 영문 대/소문자, 숫자, 특수문자 중 2가지 조합")
+      .max(20, "8~20자의 영문 대/소문자, 숫자, 특수문자 중 2가지 조합")
+      .regex(PW_REGEX, "8~20자의 영문 대/소문자, 숫자, 특수문자 중 2가지 조합"),
+    confirmPassword: z
+      .string()
+      .min(8, "비밀번호가 일치하지 않습니다.")
+      .max(20, "비밀번호가 일치하지 않습니다.")
+      .regex(PW_REGEX, "비밀번호가 일치하지 않습니다."),
+    phone: z
+      .string()
+      .regex(PHONE_REGEX, "올바른 전화번호 형식을 입력해 주세요."),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "비밀번호가 일치하지 않습니다.",
+    path: ["confirmPassword"],
+  });
+
+type ChangeUser = z.infer<typeof schema>;
 
 const ChangeUserInfo = () => {
   const [changeTel, setChangeTel] = useState(true);
   const [changePassword, setChangePassword] = useState(true);
+
+  const {
+    register,
+    formState: { errors, isSubmitting },
+  } = useForm<ChangeUser>({
+    mode: "onChange",
+    resolver: zodResolver(schema),
+  });
 
   // 전화번호 변경
   const handleChangeTelBtn = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -80,8 +115,20 @@ const ChangeUserInfo = () => {
               </>
             ) : (
               <>
-                <input type="tel" id="tel" placeholder="010-1234-5678" />
-                <button type="submit" onClick={handleChangeTelBtn}>
+                <input
+                  type="tel"
+                  id="tel"
+                  placeholder="010-1234-5678"
+                  {...register("phone")}
+                />
+                <p className="mt-2 text-sm text-rose-500">
+                  {errors.phone?.message}
+                </p>
+                <button
+                  type="submit"
+                  onClick={handleChangeTelBtn}
+                  disabled={isSubmitting}
+                >
                   변경 완료
                 </button>
               </>
@@ -103,16 +150,28 @@ const ChangeUserInfo = () => {
                   type="password"
                   id="newPassword"
                   placeholder="8~20자의 영문 대/소문자, 숫자, 특수문자 중 2가지 조합"
+                  {...register("password")}
                 />
+                <p className="mt-2 text-sm text-rose-500">
+                  {errors.password?.message}
+                </p>
                 {/* 눈뜨기 */}
                 <label htmlFor="confirmPassword">새 비밀번호 확인</label>
                 <input
                   type="password"
                   id="confirmPassword"
                   placeholder="8~20자의 영문 대/소문자, 숫자, 특수문자 중 2가지 조합"
+                  {...register("confirmPassword")}
                 />
+                <p className="mt-2 text-sm text-rose-500">
+                  {errors.confirmPassword?.message}
+                </p>
                 {/* 눈뜨기 */}
-                <button type="submit" onClick={handleChangePasswordBtn}>
+                <button
+                  type="submit"
+                  onClick={handleChangePasswordBtn}
+                  disabled={isSubmitting}
+                >
                   완료
                 </button>
                 <button type="button" onClick={handleChangePasswordBtn}>

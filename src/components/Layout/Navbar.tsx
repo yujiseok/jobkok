@@ -26,7 +26,12 @@ const Navbar = () => {
                     </Link>
                     <ul className="dropdown-content menu rounded-box w-52 bg-white p-2 shadow">
                       <li>
-                        <Link to="/talent/status">채용 진행 현황</Link>
+                        <Link
+                          to="/talent/status"
+                          className="hover:bg-gray-0 hover:text-gray-900 active:bg-gray-0"
+                        >
+                          채용 진행 현황
+                        </Link>
                       </li>
                     </ul>
                   </li>
@@ -55,10 +60,17 @@ const Navbar = () => {
           </div>
           <ul className="dropdown-content menu rounded-box absolute top-7 flex w-52 bg-white p-2 shadow before:bg-error-400">
             <li>
-              <Link to="/change-user-info">기업 정보 변경 </Link>
+              <Link
+                to="/change-user-info"
+                className="hover:bg-gray-0 hover:text-gray-900 active:bg-gray-0"
+              >
+                기업 정보 변경{" "}
+              </Link>
             </li>
             <li>
-              <a>로그아웃</a>
+              <a className="hover:bg-gray-0 hover:text-gray-900 active:bg-gray-0">
+                로그아웃
+              </a>
             </li>
           </ul>
         </div>

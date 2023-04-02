@@ -4,7 +4,7 @@ const Layout = () => {
   return (
     <>
       <Navbar />
-      <main className="mx-auto mt-16 max-w-7xl px-4 pb-96">
+      <main className="mx-auto mt-16 max-w-7xl px-4 pb-64 pt-16">
         <Outlet />
       </main>
       <ScrollRestoration />

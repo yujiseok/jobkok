@@ -3,7 +3,7 @@ module.exports = {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
-      colors:{
+      colors: {
         "error-50": "#feeaee",
         "error-100": "#fcbec9",
         "error-200": "#fb9faf",
@@ -25,7 +25,7 @@ module.exports = {
         "blue-700": "#2144af",
         "blue-800": "#193587",
         "blue-900": "#132867",
-        "gray-0": "#fff",       
+        "gray-0": "#fff",
         "gray-50": "#f1f1f2",
         "gray-100": "#d4d5d7",
         "gray-200": "#bfc0c4",
@@ -36,6 +36,7 @@ module.exports = {
         "gray-700": "#525459",
         "gray-800": "#404145",
         "gray-900": "#313235",
+        "title-gray": "#333",
         "preferred-50": "#e3fce9",
         "preferred-500": "#24b782",
         "keyword-50": "#fef9e5",

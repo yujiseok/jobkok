@@ -58,7 +58,7 @@ const TalentFail = () => {
           아쉽게 탈락했던 인재와 다시 함께할 수 있도록 모아놓은 보관함이에요
         </p>
       </section>
-      <section className="rounded-[20px] border bg-gray-0 p-11">
+      <section className="rounded-[20px] border-[1.5px] border-gray-50 bg-gray-0 p-11">
         <div className="flex gap-4">
           <select className="">
             <option selected>전체 인재</option>

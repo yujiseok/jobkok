@@ -306,7 +306,13 @@ const TalentManagement = () => {
                           <Calendar />
                         </button>
                       ) : section.id === "최종 조율" ? (
-                        <button className="rounded-md border border-blue-500 bg-gray-0 px-5 py-[0.3438rem] text-blue-500">
+                        <button
+                          className={`rounded-md border bg-gray-0 px-5 py-[0.3438rem] ${
+                            section.tasks.length
+                              ? " border-blue-500  text-blue-500"
+                              : "border-gray-200 text-gray-200"
+                          }`}
+                        >
                           채용 확정
                         </button>
                       ) : null}

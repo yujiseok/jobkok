@@ -124,7 +124,7 @@ const TalentManagement = () => {
         </div>
       </section>
 
-      <section className="pt-[34rem]">
+      <section className="pt-[26rem]">
         <div>
           <h4 className="Head3Semibold mb-12 flex items-center gap-1">
             <Pin className="-scale-x-100" />
@@ -269,7 +269,9 @@ const TalentManagement = () => {
                   <div
                     {...provided.droppableProps}
                     ref={provided.innerRef}
-                    className="flex-1 rounded-xl border border-gray-50 bg-gray-0 pl-8 pr-4 pb-12"
+                    className={`flex-1 rounded-xl border border-gray-50 bg-gray-0 pl-8 pr-4 ${
+                      section.tasks.length ? "pb-12" : "pb-0"
+                    }`}
                   >
                     <div className="flex items-center justify-between pr-4">
                       <div className="flex items-center py-5">

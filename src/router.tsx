@@ -2,8 +2,8 @@ import type { Router as RemixRouter } from "@remix-run/router/dist/router";
 import { Suspense } from "react";
 import { createBrowserRouter, Navigate, RouteObject } from "react-router-dom";
 
+import Spinner from "@components/Common/Spinner";
 import Layout from "@components/Layout/Layout";
-import Spinner from "@components/Talent/Spinner";
 import ApplicantAuth from "@pages/ApplicantAuth";
 import ApplicantDetail from "@pages/ApplicantDetail";
 import Application from "@pages/Application";

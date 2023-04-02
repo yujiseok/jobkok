@@ -22,11 +22,11 @@ const ApplicantDetail = () => {
 
       <div className="flex justify-between">
         <div>
-          <div className="relative flex items-center gap-6">
+          <div className="relative mb-3 flex items-center gap-6">
             <Back />
-            <h2 className="Head2Semibold mb-3">인재 상세페이지</h2>
+            <h2 className="Head2Semibold">인재 상세페이지</h2>
           </div>
-          <p className="Head4Semibold text-gray-500">
+          <p className="Head4Semibold ml-9 text-gray-500">
             인재 상세 정보를 확인하고 한 곳에서 채용 및 탈락 처리를 할 수
             있습니다.
           </p>
@@ -72,11 +72,11 @@ const ApplicantDetail = () => {
               인재의 채용 절차단계를 확인해보세요
             </p>
             <ul className="steps w-full ">
-              <li className="step after:!bg-blue-400 ">
+              <li className="step after:!bg-blue-400 after:!text-gray-0 ">
                 <p>최초 접수</p>
                 <p>2022.02.04</p>
               </li>
-              <li className=" step before:!bg-blue-400 after:!bg-blue-400">
+              <li className=" step before:!bg-blue-400 after:!bg-blue-400 after:!text-gray-0">
                 <p>서류 합격</p>
                 <p>2022.02.04</p>
               </li>
@@ -92,7 +92,7 @@ const ApplicantDetail = () => {
           </div>
         </div>
 
-        <div className=" flex flex-[0.4] flex-col">
+        <div className=" flex flex-[0.4] flex-col gap-4">
           <div className="interview-container flex justify-between rounded-md border-2 border-gray-50 bg-white px-5 py-4">
             <p className="SubHead1Semibold">면접 관련 정보</p>
             <div className="interview-time-container flex gap-4">
@@ -110,12 +110,12 @@ const ApplicantDetail = () => {
 
           <div className="feedback-note flex-1 rounded-md border-2 border-gray-50 bg-white p-7">
             <p className="SubHead1Semibold">평가노트</p>
-            <p className="mt-7 text-gray-400">
+            <p className="my-3 text-gray-400">
               인재의 전반적인 평가와 인상을 작성해보세요
             </p>
             <textarea
               placeholder="입력해 주세요"
-              className="Caption1Medium textarea-bordered textarea textarea-lg mt-7 w-full resize-none"
+              className="Caption1Medium textarea-bordered textarea textarea-lg min-h-[120px] w-full resize-none"
               maxLength={MAX_LENGTH}
               onChange={handleInput}
             ></textarea>

@@ -1,4 +1,4 @@
-const Button = ({
+const Box = ({
   children,
   className,
 }: {
@@ -13,4 +13,4 @@ const Button = ({
     </div>
   );
 };
-export default Button;
+export default Box;

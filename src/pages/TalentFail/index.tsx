@@ -12,8 +12,8 @@ import formatDate from "@/lib/utils/formatDate";
 import makeString from "@/lib/utils/makeString";
 import type { IFailedTalent } from "@/types/talentPool";
 import Banner from "@components/Common/Banner";
-import FailKeywordBadge from "@components/Talent/FailKeywordBadge";
 import FailProcedureBadge from "@components/Talent/FailProcedureBadge";
+import TKeywordBadge from "@components/Talent/TKeywordBadge";
 interface IData {
   userId: number;
   id: number;
@@ -61,9 +61,9 @@ const TalentFail = () => {
       <section className="rounded-[20px] border bg-gray-0 p-11">
         <div className="flex gap-4">
           <select className="">
-            <option selected>전체인재</option>
-            <option>찜된 탈락인재</option>
-            <option>영구삭제 인재</option>
+            <option selected>전체 인재</option>
+            <option>찜된 탈락 인재</option>
+            <option>영구 삭제 인재</option>
           </select>
           <input type="text" placeholder="인재를 검색해보세요" className="" />
         </div>
@@ -93,9 +93,7 @@ const TalentFail = () => {
                   <td>
                     <div className="flex gap-6px">
                       {item.keywords.map((keyword) => (
-                        <FailKeywordBadge key={keyword}>
-                          {keyword}
-                        </FailKeywordBadge>
+                        <TKeywordBadge key={keyword}>{keyword}</TKeywordBadge>
                       ))}
                     </div>
                   </td>
@@ -150,7 +148,7 @@ const TalentFail = () => {
                     <li key={i + 1}>
                       <button
                         onClick={() => handleClick(makeString(i + 1))}
-                        className={`${i + 1 === page ? "bg-purple-300" : ""}`}
+                        className={`${i + 1 === page ? "text-blue-500" : ""}`}
                       >
                         {i + 1}
                       </button>

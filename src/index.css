@@ -19,6 +19,7 @@ body {
   letter-spacing: -0.32px;
   min-height: calc(100vh - 64px);
   @apply bg-blue-25;
+  @apply text-gray-900;
 }
 
 a {

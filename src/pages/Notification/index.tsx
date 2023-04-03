@@ -9,6 +9,9 @@ const Notification = () => {
   const [inputCount, handleInput] = useInputLength(MAX_LENGTH);
   const [searchParams, setSearchParams] = useSearchParams();
   const searchByName = searchParams.get("searchName");
+  const [isAgree, setIsAgree] = useState(false);
+
+  console.log(isAgree);
 
   const handleSearchBar = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -129,14 +132,21 @@ const Notification = () => {
           </div>
           <div className="form-control mt-16 mb-6">
             <div className="flex justify-center gap-4">
-              <input type="checkbox" className="checkbox" />
+              <input
+                type="checkbox"
+                className="checkbox"
+                onClick={() => setIsAgree(!isAgree)}
+              />
               <span className="label-text">
                 알림을 보내면 취소가 불가능함을 인지합니다
               </span>
             </div>
           </div>
           <div className="flex justify-center">
-            <button className="SubHead2Semibold disabled rounded-md bg-blue-500 px-14 py-3 text-white disabled:bg-gray-200">
+            <button
+              disabled={!isAgree || !inputCount}
+              className="SubHead2Semibold rounded-md bg-blue-500 px-14 py-3 text-white disabled:bg-gray-200"
+            >
               알림 보내기
             </button>
           </div>

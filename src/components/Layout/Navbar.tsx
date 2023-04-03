@@ -1,7 +1,7 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { ReactComponent as ChevronDown } from "@/assets/svg/chevron-down.svg";
+import { ReactComponent as Logo } from "@/assets/svg/logo.svg";
 import { ReactComponent as NavProfile } from "@/assets/svg/nav-profile.svg";
-import { ReactComponent as Logo } from "@/assets/svg/union.svg";
 const Navbar = () => {
   const { pathname } = useLocation();
   return (

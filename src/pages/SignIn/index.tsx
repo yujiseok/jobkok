@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import * as z from "zod";
 import { ReactComponent as Bluelogo } from "@/assets/svg/blue-logo.svg";
 import { ReactComponent as Eyeclose } from "@/assets/svg/eye-close.svg";
+import { ReactComponent as Eyeopen } from "@/assets/svg/eye-open.svg";
 import { ReactComponent as Banner } from "@/assets/svg/jobkok-banner.svg";
 import { ReactComponent as Xicon } from "@/assets/svg/x-icon.svg";
 import { PW_REGEX } from "@/constants/signup";
@@ -148,7 +149,7 @@ const SignIn = () => {
               <button className="ml-auto" onClick={handleToggle}>
                 {getValues("password") ? (
                   showPw.visible ? (
-                    <Eyeclose />
+                    <Eyeopen />
                   ) : (
                     <Eyeclose />
                   )

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ReactComponent as Back } from "@/assets/svg/arrow-back.svg";
 import { ReactComponent as Banner } from "@/assets/svg/jobkok-banner.svg";

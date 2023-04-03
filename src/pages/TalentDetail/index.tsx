@@ -21,7 +21,7 @@ const data: ITalentDetail = {
     pass: "false",
     creationTime: "2023-03-21T13:04:30",
     applyDelete: "false",
-    keywordSelect: "센스 있어요",
+    keywordSelect: ["센스 있어요"],
     wish: "true",
     careerName: "패스트캠퍼스",
     careerStart: "2022-01-01T00:00:00",
@@ -122,11 +122,20 @@ const TalentDetail = () => {
                   채용 확정
                 </button>
               </div>
-              <div className="badge-container mt-10 flex">
-                <div className="mx-[0.375rem] my-1 rounded-sm bg-gray-200 text-blue-25">
+              <div className="badge-container mt-10 flex max-w-[280px] flex-wrap gap-x-2 gap-y-6px">
+                <div className="SubHead2Semibold rounded-sm bg-gray-200 p-1 text-blue-25">
                   # {data.data.keywordSelect}
                 </div>
-                <div className="mx-[0.375rem] my-1 rounded-sm bg-gray-200 text-blue-25">
+                <div className="SubHead2Semibold rounded-sm bg-gray-200 p-1 text-blue-25">
+                  # {data.data.keywordSelect}
+                </div>
+                <div className="SubHead2Semibold rounded-sm bg-gray-200 p-1 text-blue-25">
+                  # {data.data.keywordSelect}
+                </div>
+                <div className="SubHead2Semibold rounded-sm bg-gray-200 p-1 text-blue-25">
+                  # {data.data.keywordSelect}
+                </div>
+                <div className="SubHead2Semibold rounded-sm bg-gray-200 p-1 text-blue-25">
                   # {data.data.keywordSelect}
                 </div>
               </div>

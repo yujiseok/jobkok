@@ -16,7 +16,7 @@ export interface ITalentDetail extends ITalentBase {
     pass: string;
     creationTime: string;
     applyDelete: string;
-    keywordSelect: string;
+    keywordSelect: string[];
     wish: string;
     careerName: string;
     careerStart: string;

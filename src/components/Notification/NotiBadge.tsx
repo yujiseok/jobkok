@@ -7,7 +7,7 @@ const NotiBadge = ({
 }) => {
   return (
     <div
-      className={`${className} Caption2Semibold rounded-sm px-[0.375rem] py-[0.375rem]`}
+      className={`${className} Caption2Semibold flex justify-center rounded-2xl py-6px`}
     >
       {children}
     </div>

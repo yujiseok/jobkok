@@ -5,6 +5,8 @@ const AuthRow = ({
   children: React.ReactNode;
   className?: string;
 }) => {
-  return <div className={`${className} flex gap-3`}>{children}</div>;
+  return (
+    <div className={`${className} flex justify-between gap-3`}>{children}</div>
+  );
 };
 export default AuthRow;

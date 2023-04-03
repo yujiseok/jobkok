@@ -13,12 +13,12 @@ interface ITalentBase {
   applyName: string;
   applyPhone: string;
   applyEmail: string;
-  applyProcedure: string;
+  applyProcedure: string | null;
   applyDelete: boolean;
   createdTime: string;
-  pass: boolean;
+  pass?: boolean;
   wish: boolean;
-  keywordsSelect: any[];
+  keywords: string[];
 }
 
 export interface ITalent extends ITalentBase {
@@ -32,7 +32,10 @@ export interface ITalentWithCount extends ITalentBase {
 }
 
 export interface IFailedTalent extends ITalentBase {
-  recentMessageTime: string;
+  recruitId: number;
+  recruitTitle: string;
+  recentMessageTime: string | null;
+  failApply: boolean;
 }
 
 export interface IEditSuccess {

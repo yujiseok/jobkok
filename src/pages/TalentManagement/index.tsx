@@ -11,7 +11,10 @@ import { ReactComponent as Pin } from "@/assets/svg/pin.svg";
 import { ReactComponent as Rocket } from "@/assets/svg/rocket.svg";
 import { ReactComponent as Stats } from "@/assets/svg/stats.svg";
 import useDnD from "@/lib/hooks/useDnD";
+import InterviewBadge from "@components/Talent/InterviewBadge";
+import KeywordBadge from "@components/Talent/KeywordBadge";
 import NumberBadge from "@components/Talent/NumberBadge";
+import PreferentialBadge from "@components/Talent/PreferentialBadge";
 import ProcedureBadge from "@components/Talent/ProcedureBadge";
 
 const mockData = [
@@ -71,7 +74,7 @@ const TalentManagement = () => {
 
   return (
     <>
-      <section className="absolute top-16 left-0  h-[25rem] w-full bg-blue-400 py-12 text-gray-0">
+      <section className="absolute top-16 left-0 h-[25rem] w-full bg-blue-400 py-12 text-gray-0">
         <div className="mx-auto flex max-w-7xl flex-col gap-8">
           <div className="flex items-center justify-between ">
             <select className="SubHead2Semibold appearance-none bg-transparent outline-none">
@@ -121,7 +124,7 @@ const TalentManagement = () => {
         </div>
       </section>
 
-      <section className="mt-[34rem]">
+      <section className="pt-[34rem]">
         <div>
           <h4 className="Head3Semibold mb-12 flex items-center gap-1">
             <Pin className="-scale-x-100" />
@@ -130,8 +133,8 @@ const TalentManagement = () => {
         </div>
 
         <div className="flex flex-col gap-8">
-          <div className="relative flex gap-4 p-1">
-            <div className="relative flex-[0.3] rounded-xl bg-blue-400 px-4 py-6 text-gray-0 shadow-job">
+          <div className="relative flex items-center gap-4">
+            <div className="relative h-48 flex-[0.3] rounded-xl bg-blue-400 px-4 py-6 text-gray-0 shadow-job">
               <p className="SubHead1Semibold mb-3">잡콕인재추천</p>
               <p className="SubHead2Medium">
                 설정하신 우대사항 란에
@@ -159,7 +162,13 @@ const TalentManagement = () => {
                         <ProcedureBadge>서류검토</ProcedureBadge>
                       </div>
                     </div>
-                    <div>badge</div>
+                    <div className="flex max-w-[7.8125rem] flex-wrap gap-[0.375rem]">
+                      <KeywordBadge>경력</KeywordBadge>
+                      <KeywordBadge>자격증</KeywordBadge>
+                      <KeywordBadge>경력</KeywordBadge>
+                      <KeywordBadge>경력</KeywordBadge>
+                      <KeywordBadge>기타이력서</KeywordBadge>
+                    </div>
                     <time
                       dateTime={new Date().toLocaleDateString()}
                       className="Caption1Medium absolute bottom-5 text-gray-300"
@@ -176,8 +185,8 @@ const TalentManagement = () => {
               ))}
             </Swiper>
           </div>
-          <div className="relative flex gap-4 p-1">
-            <div className="relative flex-[0.3] rounded-xl bg-banner-teal-500 px-4 py-6 text-gray-0 shadow-job">
+          <div className="relative flex items-center gap-4">
+            <div className="relative h-48 flex-[0.3] rounded-xl bg-banner-teal-500 px-4 py-6 text-gray-0 shadow-job">
               <p className="SubHead1Semibold mb-3">잡콕인재추천</p>
               <p className="SubHead2Medium">
                 설정하신 우대사항 란에
@@ -197,15 +206,24 @@ const TalentManagement = () => {
               className="flex-1"
             >
               {numberArr.map((value, i) => (
-                <SwiperSlide key={value}>
-                  <div className="relative h-48 rounded-xl bg-gray-0 px-4 py-6 shadow-job">
+                <SwiperSlide
+                  key={value}
+                  className="rounded-xl bg-gray-0 shadow-job"
+                >
+                  <div className="relative h-48 px-4 py-6">
                     <div className="mb-3 flex justify-between">
                       <div className="flex items-center gap-[0.375rem]">
                         <div className="SubHead1Semibold">김잡콕 {value}</div>
                         <ProcedureBadge>서류검토</ProcedureBadge>
                       </div>
                     </div>
-                    <div>badge</div>
+                    <div className="flex max-w-[7.8125rem] flex-wrap gap-[0.375rem]">
+                      <KeywordBadge>경력</KeywordBadge>
+                      <KeywordBadge>자격증</KeywordBadge>
+                      <KeywordBadge>경력</KeywordBadge>
+                      <KeywordBadge>경력</KeywordBadge>
+                      <KeywordBadge>기타이력서</KeywordBadge>
+                    </div>
                     <time
                       dateTime={new Date().toLocaleDateString()}
                       className="Caption1Medium absolute bottom-5 text-gray-300"
@@ -242,37 +260,22 @@ const TalentManagement = () => {
           </Link>
         </div>
 
-        {/* <div className="flex">
-          <div>
-            지원 접수 <span>0</span>
-          </div>
-          <div>
-            서류 합격 <span>0</span>
-          </div>
-          <div>
-            면접 제안 <span>0</span>
-          </div>
-        </div> */}
-        {/* 칸반 */}
-
         <DragDropContext onDragEnd={onDragEnd}>
-          <div className="mt-8 grid grid-cols-3 gap-6">
+          {/* grid grid-cols-3 grid-rows-1 */}
+          <div className="mt-8 flex items-start justify-between gap-6">
             {data.map((section) => (
               <Droppable key={section.id} droppableId={section.id}>
                 {(provided) => (
                   <div
                     {...provided.droppableProps}
                     ref={provided.innerRef}
-                    className="rounded-xl bg-slate-400 pl-8 pr-4 pb-12"
+                    className="flex-1 rounded-xl border border-gray-50 bg-gray-0 pl-8 pr-4 pb-12"
                   >
-                    <div
-                      className="flex items-center justify-between pr-8
-                    "
-                    >
+                    <div className="flex items-center justify-between pr-4">
                       <div className="flex items-center py-5">
                         <span className="SubHead1Semibold">
                           {section.title}
-                        </span>{" "}
+                        </span>
                         <NumberBadge id={section.id}>
                           {section.tasks.length}
                         </NumberBadge>
@@ -288,10 +291,7 @@ const TalentManagement = () => {
                       ) : null}
                     </div>
 
-                    <div
-                      className="flex max-h-40 flex-col gap-4 overflow-y-auto overflow-x-hidden  pr-3
-                    "
-                    >
+                    <div className="flex max-h-[54.75rem] flex-col gap-4 overflow-y-auto overflow-x-hidden py-1 pr-3">
                       {section.tasks.map((task, index) => (
                         <Draggable
                           key={task.id}
@@ -313,25 +313,43 @@ const TalentManagement = () => {
                               }}
                             >
                               <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                  <HeartMemoji />
+                                <Link
+                                  to="/talent/detail/111"
+                                  className="flex items-center gap-2"
+                                >
+                                  <div className="rounded-md bg-blue-50">
+                                    <HeartMemoji />
+                                  </div>
                                   <span className="SubHead1Semibold">
                                     김잡콕
                                   </span>
                                   <ChevronRight />
-                                </div>
+                                </Link>
 
                                 <button>
                                   <ArchiveTick />
                                 </button>
                               </div>
-                              <div className="pt-4 pb-8">badge</div>
-                              <time
-                                className="Caption1Medium text-gray-300"
-                                dateTime={new Date().toLocaleDateString()}
-                              >
-                                {new Date().toLocaleDateString()}
-                              </time>
+                              <div className="Caption1Semibold flex gap-[0.375rem] pt-4 pb-8">
+                                <PreferentialBadge>
+                                  우대사항 <span>2</span>/<span>5</span>
+                                </PreferentialBadge>
+                                <PreferentialBadge>
+                                  키워드 <span>2</span>/<span>5</span>
+                                </PreferentialBadge>
+                              </div>
+                              <div className="flex items-center justify-between">
+                                <time
+                                  className="Caption1Medium text-gray-300"
+                                  dateTime={new Date().toLocaleDateString()}
+                                >
+                                  {new Date().toLocaleDateString()}
+                                </time>
+
+                                <InterviewBadge>
+                                  면접 D-16 20:00 예정
+                                </InterviewBadge>
+                              </div>
                             </div>
                           )}
                         </Draggable>

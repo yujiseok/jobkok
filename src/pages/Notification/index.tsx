@@ -1,32 +1,48 @@
+import { ReactComponent as Profile } from "@/assets/svg/heart-memoji.svg";
 import useInputLength from "@/lib/hooks/useInputLength";
+import NotiBadge from "@components/Notification/NotiBadge";
 
 const Notification = () => {
   const [inputCount, handleInput] = useInputLength(MAX_LENGTH);
   return (
     <>
-      <div className="min-h-16">
-        <select className="select w-full max-w-xs">
-          <option disabled>지원서를 선택하세요</option>
-          <option>스마트스토어 상세페이지 디자이너 지원서 폼</option>
-        </select>
+      <section className="absolute top-16 left-0 h-16 w-full bg-blue-400 py-12 text-gray-0">
+        <div className="mx-auto my-auto flex h-full max-w-7xl flex-col gap-8">
+          <select className="SubHead2Semibold w-[500px] appearance-none bg-transparent outline-none">
+            <option>스마트스토어 상세페이지 디자이너 지원서 폼</option>
+            <option>안녕하세요</option>
+            <option>반갑습니다</option>
+          </select>
+        </div>
+      </section>
+
+      <div className="mt-[100px]">
+        <h1 className="Head3Semibold text-gray-900">단체 알림 센터</h1>
+        <p className="SubHead1Semibold mt-5 text-gray-500">
+          인재에게 단계별 알림을 보낼 수 있습니다.
+        </p>
       </div>
-      <h1 className="text-3xl">알림 센터</h1>
-      <p>어쩌궁 저쩌궁</p>
-      <div className="mx-16 flex rounded-md border-2 border-solid bg-base-100 p-1 shadow">
-        <div className="flex-1">
-          <select className="select w-full max-w-xs">
+
+      <section className="mt-9 flex rounded-md border-2 border-solid bg-base-100 shadow">
+        <div className="flex-[0.4] p-0">
+          <select className="select mt-[2.0625rem] ml-6 max-w-xs">
             <option disabled>단계를 선택하세요</option>
             <option>면접 진행</option>
           </select>
-          <div className="overflow-x-auto  p-6">
+
+          <form className="SubHead1Medium mx-6 mt-6 mb-6 rounded-md bg-blue-25 py-4 px-6 text-gray-400">
+            인재를 검색해보세요
+          </form>
+
+          <div className="overflow-x-auto px-6">
             <table className="table w-full">
               {/* head */}
               <thead>
-                <tr>
-                  <th className="bg-red-100">선택</th>
-                  <th className="bg-red-100">인재</th>
-                  <th className="bg-red-100">채용 단계</th>
-                  <th className="bg-red-100">지원일</th>
+                <tr className="Caption1Medium text-gray-600">
+                  <th className="bg-gray-0">선택</th>
+                  <th className="bg-gray-0">인재</th>
+                  <th className="bg-gray-0">채용 단계</th>
+                  <th className="bg-gray-0">지원일</th>
                 </tr>
               </thead>
               <tbody>
@@ -35,68 +51,49 @@ const Notification = () => {
                   <th>
                     <input
                       type="checkbox"
-                      className="checkbox-primary checkbox"
+                      className="checkbox border-gray-400 checked:bg-blue-500"
                     />
                   </th>
-                  <td>김잡콕</td>
+                  <td className="SubHead1Semibold text-gray-600">김잡콕</td>
                   <td>
-                    <div className="badge ">면접 진행</div>
+                    <NotiBadge>면접 진행</NotiBadge>
                   </td>
-                  <td>2023.03.29</td>
-                </tr>
-                <tr>
-                  <th>
-                    <input
-                      type="checkbox"
-                      className="checkbox-primary checkbox"
-                    />
-                  </th>
-                  <td>김잡콕</td>
-                  <td>
-                    <div className="badge">면접 진행</div>
-                  </td>
-                  <td>2023.03.29</td>
-                </tr>
-                <tr>
-                  <th>
-                    <input
-                      type="checkbox"
-                      className="checkbox-primary checkbox"
-                    />
-                  </th>
-                  <td>김잡콕</td>
-                  <td>
-                    <div className="badge">면접 진행</div>
-                  </td>
-                  <td>2023.03.29</td>
+                  <td className="Caption1Medium text-gray-500">2023.03.29</td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
-        <div className="mx-4 my-6 flex-1">
-          <div className="my-6 flex  items-center justify-between">
-            <h2 className="text-xl font-bold">알림 보내기</h2>
-            <select className="select w-full max-w-xs bg-blue-100 text-blue-600">
+
+        <div className="mx-4 my-6 flex-[0.6]">
+          <div className="mb-12 mt-12 flex  items-center justify-between">
+            <h2 className="Head3Semibold">알림 보내기</h2>
+            <select className="select max-w-xs bg-blue-50 px-3 text-blue-500">
               <option disabled>단계를 선택하세요</option>
               <option>면접 합격</option>
             </select>
           </div>
-          <div className="mb-6 flex h-11 items-center rounded-md bg-slate-200 py-6">
-            <p className="mx-4">받는 사람</p>
-            <p className="rounded-md bg-white text-sm">김잡콕 님</p>
+
+          <div className="mb-6 flex items-center rounded-md bg-blue-25 py-4 px-4">
+            <p className=" SubHead1Semibold mr-8 text-gray-800">받는 사람</p>
+
+            <div className="flex items-center gap-4 rounded-md bg-gray-0 py-1 px-2 ">
+              <Profile className="rounded-md bg-gray-50 " />
+              <p className="SubHead1Medium text-gray-900">김잡콕</p>
+            </div>
           </div>
+
           <textarea
-            placeholder="입력해 주세요"
-            className="textarea-bordered textarea textarea-lg w-full resize-none"
+            placeholder="안녕하세요. 귀하께서 서류 전형에 합격하여 면접 제안드립니다."
+            className="SubHead1Medium textarea-bordered textarea textarea-lg min-h-[300px] w-full resize-none"
             maxLength={MAX_LENGTH}
             onChange={handleInput}
           ></textarea>
-          <div className=" text-sm text-gray-400">
+          <div className="BodyBody3 mt-2 text-gray-300">
             <span>{inputCount.toLocaleString()}</span>
             <span>/{MAX_LENGTH.toLocaleString()}자</span>
           </div>
-          <div className="form-control">
+          <div className="form-control mt-16 mb-6">
             <div className="flex justify-center gap-4">
               <input type="checkbox" className="checkbox" />
               <span className="label-text">
@@ -105,13 +102,15 @@ const Notification = () => {
             </div>
           </div>
           <div className="flex justify-center">
-            <button className="btn-primary btn ">알림 보내기</button>
+            <button className="SubHead2Semibold disabled rounded-md bg-blue-500 px-14 py-3 text-white disabled:bg-gray-200">
+              알림 보내기
+            </button>
           </div>
         </div>
-      </div>
+      </section>
     </>
   );
 };
 export default Notification;
 
-const MAX_LENGTH = 10;
+const MAX_LENGTH = 1000;

@@ -52,6 +52,7 @@ swiper-container {
     initial
   );
   box-sizing: content-box;
+  padding: 8px 0;
 }
 .swiper-android .swiper-slide,
 .swiper-wrapper {

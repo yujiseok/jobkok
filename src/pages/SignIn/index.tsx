@@ -5,7 +5,8 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import * as z from "zod";
 import { ReactComponent as Bluelogo } from "@/assets/svg/blue-logo.svg";
-import { ReactComponent as Whitelogo } from "@/assets/svg/white-logo.svg";
+import { ReactComponent as Eyeclose } from "@/assets/svg/eye-close.svg";
+import { ReactComponent as Banner } from "@/assets/svg/jobkok-banner.svg";
 import { ReactComponent as Xicon } from "@/assets/svg/x-icon.svg";
 import { PW_REGEX } from "@/constants/signup";
 
@@ -22,7 +23,7 @@ const userSchema = z.object({
     .email("이메일 주소를 확인해 주세요."),
   password: z
     .string()
-    .min(8, "비밀번호는 8자 이상 20자 이하로 입력해 주세요.")
+    .min(1, "비밀번호는 8자 이상 20자 이하로 입력해 주세요.")
     .max(20, "비밀번호는 8자 이상 20자 이하로 입력해 주세요.")
     .regex(PW_REGEX, "8~20자의 영문 대/소문자, 숫자, 특수문자 중 2가지 조합"),
 });
@@ -84,7 +85,7 @@ const SignIn = () => {
 
   return (
     <div className="flex h-screen bg-gray-0">
-      <div className="container flex w-3/5 justify-center py-[68px] px-[195px]">
+      <div className="my-[68px] mx-[195px] flex w-4/5 justify-center">
         <div>
           <Bluelogo className="mb-[52px]" />
           <p className="Head2Semibold mb-2 text-title-gray">로그인</p>
@@ -92,9 +93,15 @@ const SignIn = () => {
             잡콕에 다시 오신 걸 환영해요
           </p>
           <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
-            <label className="Caption1Medium mb-1 text-gray-300">아이디</label>
+            <label className="Caption1Medium mb-1 text-gray-300">이메일</label>
             <div className="mb-6">
-              <div className="flex h-[51px] w-[430px] items-center rounded-lg border border-solid border-gray-100 bg-gray-0 px-6 after:text-gray-300 focus-within:border-blue-400">
+              <div
+                className={`flex h-[51px] w-[430px] items-center rounded-lg border border-solid bg-gray-0 px-6 after:text-gray-300 ${
+                  errors.useremail
+                    ? "border-error-400"
+                    : "border-gray-100 focus-within:border-blue-400"
+                }`}
+              >
                 {/* 이메일 입력칸 */}
                 <input
                   placeholder="jobkok@gmail.com"
@@ -111,18 +118,26 @@ const SignIn = () => {
                     setValue("useremail", "");
                   }}
                 >
-                  <Xicon />
+                  {getValues("useremail") ? <Xicon /> : null}
                 </button>
               </div>
               {/* 오류 메세지 띄우기 */}
-              <span className="text-red-600">{errors?.useremail?.message}</span>
+              <span className="Caption1Medium text-error-400">
+                {errors?.useremail?.message}
+              </span>
             </div>
 
             {/* 패스워드 입력칸 */}
             <label className="Caption1Medium mb-1 text-gray-300">
               비밀번호
             </label>
-            <div className="flex h-[51px] w-[430px] items-center rounded-lg border border-solid border-gray-100 bg-gray-0 px-6 after:text-gray-300 focus-within:border-blue-400">
+            <div
+              className={`flex h-[51px] w-[430px] items-center rounded-lg border border-solid bg-gray-0 px-6 after:text-gray-300 ${
+                errors.password
+                  ? "border-error-400"
+                  : "border-gray-100 focus-within:border-blue-400"
+              }`}
+            >
               <input
                 type={showPw.type}
                 placeholder="비밀번호를 입력해 주세요"
@@ -131,11 +146,19 @@ const SignIn = () => {
                 {...register("password", { required: true })}
               />
               <button className="ml-auto" onClick={handleToggle}>
-                {showPw.visible ? <span>눈감기</span> : <span>눈뜨기</span>}
+                {getValues("password") ? (
+                  showPw.visible ? (
+                    <Eyeclose />
+                  ) : (
+                    <Eyeclose />
+                  )
+                ) : null}
               </button>
             </div>
             {/* 오류 메세지 띄우기 */}
-            <span className="text-red-600">{errors?.password?.message}</span>
+            <span className="Caption1Medium text-error-400">
+              {errors?.password?.message}
+            </span>
             <div className="mt-4 mb-20 flex justify-between">
               <div>
                 <input
@@ -149,13 +172,19 @@ const SignIn = () => {
               </div>
               <Link
                 to="/find-user-info"
-                className="SubHead2Medium mx-2 text-blue-400"
+                className="SubHead1Medium mx-2 text-blue-400"
               >
                 비밀번호를 잊어버렸나요? {">"}
               </Link>
             </div>
             <button
-              className="SubHead1Semibold my-5 h-[48px] w-[430px] self-center rounded-lg bg-gray-200 text-gray-0"
+              className={`SubHead1Semibold my-5 h-[48px] w-[430px] self-center rounded-lg text-gray-0 ${
+                getValues("useremail") && getValues("password")
+                  ? errors.useremail || errors.password
+                    ? "bg-gray-200"
+                    : "bg-blue-500"
+                  : "bg-gray-200"
+              }`}
               type="submit"
               disabled={isSubmitting}
             >
@@ -163,18 +192,15 @@ const SignIn = () => {
             </button>
           </form>
           <div className="SubHead2Medium flex justify-center">
-            <p className="text-gray-600">처음 오셨다면</p>
+            <p className="text-gray-600">잡콕에 처음 오셨다면</p>
             <Link to="/sign-up" className="mx-2 text-blue-400">
               회원가입하기 {">"}
             </Link>
           </div>
         </div>
       </div>
-      <div className="flex w-full flex-col items-center justify-center bg-blue-500">
-        <p className="Head4Medium mb-12 text-gray-0">
-          인재는 두배로, 채용 시간은 절반으로
-        </p>
-        <Whitelogo />
+      <div>
+        <Banner />
       </div>
     </div>
   );

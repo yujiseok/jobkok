@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { ReactComponent as Profile } from "@/assets/svg/heart-memoji.svg";
 import { ReactComponent as Search } from "@/assets/svg/search.svg";
+import { ReactComponent as SendingIcon } from "@/assets/svg/send.svg";
 import useInputLength from "@/lib/hooks/useInputLength";
 import formatDate from "@/lib/utils/formatDate";
 import NotiBadge from "@components/Notification/NotiBadge";
@@ -305,9 +306,10 @@ const Notification = () => {
           <div className="flex justify-center">
             <button
               disabled={!isAgree || !inputCount}
-              className="SubHead2Semibold rounded-md bg-blue-500 px-14 py-3 text-white disabled:bg-gray-200"
+              className="SubHead2Semibold flex items-center gap-2 rounded-md bg-blue-500 px-14 py-3 text-white disabled:bg-gray-200"
             >
               알림 보내기
+              <SendingIcon />
             </button>
           </div>
         </div>

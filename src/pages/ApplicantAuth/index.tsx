@@ -3,7 +3,11 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import * as z from "zod";
-import GetFormInfo from "@components/Applicant/GetFormInfo";
+import { ReactComponent as IconBack } from "@/assets/applicant/arrow-left.svg";
+import { ReactComponent as IconLogo } from "@/assets/applicant/logo.svg";
+import AuthEnter from "@components/Applicant/AuthEnter";
+import AuthError from "@components/Applicant/AuthError";
+import AuthRow from "@components/Applicant/AuthRow";
 // import { applicantSubmit, emailAuth, submitApply } from "@/api/applicant";
 
 const schema = z.object({
@@ -85,96 +89,114 @@ const ApplicantAuth = () => {
   };
 
   return (
-    <div className="container mx-auto max-w-[768px] py-10">
-      <GetFormInfo />
-      <section className="rounded-md border border-solid p-10">
-        <h2 className="mb-10 text-2xl font-bold">지원자 기본 정보</h2>
-        <form className="flex-col" onSubmit={handleSubmit(onSubmit)}>
-          <div className="mb-5">
-            <label htmlFor="name">
-              이름 <span className="text-sm text-red-500">필수</span>
-            </label>
-            <input
-              className="ml-3 rounded-md border border-solid p-1"
-              type="text"
-              id="name"
-              placeholder="홍길동"
-              {...register("name")}
-            />
-            <p className="mt-2 text-sm text-rose-500">{errors.name?.message}</p>
-          </div>
-          <div className="mb-5">
-            <label htmlFor="tel">
-              전화번호 <span className="text-sm text-red-500">필수</span>
-            </label>
-            <input
-              className="ml-3 rounded-md border border-solid p-1"
-              type="tel"
-              id="tel"
-              placeholder="010-1234-5678"
-              {...register("tel")}
-            />
-            <p className="mt-2 text-sm text-rose-500">{errors.tel?.message}</p>
-          </div>
-          <div className="mb-5">
-            <label htmlFor="email">
-              이메일 <span className="text-sm text-red-500">필수</span>
-            </label>
-            <input
-              className="mr-5 ml-3 rounded-md border border-solid p-1"
-              type="email"
-              id="email"
-              placeholder="user@user.com"
-              {...register("email")}
-            />
-            <button
-              className="rounded-md bg-blue-500 py-1 px-2 text-white"
-              type="button"
-              onClick={handleGetCodeBtn}
-            >
-              인증받기
-            </button>
-            <p className="mt-2 text-sm text-rose-500">
-              {errors.email?.message}
+    <div className="mx-auto flex justify-center">
+      <div className="flex w-[820px] gap-[99px] p-16">
+        <IconBack />
+        <section className="w-[430px]">
+          <h2 className="mb-[52.8px]">
+            <IconLogo />
+          </h2>
+          <div className="mb-[58px]">
+            <h3 className="Head2Semibold mb-2 text-[#333]">지원자 인증</h3>
+            <p className="SubHead1Medium text-gray-600">
+              해당 정보는 기업에게 제공되는 개인정보 입니다.
             </p>
           </div>
-          {isToggled && (
-            <div className="mb-5">
-              <label htmlFor="authCode">
-                인증코드 <span className="text-sm text-red-500">필수</span>
-              </label>
-              <input
-                className="mr-5 ml-3 rounded-md border border-solid p-1"
-                type="text"
-                id="authCode"
-                maxLength={6}
-                placeholder="인증코드를 입력해주세요."
-                {...register("authCode", {
-                  required: true,
-                })}
-              />
+          <form className="mb-[158px]" onSubmit={handleSubmit(onSubmit)}>
+            <AuthRow className="mb-4">
+              <AuthEnter>
+                <label className="Caption1Medium text-gray-300" htmlFor="name">
+                  이름
+                </label>
+                <input
+                  className="SubHead1Medium h-[52px] w-[180px] rounded-md border py-4 px-6 text-gray-300"
+                  type="text"
+                  id="name"
+                  placeholder="홍길동"
+                  {...register("name")}
+                />
+                <AuthError>{errors.name?.message}</AuthError>
+              </AuthEnter>
+              <AuthEnter>
+                <label
+                  className="Caption1Medium w-[238px] text-gray-300"
+                  htmlFor="tel"
+                >
+                  전화번호
+                </label>
+                <input
+                  className="SubHead1Medium h-[52px] w-full rounded-md border py-4 px-6 text-gray-300"
+                  type="tel"
+                  id="tel"
+                  placeholder="010-1234-5678"
+                  {...register("tel")}
+                />
+                <AuthError>{errors.tel?.message}</AuthError>
+              </AuthEnter>
+            </AuthRow>
+            <AuthRow>
+              <AuthEnter>
+                <label className="Caption1Medium text-gray-300" htmlFor="email">
+                  이메일
+                </label>
+                <input
+                  className="SubHead1Medium h-[52px] w-[315px] rounded-md border py-4 px-6 text-gray-300"
+                  type="email"
+                  id="email"
+                  placeholder="jobkok@jobkok.com"
+                  {...register("email")}
+                />
+                <AuthError className="mt-1 text-sm text-rose-500">
+                  {errors.email?.message}
+                </AuthError>
+              </AuthEnter>
               <button
-                className="rounded-md bg-blue-500 py-1 px-2 text-white"
+                className="SubHead1Semibold mt-[19px] h-[52px] rounded-lg bg-blue-50 py-2.5 px-6 text-blue-200"
                 type="button"
-                onClick={handelConfirmCode}
+                onClick={handleGetCodeBtn}
               >
-                인증완료
+                코드발송
               </button>
-              <p className="mt-2 text-sm text-rose-500">
-                {errors.authCode?.message}
-              </p>
-            </div>
-          )}
-        </form>
-        <button
-          className="rounded-md bg-blue-500 py-3 px-5 text-white"
-          type="submit"
-          onClick={handleSubmit(onSubmit)}
-          disabled={isSubmitting}
-        >
-          다음
-        </button>
-      </section>
+            </AuthRow>
+            {isToggled && (
+              <div className="mb-5">
+                <label htmlFor="authCode">
+                  인증코드 <span className="text-sm text-red-500">필수</span>
+                </label>
+                <input
+                  className="mr-5 ml-3 rounded-md border border-solid p-1"
+                  type="text"
+                  id="authCode"
+                  maxLength={6}
+                  placeholder="인증코드를 입력해주세요."
+                  {...register("authCode", {
+                    required: true,
+                  })}
+                />
+                <button
+                  className="rounded-md bg-blue-500 py-1 px-2 text-white"
+                  type="button"
+                  onClick={handelConfirmCode}
+                >
+                  인증완료
+                </button>
+                <p className="mt-2 text-sm text-rose-500">
+                  {errors.authCode?.message}
+                </p>
+              </div>
+            )}
+          </form>
+          <button
+            className="SubHead1Semibold h-11 w-full rounded-lg bg-gray-200 py-2.5 px-6 text-gray-0"
+            type="submit"
+            onClick={handleSubmit(onSubmit)}
+            disabled={isSubmitting}
+          >
+            지원서 작성하기
+          </button>
+        </section>
+      </div>
+      <img className="h-screen w-[460px] bg-blue-400" />
     </div>
   );
 };

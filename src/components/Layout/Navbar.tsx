@@ -1,13 +1,15 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { ReactComponent as ChevronDown } from "@/assets/svg/chevron-down.svg";
 import { ReactComponent as NavProfile } from "@/assets/svg/nav-profile.svg";
+import { ReactComponent as Logo } from "@/assets/svg/union.svg";
 const Navbar = () => {
   const { pathname } = useLocation();
   return (
     <nav className="min-h-16 fixed top-0 z-20 w-full bg-white">
       <div className="min-h-16 mx-auto flex max-w-7xl items-center justify-between px-4">
-        <div className="flex items-center gap-16 ">
-          <Link to="/" className="text-2xl">
+        <div className="flex items-center gap-16">
+          <Link to="/" className="flex items-center gap-2 text-2xl">
+            <Logo />
             <h2 className="Head3Semibold text-blue-400">Jobkok</h2>
           </Link>
           <ul className="SubHead1Medium flex cursor-pointer items-center gap-12">

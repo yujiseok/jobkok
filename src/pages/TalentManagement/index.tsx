@@ -124,7 +124,7 @@ const TalentManagement = () => {
         </div>
       </section>
 
-      <section className="mt-[34rem]">
+      <section className="pt-[34rem]">
         <div>
           <h4 className="Head3Semibold mb-12 flex items-center gap-1">
             <Pin className="-scale-x-100" />
@@ -133,8 +133,8 @@ const TalentManagement = () => {
         </div>
 
         <div className="flex flex-col gap-8">
-          <div className="relative flex gap-4 p-1">
-            <div className="relative flex-[0.3] rounded-xl bg-blue-400 px-4 py-6 text-gray-0 shadow-job">
+          <div className="relative flex items-center gap-4">
+            <div className="relative h-48 flex-[0.3] rounded-xl bg-blue-400 px-4 py-6 text-gray-0 shadow-job">
               <p className="SubHead1Semibold mb-3">잡콕인재추천</p>
               <p className="SubHead2Medium">
                 설정하신 우대사항 란에
@@ -185,8 +185,8 @@ const TalentManagement = () => {
               ))}
             </Swiper>
           </div>
-          <div className="relative flex gap-4 p-1">
-            <div className="relative flex-[0.3] rounded-xl bg-banner-teal-500 px-4 py-6 text-gray-0 shadow-job">
+          <div className="relative flex items-center gap-4">
+            <div className="relative h-48 flex-[0.3] rounded-xl bg-banner-teal-500 px-4 py-6 text-gray-0 shadow-job">
               <p className="SubHead1Semibold mb-3">잡콕인재추천</p>
               <p className="SubHead2Medium">
                 설정하신 우대사항 란에
@@ -206,8 +206,11 @@ const TalentManagement = () => {
               className="flex-1"
             >
               {numberArr.map((value, i) => (
-                <SwiperSlide key={value}>
-                  <div className="relative h-48 rounded-xl bg-gray-0 px-4 py-6 shadow-job">
+                <SwiperSlide
+                  key={value}
+                  className="rounded-xl bg-gray-0 shadow-job"
+                >
+                  <div className="relative h-48 px-4 py-6">
                     <div className="mb-3 flex justify-between">
                       <div className="flex items-center gap-[0.375rem]">
                         <div className="SubHead1Semibold">김잡콕 {value}</div>
@@ -268,7 +271,7 @@ const TalentManagement = () => {
                     ref={provided.innerRef}
                     className="flex-1 rounded-xl border border-gray-50 bg-gray-0 pl-8 pr-4 pb-12"
                   >
-                    <div className="flex items-center justify-between pr-8">
+                    <div className="flex items-center justify-between pr-4">
                       <div className="flex items-center py-5">
                         <span className="SubHead1Semibold">
                           {section.title}

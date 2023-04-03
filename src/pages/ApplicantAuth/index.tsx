@@ -32,7 +32,11 @@ const schema = z.object({
       /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i,
       "이메일 형식이 올바르지 않습니다.",
     ),
-  authCode: z.string().min(6, "인증코드 6자리를 입력해주세요").optional(),
+  authCode: z
+    .string()
+    .min(6, "인증코드 6자리를 입력해주세요")
+    .regex(/^\d{6}$/, "인증코드 6자리를 입력해주세요")
+    .optional(),
 });
 
 type IAuthForm = z.infer<typeof schema>;

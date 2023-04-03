@@ -84,7 +84,7 @@ const ApplicantAuth = () => {
       //데이터 지원서로 가져와서, 한꺼번에 등록 api 호출해야함
       //리덕스에 data 저장?
       console.log(data);
-      // navigate("/applicant/application");
+      navigate("/applicant/application");
     } else {
       setFocus("authCode");
     }
@@ -138,18 +138,20 @@ const ApplicantAuth = () => {
                 <AuthEnter>
                   <AuthLabel htmlFor="email">이메일</AuthLabel>
                   <input
-                    className={`SubHead1Medium h-[52px] w-[315px]  rounded-md border py-4 px-6 text-gray-800 focus:outline-none ${
+                    className={`SubHead1Medium h-[52px] w-[315px] rounded-md border py-4 px-6 text-gray-800 focus:outline-none ${
                       errors.email && "border-error-400"
-                    }`}
+                    } ${isCertified && "bg-gray-100"}`}
                     type="email"
                     id="email"
                     placeholder="jobkok@jobkok.com"
                     {...register("email")}
+                    disabled={isCertified}
                   />
                   <p className="Caption1Medium mt-1 text-gray-400">
                     {isSended
                       ? "이메일로 회원님의 인증코드가 발송되었습니다"
-                      : "인증코드를 받아 이메일 인증을 해주세요."}
+                      : !isCertified &&
+                        "인증코드를 받아 이메일 인증을 해주세요."}
                   </p>
                 </AuthEnter>
                 <button

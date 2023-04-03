@@ -66,7 +66,7 @@ const Application = () => {
   const navigate = useNavigate();
   const {
     register,
-    getValues,
+    watch,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<IApplicationForm>({
@@ -141,8 +141,8 @@ const Application = () => {
               {...register("careerDetail")}
             ></textarea>
             <div>
-              문항 답변 글자수 : {getValues().careerDetail?.length}
-              /1000자(공백포함)
+              문항 답변 글자수 : {watch().careerDetail?.length.toLocaleString()}
+              /1,000자(공백포함)
             </div>
           </div>
         </fieldset>
@@ -168,8 +168,8 @@ const Application = () => {
             ></textarea>
           </div>
           <div>
-            문항 답변 글자수 : {getValues().resumeContent?.length}
-            /1000자(공백포함, 20자 이상)
+            문항 답변 글자수 : {watch().resumeContent?.length.toLocaleString()}
+            /1,000자(공백포함, 20자 이상)
           </div>
         </fieldset>
         <fieldset className="mb-20">

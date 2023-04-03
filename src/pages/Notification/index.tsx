@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { ReactComponent as Profile } from "@/assets/svg/heart-memoji.svg";
 import { ReactComponent as Search } from "@/assets/svg/search.svg";
 import { ReactComponent as SendingIcon } from "@/assets/svg/send.svg";
+import { applyProcedure } from "@/constants/applyProcedure";
 import { LIMIT } from "@/constants/pagination";
 import useInputLength from "@/lib/hooks/useInputLength";
 import usePagination from "@/lib/hooks/usePagination";
@@ -51,7 +52,9 @@ const Notification = () => {
         <div className="flex-[0.4] p-0">
           <select className="select focus:outline-transparent">
             <option disabled>단계를 선택하세요</option>
-            <option>면접 진행</option>
+            {applyProcedure.map((procedure, i) => (
+              <option key={i}>{procedure}</option>
+            ))}
           </select>
 
           <form
@@ -89,7 +92,7 @@ const Notification = () => {
                     <th>
                       <input
                         type="checkbox"
-                        className="checkbox border-gray-400 checked:bg-blue-500"
+                        className="h-5 w-5 border-gray-400 checked:bg-blue-500"
                       />
                     </th>
                     <td className="SubHead1Semibold flex items-center gap-4 text-gray-600">
@@ -185,9 +188,10 @@ const Notification = () => {
             <div className="flex justify-center gap-4">
               <input
                 type="checkbox"
-                className="checkbox"
+                className="h-5 w-5 border-gray-400 checked:bg-blue-500"
                 onClick={() => setIsAgree(!isAgree)}
               />
+
               <span className="label-text">
                 알림을 보내면 취소가 불가능함을 인지합니다
               </span>

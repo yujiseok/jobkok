@@ -3,7 +3,163 @@ import { useSearchParams } from "react-router-dom";
 import { ReactComponent as Profile } from "@/assets/svg/heart-memoji.svg";
 import { ReactComponent as Search } from "@/assets/svg/search.svg";
 import useInputLength from "@/lib/hooks/useInputLength";
+import formatDate from "@/lib/utils/formatDate";
 import NotiBadge from "@components/Notification/NotiBadge";
+
+const data = {
+  content: [
+    {
+      recruitId: 2,
+      recruitTitle: "제목1",
+      applyId: 2,
+      applyName: "권지수",
+      applyPhone: "010-2222-3333",
+      applyEmail: "jisuno0915@gmail.com",
+      applyProcedure: "서류제출",
+      applyDelete: false,
+      failApply: true,
+      wish: false,
+      createdTime: "2023-02-16T15:59:46.803305",
+      recentMessageTime: "2023-03-31T17:05:41.0287",
+      keywords: ["keyword1", "keyword2", "keyword3"],
+    },
+    {
+      recruitId: 2,
+      recruitTitle: "제목1",
+      applyId: 3,
+      applyName: "지원자2",
+      applyPhone: null,
+      applyEmail: "ydsn336@naver.com",
+      applyProcedure: "서류제출",
+      applyDelete: false,
+      failApply: false,
+      wish: false,
+      createdTime: "2023-02-17T15:59:46.803305",
+      recentMessageTime: "2023-03-31T17:05:41.089688",
+      keywords: ["keyword1", "keyword2", "keyword3", "keyword6", "keyword8"],
+    },
+    {
+      recruitId: 2,
+      recruitTitle: "제목1",
+      applyId: 4,
+      applyName: "지원자3",
+      applyPhone: "010-2222-2121",
+      applyEmail: "c@test.com",
+      applyProcedure: "면접",
+      applyDelete: true,
+      failApply: true,
+      wish: false,
+      createdTime: "2023-03-26T17:07:24.220008",
+      recentMessageTime: null,
+      keywords: ["keyword2", "keyword4", "keyword6", "keyword8", "keyword10"],
+    },
+    {
+      recruitId: 2,
+      recruitTitle: "제목1",
+      applyId: 5,
+      applyName: null,
+      applyPhone: null,
+      applyEmail: null,
+      applyProcedure: "서류제출",
+      applyDelete: false,
+      failApply: false,
+      wish: false,
+      createdTime: "2023-03-26T17:09:48.111359",
+      recentMessageTime: null,
+      keywords: ["keyword1", "keyword3", "keyword4", "keyword5", "keyword9"],
+    },
+    {
+      recruitId: 2,
+      recruitTitle: "제목1",
+      applyId: 8,
+      applyName: "홍길동",
+      applyPhone: "010-1111-1111",
+      applyEmail: "applyTest2@test.com",
+      applyProcedure: "면접",
+      applyDelete: false,
+      failApply: true,
+      wish: false,
+      createdTime: "2023-03-27T20:48:44.871229",
+      recentMessageTime: null,
+      keywords: ["keyword1", "keyword4", "keyword6", "keyword7", "keyword8"],
+    },
+    {
+      recruitId: 2,
+      recruitTitle: "제목1",
+      applyId: 9,
+      applyName: "각난닫",
+      applyPhone: "010-1111-1111",
+      applyEmail: "applyTest3@test.com",
+      applyProcedure: null,
+      applyDelete: false,
+      failApply: false,
+      wish: false,
+      createdTime: "2023-03-28T17:34:18.03024",
+      recentMessageTime: null,
+      keywords: ["keyword1", "keyword4", "keyword6", "keyword8", "keyword9"],
+    },
+    {
+      recruitId: 2,
+      recruitTitle: "제목1",
+      applyId: 10,
+      applyName: "znzn",
+      applyPhone: "010-1111-1111",
+      applyEmail: "applyTest4@test.com",
+      applyProcedure: null,
+      applyDelete: false,
+      failApply: false,
+      wish: false,
+      createdTime: "2023-03-28T19:54:23.735125",
+      recentMessageTime: null,
+      keywords: ["keyword1", "keyword4", "keyword6", "keyword8", "keyword10"],
+    },
+    {
+      recruitId: 2,
+      recruitTitle: "제목1",
+      applyId: 23,
+      applyName: "키시",
+      applyPhone: "010-1111-1111",
+      applyEmail: "applyTest7@test.com",
+      applyProcedure: null,
+      applyDelete: false,
+      failApply: false,
+      wish: false,
+      createdTime: "2023-03-29T15:19:26.468342",
+      recentMessageTime: null,
+      keywords: ["keyword3", "keyword4", "keyword6", "keyword8", "keyword10"],
+    },
+    {
+      recruitId: 2,
+      recruitTitle: "제목1",
+      applyId: 32,
+      applyName: "아나",
+      applyPhone: "010-1111-1111",
+      applyEmail: "applyTest5@test.com",
+      applyProcedure: null,
+      applyDelete: false,
+      failApply: false,
+      wish: false,
+      createdTime: "2023-03-29T15:34:44.146626",
+      recentMessageTime: null,
+      keywords: ["keyword3", "keyword4", "keyword6", "keyword8", "keyword10"],
+    },
+    {
+      recruitId: 2,
+      recruitTitle: "제목1",
+      applyId: 33,
+      applyName: "외않되되",
+      applyPhone: "010-1111-1111",
+      applyEmail: "apply@test.com",
+      applyProcedure: null,
+      applyDelete: false,
+      failApply: false,
+      wish: false,
+      createdTime: "2023-03-29T15:37:49.190268",
+      recentMessageTime: null,
+      keywords: ["keyword3", "keyword4", "keyword6", "keyword8", "keyword10"],
+    },
+  ],
+};
 
 const Notification = () => {
   const [inputCount, handleInput] = useInputLength(MAX_LENGTH);
@@ -76,24 +232,28 @@ const Notification = () => {
               </thead>
               <tbody>
                 {/* row */}
-                <tr>
-                  <th>
-                    <input
-                      type="checkbox"
-                      className="checkbox border-gray-400 checked:bg-blue-500"
-                    />
-                  </th>
-                  <td className="SubHead1Semibold flex items-center gap-4 text-gray-600">
-                    <Profile className="rounded-md bg-gray-50" />
-                    김잡콕
-                  </td>
-                  <td>
-                    <NotiBadge className="bg-blue-400 text-gray-0">
-                      면접 진행
-                    </NotiBadge>
-                  </td>
-                  <td className="Caption1Medium text-gray-500">2023.03.29</td>
-                </tr>
+                {data.content.map((item) => (
+                  <tr key={item.recruitId}>
+                    <th>
+                      <input
+                        type="checkbox"
+                        className="checkbox border-gray-400 checked:bg-blue-500"
+                      />
+                    </th>
+                    <td className="SubHead1Semibold flex items-center gap-4 text-gray-600">
+                      <Profile className="rounded-md bg-gray-50" />
+                      {item.applyName}
+                    </td>
+                    <td>
+                      <NotiBadge className="bg-badge-purple text-text-on-badge-purple">
+                        {item.applyProcedure}
+                      </NotiBadge>
+                    </td>
+                    <td className="Caption1Medium text-gray-500">
+                      {formatDate(item.createdTime)}
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>

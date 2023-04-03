@@ -367,7 +367,7 @@ const data = {
       applyName: "지원자10",
       applyPhone: "010-1111-1111",
       applyEmail: "applyTest5@test.com",
-      applyProcedure: "서류 검토",
+      applyProcedure: "최종 조율",
       applyDelete: false,
       failApply: false,
       wish: false,

@@ -3,13 +3,17 @@ import { useSearchParams } from "react-router-dom";
 import { ReactComponent as Profile } from "@/assets/svg/heart-memoji.svg";
 import { ReactComponent as Search } from "@/assets/svg/search.svg";
 import { ReactComponent as SendingIcon } from "@/assets/svg/send.svg";
+import { applicantProcedure } from "@/constants/applicantProcedure";
 import { applyProcedure } from "@/constants/applyProcedure";
 import { LIMIT } from "@/constants/pagination";
 import useInputLength from "@/lib/hooks/useInputLength";
 import usePagination from "@/lib/hooks/usePagination";
 import formatDate from "@/lib/utils/formatDate";
 import makeString from "@/lib/utils/makeString";
-import NotiBadge from "@components/Notification/NotiBadge";
+import BlueBadge from "@components/Notification/BlueBadge";
+import PurpleBadge from "@components/Notification/Purplebadge";
+import NotiBadge from "@components/Notification/RedBadge";
+import RedBadge from "@components/Notification/RedBadge";
 
 const Notification = () => {
   const [inputCount, handleInput] = useInputLength(MAX_LENGTH);
@@ -87,7 +91,7 @@ const Notification = () => {
               </thead>
               <tbody>
                 {/* row */}
-                {data.content.map((item) => (
+                {data.content.slice(offset, offset + LIMIT).map((item) => (
                   <tr key={item.applyId}>
                     <th>
                       <input
@@ -100,9 +104,14 @@ const Notification = () => {
                       {item.applyName}
                     </td>
                     <td>
-                      <NotiBadge className="bg-badge-purple text-text-on-badge-purple">
-                        {item.applyProcedure}
-                      </NotiBadge>
+                      {item.applyProcedure === "서류 검토" ? (
+                        <BlueBadge>서류 검토</BlueBadge>
+                      ) : // eslint-disable-next-line no-constant-condition
+                      item.applyProcedure === "면접 진행" ? (
+                        <RedBadge>면접 진행</RedBadge>
+                      ) : (
+                        <PurpleBadge>최종 조율</PurpleBadge>
+                      )}
                     </td>
                     <td className="Caption1Medium text-gray-500">
                       {formatDate(item.createdTime)}
@@ -158,10 +167,9 @@ const Notification = () => {
             <h2 className="Head3Semibold">알림 보내기</h2>
             <select className="select bg-blue-50 px-3 text-blue-500 focus:outline-transparent">
               <option disabled>단계를 선택하세요</option>
-              <option>서류 합격</option>
-              <option>면접 조율</option>
-              <option>최종 합격</option>
-              <option>불합격</option>
+              {applicantProcedure.map((procedure, i) => (
+                <option key={i}>{procedure}</option>
+              ))}
             </select>
           </div>
 
@@ -221,10 +229,10 @@ const data = {
       recruitId: 2,
       recruitTitle: "제목1",
       applyId: 2,
-      applyName: "권지수",
+      applyName: "지원자1",
       applyPhone: "010-2222-3333",
       applyEmail: "jisuno0915@gmail.com",
-      applyProcedure: "서류제출",
+      applyProcedure: "서류 검토",
       applyDelete: false,
       failApply: true,
       wish: false,
@@ -239,7 +247,7 @@ const data = {
       applyName: "지원자2",
       applyPhone: null,
       applyEmail: "ydsn336@naver.com",
-      applyProcedure: "서류제출",
+      applyProcedure: "최종 조율",
       applyDelete: false,
       failApply: false,
       wish: false,
@@ -254,7 +262,7 @@ const data = {
       applyName: "지원자3",
       applyPhone: "010-2222-2121",
       applyEmail: "c@test.com",
-      applyProcedure: "면접",
+      applyProcedure: "면접 진행",
       applyDelete: true,
       failApply: true,
       wish: false,
@@ -266,10 +274,10 @@ const data = {
       recruitId: 2,
       recruitTitle: "제목1",
       applyId: 8,
-      applyName: "홍길동",
+      applyName: "지원자4",
       applyPhone: "010-1111-1111",
       applyEmail: "applyTest2@test.com",
-      applyProcedure: "면접",
+      applyProcedure: "서류 검토",
       applyDelete: false,
       failApply: true,
       wish: false,
@@ -281,10 +289,10 @@ const data = {
       recruitId: 2,
       recruitTitle: "제목1",
       applyId: 9,
-      applyName: "각난닫",
+      applyName: "지원자5",
       applyPhone: "010-1111-1111",
       applyEmail: "applyTest3@test.com",
-      applyProcedure: null,
+      applyProcedure: "면접 진행",
       applyDelete: false,
       failApply: false,
       wish: false,
@@ -296,10 +304,10 @@ const data = {
       recruitId: 2,
       recruitTitle: "제목1",
       applyId: 10,
-      applyName: "znzn",
+      applyName: "지원자6",
       applyPhone: "010-1111-1111",
       applyEmail: "applyTest4@test.com",
-      applyProcedure: null,
+      applyProcedure: "최종 조율",
       applyDelete: false,
       failApply: false,
       wish: false,
@@ -311,10 +319,10 @@ const data = {
       recruitId: 2,
       recruitTitle: "제목1",
       applyId: 23,
-      applyName: "키시",
+      applyName: "지원자7",
       applyPhone: "010-1111-1111",
       applyEmail: "applyTest7@test.com",
-      applyProcedure: null,
+      applyProcedure: "최종 조율",
       applyDelete: false,
       failApply: false,
       wish: false,
@@ -326,10 +334,55 @@ const data = {
       recruitId: 2,
       recruitTitle: "제목1",
       applyId: 32,
-      applyName: "아나",
+      applyName: "지원자8",
       applyPhone: "010-1111-1111",
       applyEmail: "applyTest5@test.com",
-      applyProcedure: null,
+      applyProcedure: "서류 검토",
+      applyDelete: false,
+      failApply: false,
+      wish: false,
+      createdTime: "2023-03-29T15:34:44.146626",
+      recentMessageTime: null,
+      keywords: ["keyword3", "keyword4", "keyword6", "keyword8", "keyword10"],
+    },
+    {
+      recruitId: 2,
+      recruitTitle: "제목1",
+      applyId: 32,
+      applyName: "지원자9",
+      applyPhone: "010-1111-1111",
+      applyEmail: "applyTest5@test.com",
+      applyProcedure: "서류 검토",
+      applyDelete: false,
+      failApply: false,
+      wish: false,
+      createdTime: "2023-03-29T15:34:44.146626",
+      recentMessageTime: null,
+      keywords: ["keyword3", "keyword4", "keyword6", "keyword8", "keyword10"],
+    },
+    {
+      recruitId: 2,
+      recruitTitle: "제목1",
+      applyId: 32,
+      applyName: "지원자10",
+      applyPhone: "010-1111-1111",
+      applyEmail: "applyTest5@test.com",
+      applyProcedure: "서류 검토",
+      applyDelete: false,
+      failApply: false,
+      wish: false,
+      createdTime: "2023-03-29T15:34:44.146626",
+      recentMessageTime: null,
+      keywords: ["keyword3", "keyword4", "keyword6", "keyword8", "keyword10"],
+    },
+    {
+      recruitId: 2,
+      recruitTitle: "제목1",
+      applyId: 32,
+      applyName: "지원자11",
+      applyPhone: "010-1111-1111",
+      applyEmail: "applyTest5@test.com",
+      applyProcedure: "서류 검토",
       applyDelete: false,
       failApply: false,
       wish: false,

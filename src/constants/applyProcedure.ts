@@ -1,1 +1,1 @@
-export const applyProcedure = ["서류 제출", "면접", "최종 조율"];
+export const applyProcedure = ["전체", "서류 검토", "면접 진행", "최종 조율"];

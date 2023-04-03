@@ -39,7 +39,7 @@ type IAuthForm = z.infer<typeof schema>;
 
 const ApplicantAuth = () => {
   const navigate = useNavigate();
-  const [isSended, setSended] = useState(false);
+  const [isSended, setIsSended] = useState(false);
   const [isCertified, setIsCertified] = useState(false);
   const {
     register,
@@ -61,7 +61,7 @@ const ApplicantAuth = () => {
     } else if (isCertified) {
       confirm("이미 이메일 인증이 완료됐습니다.");
     } else {
-      setSended(true);
+      setIsSended(true);
       // 이메일 인증 API
       confirm("이메일이 전송됐습니다. 메일함을 확인해주세요.");
     }
@@ -73,7 +73,7 @@ const ApplicantAuth = () => {
       setFocus("authCode");
       // 이메일 인증 API 성공값 추가 필요 : 실패시 confirm("올바른 인증코드를 입력해주세요")
     } else {
-      setSended(false);
+      setIsSended(false);
       setIsCertified(true);
     }
   };
@@ -84,9 +84,8 @@ const ApplicantAuth = () => {
       //데이터 지원서로 가져와서, 한꺼번에 등록 api 호출해야함
       //리덕스에 data 저장?
       console.log(data);
-      navigate("/applicant/application");
+      // navigate("/applicant/application");
     } else {
-      setSended(true);
       setFocus("authCode");
     }
   };
@@ -147,11 +146,11 @@ const ApplicantAuth = () => {
                     placeholder="jobkok@jobkok.com"
                     {...register("email")}
                   />
-                  {isSended && (
-                    <p className="Caption1Medium mt-1 text-gray-400">
-                      이메일로 회원님의 인증코드가 발송되었습니다
-                    </p>
-                  )}
+                  <p className="Caption1Medium mt-1 text-gray-400">
+                    {isSended
+                      ? "이메일로 회원님의 인증코드가 발송되었습니다"
+                      : "인증코드를 받아 이메일 인증을 해주세요."}
+                  </p>
                 </AuthEnter>
                 <button
                   className={`SubHead1Semibold mt-[19px] h-[52px] rounded-lg bg-blue-50 py-2.5 px-6 ${

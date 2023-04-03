@@ -56,7 +56,7 @@ const TalentManagement = () => {
               <div>오늘의 인재수</div>
             </div>
 
-            <div className="border-r-2 border-l-2 border-gray-0 px-36">
+            <div className="border-r-2 border-l-2 border-gray-0/50 px-36">
               <div className="Head1Bold mb-1">
                 D-<span>9</span>
               </div>
@@ -228,7 +228,6 @@ const TalentManagement = () => {
         </div>
 
         <DragDropContext onDragEnd={onDragEnd}>
-          {/* grid grid-cols-3 grid-rows-1 */}
           <div className="flex items-start justify-between gap-6">
             {data.map((section) => (
               <Droppable key={section.id} droppableId={section.id}>

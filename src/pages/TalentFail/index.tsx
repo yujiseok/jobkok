@@ -11,10 +11,9 @@ import usePagination from "@/lib/hooks/usePagination";
 import formatDate from "@/lib/utils/formatDate";
 import makeString from "@/lib/utils/makeString";
 import type { IFailedTalent } from "@/types/talentPool";
-import FailKeywordBadge from "@components/Talent/FailKeywordBadge";
+import Banner from "@components/Common/Banner";
 import FailProcedureBadge from "@components/Talent/FailProcedureBadge";
-import Heading from "@components/Talent/Heading";
-
+import TKeywordBadge from "@components/Talent/TKeywordBadge";
 interface IData {
   userId: number;
   id: number;
@@ -30,39 +29,6 @@ const getData = async () => {
   return data;
 };
 
-const data: IFailedTalent[] = [
-  {
-    recruitId: 2,
-    recruitTitle: "제목1",
-    applyId: 2,
-    applyName: "지원자1",
-    applyPhone: "010-2222-3333",
-    applyEmail: "a@test.com",
-    applyProcedure: "서류제출",
-    applyDelete: false,
-    failApply: true,
-    wish: true,
-    createdTime: "2023-02-16T15:59:46.803305",
-    recentMessageTime: "2023-02-20T15:59:46.803305",
-    keywords: ["keyword1", "keyword2", "keyword3"],
-  },
-  {
-    recruitId: 2,
-    recruitTitle: "제목1",
-    applyId: 8,
-    applyName: "홍길동",
-    applyPhone: "010-1111-1111",
-    applyEmail: "applyTest2@test.com",
-    applyProcedure: null,
-    applyDelete: false,
-    failApply: true,
-    wish: false,
-    createdTime: "2023-03-27T20:48:44.871229",
-    recentMessageTime: null,
-    keywords: ["keyword1", "keyword4", "keyword6", "keyword8"],
-  },
-];
-
 const TalentFail = () => {
   const { data: test } = useQuery({
     queryKey: ["data"],
@@ -77,7 +43,7 @@ const TalentFail = () => {
 
   return (
     <>
-      <section className="x absolute top-16 left-0 h-16 w-full  bg-blue-400 py-12 text-gray-0">
+      <Banner className="h-16">
         <div className="mx-auto flex h-full max-w-7xl items-center">
           <select className="">
             <option>스마트스토어 상세페이지 디자이너 지원서 폼</option>
@@ -85,19 +51,19 @@ const TalentFail = () => {
             <option>영구삭제 인재</option>
           </select>
         </div>
-      </section>
-      <header className="pt-[6.25rem]">
-        <Heading>탈락 인재 보관함</Heading>
+      </Banner>
+      <section className="pt-[6.25rem]">
+        <h4 className="Head3Semibold">탈락 인재 보관함</h4>
         <p className="SubHead1Semibold mt-6 mb-12 text-gray-500">
           아쉽게 탈락했던 인재와 다시 함께할 수 있도록 모아놓은 보관함이에요
         </p>
-      </header>
-      <section className="rounded-[20px] border bg-gray-0 p-11">
+      </section>
+      <section className="rounded-[20px] border-[1.5px] border-gray-50 bg-gray-0 p-11">
         <div className="flex gap-4">
           <select className="">
-            <option selected>전체인재</option>
-            <option>찜된 탈락인재</option>
-            <option>영구삭제 인재</option>
+            <option selected>전체 인재</option>
+            <option>찜된 탈락 인재</option>
+            <option>영구 삭제 인재</option>
           </select>
           <input type="text" placeholder="인재를 검색해보세요" className="" />
         </div>
@@ -127,9 +93,7 @@ const TalentFail = () => {
                   <td>
                     <div className="flex gap-6px">
                       {item.keywords.map((keyword) => (
-                        <FailKeywordBadge key={keyword}>
-                          {keyword}
-                        </FailKeywordBadge>
+                        <TKeywordBadge key={keyword}>{keyword}</TKeywordBadge>
                       ))}
                     </div>
                   </td>
@@ -184,7 +148,7 @@ const TalentFail = () => {
                     <li key={i + 1}>
                       <button
                         onClick={() => handleClick(makeString(i + 1))}
-                        className={`${i + 1 === page ? "bg-purple-300" : ""}`}
+                        className={`${i + 1 === page ? "text-blue-500" : ""}`}
                       >
                         {i + 1}
                       </button>
@@ -210,5 +174,36 @@ const TalentFail = () => {
 };
 
 const TH_ITEMS = ["인재", "키워드", "탈락시점", "지원일", "최근알림일", "액션"];
-
+const data: IFailedTalent[] = [
+  {
+    recruitId: 2,
+    recruitTitle: "제목1",
+    applyId: 2,
+    applyName: "지원자1",
+    applyPhone: "010-2222-3333",
+    applyEmail: "a@test.com",
+    applyProcedure: "서류제출",
+    applyDelete: false,
+    failApply: true,
+    wish: true,
+    createdTime: "2023-02-16T15:59:46.803305",
+    recentMessageTime: "2023-02-20T15:59:46.803305",
+    keywords: ["keyword1", "keyword2", "keyword3"],
+  },
+  {
+    recruitId: 2,
+    recruitTitle: "제목1",
+    applyId: 8,
+    applyName: "홍길동",
+    applyPhone: "010-1111-1111",
+    applyEmail: "applyTest2@test.com",
+    applyProcedure: null,
+    applyDelete: false,
+    failApply: true,
+    wish: false,
+    createdTime: "2023-03-27T20:48:44.871229",
+    recentMessageTime: null,
+    keywords: ["keyword1", "keyword4", "keyword6", "keyword8"],
+  },
+];
 export default TalentFail;

@@ -10,10 +10,11 @@ import { LIMIT } from "@/constants/pagination";
 import usePagination from "@/lib/hooks/usePagination";
 import formatDate from "@/lib/utils/formatDate";
 import makeString from "@/lib/utils/makeString";
-import type { IFailedTalent } from "@/types/talentPool";
+import type { IFailedTalent } from "@/types/talent";
 import Banner from "@components/Common/Banner";
 import FailProcedureBadge from "@components/Talent/FailProcedureBadge";
 import TKeywordBadge from "@components/Talent/TKeywordBadge";
+
 interface IData {
   userId: number;
   id: number;
@@ -178,7 +179,7 @@ const data: IFailedTalent[] = [
   {
     recruitId: 2,
     recruitTitle: "제목1",
-    applyId: 2,
+    applyId: "2",
     applyName: "지원자1",
     applyPhone: "010-2222-3333",
     applyEmail: "a@test.com",
@@ -193,7 +194,7 @@ const data: IFailedTalent[] = [
   {
     recruitId: 2,
     recruitTitle: "제목1",
-    applyId: 8,
+    applyId: "8",
     applyName: "홍길동",
     applyPhone: "010-1111-1111",
     applyEmail: "applyTest2@test.com",

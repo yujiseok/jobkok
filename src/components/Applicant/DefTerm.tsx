@@ -6,9 +6,7 @@ const DefTerm = ({
   className?: string;
 }) => {
   return (
-    <div className={`${className} Caption1Medium text-gray-600`}>
-      {children}
-    </div>
+    <dt className={`${className} Caption1Medium text-gray-600`}>{children}</dt>
   );
 };
 export default DefTerm;

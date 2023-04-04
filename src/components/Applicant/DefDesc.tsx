@@ -6,9 +6,7 @@ const DefDesc = ({
   className?: string;
 }) => {
   return (
-    <div className={`${className} SubHead2Medium text-gray-600`}>
-      {children}
-    </div>
+    <dd className={`${className} SubHead2Medium text-gray-600`}>{children}</dd>
   );
 };
 export default DefDesc;

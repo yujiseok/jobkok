@@ -13,9 +13,18 @@ import {
   KEYWORDS_CHECK,
   LANGUAGELEVEL_OPTION,
   MILITARY_OPTION,
+  OPTIONAL_FIELD,
+  REQUIRED_FIELD,
 } from "@/constants/applicant";
-import GetFormInfo from "@components/Applicant/GetFormInfo";
+import AsideBox from "@components/Applicant//AsideBox";
+import DefDesc from "@components/Applicant//DefDesc";
+import DefTerm from "@components/Applicant//DefTerm";
+import AsideHeading from "@components/Applicant/AsideHeading";
+import FieldBox from "@components/Applicant/FieldBox";
+import FieldLegend from "@components/Applicant/FieldLegend";
+import FieldParagraph from "@components/Applicant/FieldParagraph";
 import PolicyTerms from "@components/Applicant/PolicyTerms";
+import SubmitBtn from "@components/Applicant/SubmitBtn";
 
 const schema = z.object({
   // // 경력
@@ -91,7 +100,41 @@ const Application = () => {
 
   return (
     <div className="container mx-auto max-w-[768px] flex-col py-10">
-      <GetFormInfo />
+      <aside className="fixed top-[244px] right-16">
+        <AsideBox className="pt-[26px] pb-5">
+          <AsideHeading>지원서 일정</AsideHeading>
+          <dl>
+            <div className="mb-3 flex gap-3.5">
+              <DefTerm>지원서 접수 마감일</DefTerm>
+              <DefDesc>23/03/30</DefDesc>
+            </div>
+            <div className="flex gap-3.5">
+              <DefTerm>면접 가능 기간</DefTerm>
+              <DefDesc>2023/03/31 ~ 2023/04/01</DefDesc>
+            </div>
+          </dl>
+        </AsideBox>
+        <SubmitBtn className="w-[284px]">지원서 제출</SubmitBtn>
+        <AsideBox>
+          <AsideHeading>필수입력사항</AsideHeading>
+          <ul>
+            {REQUIRED_FIELD.map((field) => (
+              <li key={field}>{field}</li>
+            ))}
+          </ul>
+        </AsideBox>
+        <AsideBox>
+          <AsideHeading>선택입력사항</AsideHeading>
+          <ul>
+            {OPTIONAL_FIELD.map((field) => (
+              <li key={field}>{field}</li>
+            ))}
+          </ul>
+        </AsideBox>
+        <AsideBox>
+          <AsideHeading>약관동의</AsideHeading>
+        </AsideBox>
+      </aside>
       <form
         className="mb-10 rounded-md rounded-lg border border-solid p-10"
         onSubmit={handleSubmit(onSubmit)}

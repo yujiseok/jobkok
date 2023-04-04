@@ -151,14 +151,14 @@ const router: RemixRouter = createBrowserRouter([
         path: "/",
         element: <Navigate to="/talent/management" />,
       },
-      {
-        path: "/sign-up",
-        element: <SignUp />,
-      },
-      {
-        path: "/sign-in",
-        element: <SignIn />,
-      },
+      // {
+      //   path: "/sign-up",
+      //   element: <SignUp />,
+      // },
+      // {
+      //   path: "/sign-in",
+      //   element: <SignIn />,
+      // },
       {
         path: "/find-user-info",
         element: <FindUserInfo />,
@@ -226,6 +226,14 @@ const router: RemixRouter = createBrowserRouter([
         ],
       },
     ],
+  },
+  {
+    path: "/sign-up",
+    element: <SignUp />,
+  },
+  {
+    path: "/sign-in",
+    element: <SignIn />,
   },
   {
     path: "/applicant",

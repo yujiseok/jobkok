@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { addComment, getDetailInfo } from "@/api/talentDetail";
 import { ReactComponent as Tick } from "@/assets/svg/archive-tick.svg";
@@ -7,17 +8,15 @@ import { ReactComponent as Edit } from "@/assets/svg/edit-icon.svg";
 import { ReactComponent as Profile } from "@/assets/svg/profile-detail.svg";
 import { ReactComponent as SendingIcon } from "@/assets/svg/send.svg";
 import { ReactComponent as TrashBin } from "@/assets/svg/trash.svg";
-
-import useInputLength from "@/lib/hooks/useInputLength";
 import type { ITalentDetail } from "@/types/talentDetail";
 
 const TalentDetail = () => {
-  const [inputCount, handleInput] = useInputLength(MAX_LENGTH);
   const [isAgree, setIsAgree] = useState(false);
   const navigate = useNavigate();
   const [talentInfo, setTalentInfo] = useState<ITalentDetail>({});
   const { id } = useParams();
   const numId = Number(id);
+  const { register, watch, handleSubmit } = useForm();
 
   useEffect(() => {
     const getDetail = async () => {
@@ -29,13 +28,11 @@ const TalentDetail = () => {
     getDetail();
   }, []);
 
-  const handleComment = async (e) => {
-    console.log(e);
-    // const res = await addComment(numId, e.target.value);
-    // console.log(res);
+  const onSubmit = async (data) => {
+    const res = await addComment(numId, data);
+    console.log(res);
   };
 
-  // return <div></div>;
   return (
     <>
       <div className="breadcrumbs flex justify-end pb-10 pt-4 text-sm">
@@ -233,29 +230,37 @@ const TalentDetail = () => {
             </button>
           </div>
 
-          <div className="feedback-note flex-1 rounded-md border-2 border-gray-50 bg-white p-7">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="feedback-note flex-1 rounded-md border-2 border-gray-50 bg-white p-7"
+          >
             <div className="flex items-center justify-between">
               <p className="SubHead1Semibold">평가노트</p>
               <button>
-                <Edit onClick={(e) => handleComment(e)} />
+                <Edit />
               </button>
             </div>
             <p className="SubHead2Medium my-3 text-gray-400">
               인재의 전반적인 평가와 인상을 작성해보세요
             </p>
+
             <textarea
-              placeholder="입력해 주세요"
+              placeholder={
+                talentInfo.evaluation ? talentInfo.evaluation : "입력해 주세요"
+              }
               className="Caption1Medium textarea-bordered textarea textarea-lg min-h-[120px] w-full resize-none"
               maxLength={MAX_LENGTH}
-              onChange={handleInput}
+              {...register("evaluation")}
             ></textarea>
+
             <div className="Caption1Medium text-gray-300">
-              <span>{inputCount.toLocaleString()}</span>
+              <span>{watch().evaluation?.length.toLocaleString()}</span>
               <span>/{MAX_LENGTH.toLocaleString()}자</span>
             </div>
-          </div>
+          </form>
         </div>
       </section>
+
       <div className="mt-12">
         <p className="Head4Semibold">지원서 내용</p>
         <p className="SubHead2Medium mt-2 text-gray-400">

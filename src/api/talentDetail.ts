@@ -15,7 +15,7 @@ export const getDetailInfo = async (applyId: number) => {
 export const addComment = async (applyId: number, evaluation: string) => {
   const { data } = await client({
     method: "PUT",
-    url: `note/${applyId}`,
+    url: `/apply/note/${applyId}`,
     data: evaluation,
   });
   return data;

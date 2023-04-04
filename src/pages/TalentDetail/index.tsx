@@ -16,6 +16,7 @@ import { ReactComponent as Back } from "@/assets/svg/backspace.svg";
 import { ReactComponent as Edit } from "@/assets/svg/edit-icon.svg";
 import { ReactComponent as Profile } from "@/assets/svg/profile-detail.svg";
 import { ReactComponent as TrashBin } from "@/assets/svg/trash.svg";
+import Breadcrumbs from "@components/TalentDetail/Breadcrumbs";
 import PersonalNotiModal from "@components/TalentDetail/PersonalNotiModal";
 
 type FormValues = {
@@ -73,17 +74,7 @@ const TalentDetail = () => {
 
   return (
     <>
-      <div className="breadcrumbs flex justify-end pb-10 pt-4 text-sm">
-        <ul>
-          <li className="SubHead2Semibold text-gray-400">
-            <Link to="/talent/management">인재 관리</Link>
-          </li>
-          <li className="SubHead2Semibold text-gray-400">
-            <Link to="/talent/status">채용 진행 현황</Link>
-          </li>
-          <li className="SubHead2Semibold">인재 상세페이지</li>
-        </ul>
-      </div>
+      <Breadcrumbs />
 
       <div className="flex justify-between">
         <div>
@@ -183,23 +174,29 @@ const TalentDetail = () => {
             <p className="SubHead2Medium pb-12 text-gray-400">
               인재의 채용 절차단계를 확인해보세요
             </p>
-            <ul className="steps w-full ">
-              <li className="step after:!bg-blue-400 after:!text-gray-0 ">
-                <p>최초 접수</p>
-                <p>2022.02.04</p>
-              </li>
-              <li className=" step before:!bg-blue-400 after:!bg-blue-400 after:!text-gray-0">
-                <p>서류 합격</p>
-                <p>2022.02.04</p>
-              </li>
-              <li className="step">
-                <p> 면접</p>
-                <br />
-              </li>
-              <li className="step">
-                <p> 최종 합격</p>
-                <br />
-              </li>
+
+            <ul className="steps w-full">
+              {[
+                { label: "최초 접수", date: talentInfo?.createdTime },
+                { label: "서류 검토", date: talentInfo?.checkApply },
+                { label: "면접일", date: talentInfo?.meeting },
+                {
+                  label: "최종 합격",
+                  date: talentInfo?.pass !== "false" && talentInfo?.pass,
+                },
+              ].map(({ label, date }, index) => (
+                <li
+                  key={index}
+                  className={`step ${
+                    date
+                      ? "before:!bg-blue-400 after:!bg-blue-400 after:!text-gray-0"
+                      : ""
+                  }`}
+                >
+                  <p>{label}</p>
+                  <p>{date ? date.slice(0, 10) : "-"}</p>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
@@ -220,7 +217,7 @@ const TalentDetail = () => {
                           면접 날짜
                         </label>
                         <input
-                          className="BodyBody3"
+                          className="BodyBody2"
                           type="date"
                           id="meetingDate"
                           onChange={handleInterviewDate}
@@ -234,7 +231,7 @@ const TalentDetail = () => {
                           면접 시간
                         </label>
                         <input
-                          className="BodyBody3"
+                          className="BodyBody2"
                           type="time"
                           id="interviewTime"
                           onChange={handleInterviewTime}
@@ -247,13 +244,17 @@ const TalentDetail = () => {
                         <span className="Caption1Medium text-gray-400">
                           면접 날짜
                         </span>
-                        <span className="BodyBody2">미정</span>
+                        <span className="BodyBody2">
+                          {talentInfo?.meeting.slice(0, 10)}
+                        </span>
                       </div>
                       <div className="flex items-center gap-3">
                         <span className="Caption1Medium text-gray-400">
                           면접 시간
                         </span>
-                        <span className="BodyBody2">미정</span>
+                        <span className="BodyBody2">
+                          {talentInfo?.meeting.slice(11, 16)}
+                        </span>
                       </div>
                     </>
                   )}

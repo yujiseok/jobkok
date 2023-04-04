@@ -11,16 +11,13 @@ const Layout = () => {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    // 쿠키에 토큰이 없을 때, 접속 페이지로 보내기
     if (
       !localStorage.getItem("token") &&
       pathname !== "/sign-in" &&
       pathname !== "/sign-up"
     ) {
       navigate("/sign-in");
-    }
-    // 쿠키에 토큰이 있을 때, 접속/회원가입/로그인으로 이동 막기
-    else if (
+    } else if (
       localStorage.getItem("token") &&
       (pathname === "/sign-in" || pathname === "/sign-up")
     ) {

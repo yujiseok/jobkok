@@ -73,7 +73,7 @@ const TalentDetail = () => {
   };
 
   return (
-    <>
+    <div className="relative pt-8">
       <Breadcrumbs />
 
       <div className="flex justify-between">
@@ -128,13 +128,16 @@ const TalentDetail = () => {
                       {talentInfo?.applyName}
                     </p>
                     <div className="flex cursor-pointer gap-2">
-                      <button>
-                        {isLiked ? (
-                          <TickBlue onClick={() => setIsLiked(false)} />
-                        ) : (
-                          <Tick onClick={handleWishApplicant} />
-                        )}
-                      </button>
+                      {isLiked ? (
+                        <button onClick={() => setIsLiked(false)}>
+                          <TickBlue />
+                        </button>
+                      ) : (
+                        <button onClick={handleWishApplicant}>
+                          <Tick />{" "}
+                        </button>
+                      )}
+
                       <TrashBin />
                     </div>
                   </div>
@@ -275,7 +278,7 @@ const TalentDetail = () => {
 
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="feedback-note flex-1 rounded-md border-2 border-gray-50 bg-white p-7"
+            className="feedback-note flex-1 rounded-md border-2 border-gray-50 bg-white px-5 py-4"
           >
             <div className="flex items-center justify-between">
               <p className="SubHead1Semibold">평가노트</p>
@@ -325,7 +328,7 @@ const TalentDetail = () => {
           </ul>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 export default TalentDetail;

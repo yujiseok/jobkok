@@ -100,7 +100,16 @@ const Application = () => {
   };
 
   return (
-    <div className="container mx-auto max-w-[768px] flex-col py-10">
+    <>
+      <header className="absolute left-0 right-0 h-[148px] bg-blue-400 py-[56px]">
+        <div className="relative mx-auto flex max-w-7xl justify-center">
+          <IconArrowLeft className="absolute left-[62px]" />
+          <h1 className="Head2Semibold text-gray-0">
+            [기업에서 설정한 지원서 제목] 지원서
+          </h1>
+        </div>
+      </header>
+
       <aside className="fixed top-[244px] right-16">
         <AsideBox className="pt-[26px] pb-5">
           <AsideHeading>지원서 일정</AsideHeading>
@@ -509,7 +518,7 @@ const Application = () => {
           </SubmitBtn>
         </div>
       </section>
-    </div>
+    </>
   );
 };
 export default Application;

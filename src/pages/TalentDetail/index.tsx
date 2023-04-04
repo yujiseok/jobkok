@@ -1,52 +1,59 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   addComment,
   assortFailTalent,
+  assortLikeTalent,
   checkApplication,
   getDetailInfo,
 } from "@/api/talentDetail";
+import { ReactComponent as TickBlue } from "@/assets/svg/archive-tick-blue.svg";
 import { ReactComponent as Tick } from "@/assets/svg/archive-tick.svg";
 import { ReactComponent as Back } from "@/assets/svg/backspace.svg";
 import { ReactComponent as Edit } from "@/assets/svg/edit-icon.svg";
 import { ReactComponent as Profile } from "@/assets/svg/profile-detail.svg";
 import { ReactComponent as SendingIcon } from "@/assets/svg/send.svg";
 import { ReactComponent as TrashBin } from "@/assets/svg/trash.svg";
-import type { ITalentDetail } from "@/types/talentDetail";
+
+type FormValues = {
+  evaluation: string;
+};
 
 const TalentDetail = () => {
   const [isAgree, setIsAgree] = useState(false);
   const navigate = useNavigate();
-  const [talentInfo, setTalentInfo] = useState<ITalentDetail>({});
-  const { id } = useParams();
-  const numId = Number(id);
-  const { register, watch, handleSubmit } = useForm();
+  const { id } = useParams() as { id: string };
+  const { register, watch, handleSubmit } = useForm<FormValues>();
   const [isEditing, setisEditing] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
 
-  useEffect(() => {
-    const getDetail = async () => {
-      if (id) {
-        const { data } = await getDetailInfo(numId);
-        setTalentInfo(data);
-      }
-    };
-    getDetail();
-  }, []);
+  const { data: talentInfo } = useQuery({
+    queryKey: ["talentInfo"],
+    queryFn: () => getDetailInfo(id),
+    suspense: true,
+  });
 
-  const onSubmit = async (data) => {
-    const res = await addComment(numId, data);
-  };
-
-  const checkTalent = async () => {
-    const res = await checkApplication(numId);
-  };
-
-  const failTalent = async () => {
-    const res = await assortFailTalent(numId);
+  const onSubmit = async (data: FormValues) => {
+    const res = await addComment(id, data.evaluation);
     console.log(res);
   };
 
+  const checkTalent = async () => {
+    const res = await checkApplication(id);
+  };
+
+  const failTalent = async () => {
+    const res = await assortFailTalent(id);
+  };
+
+  const handleWishApplicant = async () => {
+    const res = await assortLikeTalent(id);
+    setIsLiked(true);
+  };
+
+  // if (!talentInfo) return <div>"정보가 없습니다!"</div>;
   return (
     <>
       <div className="breadcrumbs flex justify-end pb-10 pt-4 text-sm">
@@ -163,15 +170,21 @@ const TalentDetail = () => {
                       {talentInfo?.applyName}
                     </p>
                     <div className="flex cursor-pointer gap-2">
-                      <Tick />
+                      <button>
+                        {isLiked ? (
+                          <TickBlue onClick={() => setIsLiked(false)} />
+                        ) : (
+                          <Tick onClick={handleWishApplicant} />
+                        )}
+                      </button>
                       <TrashBin />
                     </div>
                   </div>
                   <p className="SubHead2Medium text-gray-600">
-                    {talentInfo.applyPhone}
+                    {talentInfo?.applyPhone}
                   </p>
                   <p className="SubHead2Medium text-gray-600">
-                    {talentInfo.applyEmail}
+                    {talentInfo?.applyEmail}
                   </p>
                 </div>
                 <button className="SubHead2Semibold cursor-pointer rounded-md bg-blue-50 px-6 py-3 text-blue-400">
@@ -180,19 +193,19 @@ const TalentDetail = () => {
               </div>
               <div className="badge-container mt-10 flex max-w-[280px] flex-wrap gap-x-2 gap-y-6px">
                 <div className="SubHead2Semibold rounded-sm bg-gray-200 p-1 text-blue-25">
-                  # {talentInfo.keywords}
+                  # {talentInfo?.keywords}
                 </div>
                 <div className="SubHead2Semibold rounded-sm bg-gray-200 p-1 text-blue-25">
-                  # {talentInfo.keywords}
+                  # {talentInfo?.keywords}
                 </div>
                 <div className="SubHead2Semibold rounded-sm bg-gray-200 p-1 text-blue-25">
-                  # {talentInfo.keywords}
+                  # {talentInfo?.keywords}
                 </div>
                 <div className="SubHead2Semibold rounded-sm bg-gray-200 p-1 text-blue-25">
-                  # {talentInfo.keywords}
+                  # {talentInfo?.keywords}
                 </div>
                 <div className="SubHead2Semibold rounded-sm bg-gray-200 p-1 text-blue-25">
-                  # {talentInfo.keywords}
+                  # {talentInfo?.keywords}
                 </div>
               </div>
             </div>
@@ -298,8 +311,10 @@ const TalentDetail = () => {
             </p>
 
             <textarea
-              placeholder={
-                talentInfo.evaluation ? talentInfo.evaluation : "입력해 주세요"
+              defaultValue={
+                talentInfo?.evaluation
+                  ? talentInfo?.evaluation
+                  : "입력해 주세요"
               }
               className="Caption1Medium textarea-bordered textarea textarea-lg min-h-[120px] w-full resize-none"
               maxLength={MAX_LENGTH}

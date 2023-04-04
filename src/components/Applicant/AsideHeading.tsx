@@ -6,7 +6,7 @@ const AsideHeading = ({
   className?: string;
 }) => {
   return (
-    <h4 className={`${className} Head4Semibold mb-4 text-gray-900`}>
+    <h4 className={`${className} SubHead1Semibold text-gray-800`}>
       {children}
     </h4>
   );

@@ -213,7 +213,11 @@ const router: RemixRouter = createBrowserRouter([
           },
           {
             path: "detail/:id",
-            element: <TalentDetail />,
+            element: (
+              <Suspense fallback={<Spinner />}>
+                <TalentDetail />,
+              </Suspense>
+            ),
           },
           {
             path: "fail",

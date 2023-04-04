@@ -5,7 +5,6 @@ import { createBrowserRouter, Navigate, RouteObject } from "react-router-dom";
 import Spinner from "@components/Common/Spinner";
 import Layout from "@components/Layout/Layout";
 import ApplicantAuth from "@pages/ApplicantAuth";
-import ApplicantDetail from "@pages/ApplicantDetail";
 import Application from "@pages/Application";
 import ChangeUserInfo from "@pages/ChangeUserInfo";
 import ClosedForm from "@pages/ClosedForm";
@@ -20,6 +19,7 @@ import Notification from "@pages/Notification";
 import SearchForm from "@pages/SearchForm";
 import SignIn from "@pages/SignIn";
 import SignUp from "@pages/SignUp";
+import TalentDetail from "@pages/TalentDetail";
 import TalentFail from "@pages/TalentFail";
 import TalentManagement from "@pages/TalentManagement";
 import TalentStatus from "@pages/TalentStatus";
@@ -152,18 +152,6 @@ const router: RemixRouter = createBrowserRouter([
         element: <Navigate to="/talent/management" />,
       },
       {
-        path: "/sign-up",
-        element: <SignUp />,
-      },
-      {
-        path: "/sign-in",
-        element: <SignIn />,
-      },
-      {
-        path: "/find-user-info",
-        element: <FindUserInfo />,
-      },
-      {
         path: "/confirm-password",
         element: <ConfirmPassword />,
       },
@@ -205,7 +193,11 @@ const router: RemixRouter = createBrowserRouter([
         children: [
           {
             path: "management",
-            element: <TalentManagement />,
+            element: (
+              <Suspense fallback={<Spinner />}>
+                <TalentManagement />
+              </Suspense>
+            ),
           },
           {
             path: "status",
@@ -213,7 +205,7 @@ const router: RemixRouter = createBrowserRouter([
           },
           {
             path: "detail/:id",
-            element: <ApplicantDetail />,
+            element: <TalentDetail />,
           },
           {
             path: "fail",
@@ -226,6 +218,18 @@ const router: RemixRouter = createBrowserRouter([
         ],
       },
     ],
+  },
+  {
+    path: "/sign-up",
+    element: <SignUp />,
+  },
+  {
+    path: "/sign-in",
+    element: <SignIn />,
+  },
+  {
+    path: "/find-user-info",
+    element: <FindUserInfo />,
   },
   {
     path: "/applicant",

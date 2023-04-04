@@ -1,9 +1,9 @@
 import type { Router as RemixRouter } from "@remix-run/router/dist/router";
 import { Suspense } from "react";
-import type { RouteObject } from "react-router-dom";
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate, RouteObject } from "react-router-dom";
+
+import Spinner from "@components/Common/Spinner";
 import Layout from "@components/Layout/Layout";
-import Spinner from "@components/Talent/Spinner";
 import ApplicantAuth from "@pages/ApplicantAuth";
 import ApplicantDetail from "@pages/ApplicantDetail";
 import Application from "@pages/Application";
@@ -13,7 +13,6 @@ import Completion from "@pages/Completion";
 import ConfirmPassword from "@pages/ConfirmPassword";
 import EditForm from "@pages/EditForm";
 import FindUserInfo from "@pages/FindUserInfo";
-import Home from "@pages/Home";
 import LinkForm from "@pages/LinkForm";
 import NewForm from "@pages/NewForm";
 import NotFound from "@pages/NotFound";
@@ -150,16 +149,16 @@ const router: RemixRouter = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Home />,
+        element: <Navigate to="/talent/management" />,
       },
-      {
-        path: "/sign-up",
-        element: <SignUp />,
-      },
-      {
-        path: "/sign-in",
-        element: <SignIn />,
-      },
+      // {
+      //   path: "/sign-up",
+      //   element: <SignUp />,
+      // },
+      // {
+      //   path: "/sign-in",
+      //   element: <SignIn />,
+      // },
       {
         path: "/find-user-info",
         element: <FindUserInfo />,
@@ -227,6 +226,14 @@ const router: RemixRouter = createBrowserRouter([
         ],
       },
     ],
+  },
+  {
+    path: "/sign-up",
+    element: <SignUp />,
+  },
+  {
+    path: "/sign-in",
+    element: <SignIn />,
   },
   {
     path: "/applicant",

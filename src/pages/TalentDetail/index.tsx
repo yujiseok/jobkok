@@ -15,15 +15,14 @@ import { ReactComponent as Tick } from "@/assets/svg/archive-tick.svg";
 import { ReactComponent as Back } from "@/assets/svg/backspace.svg";
 import { ReactComponent as Edit } from "@/assets/svg/edit-icon.svg";
 import { ReactComponent as Profile } from "@/assets/svg/profile-detail.svg";
-import { ReactComponent as SendingIcon } from "@/assets/svg/send.svg";
 import { ReactComponent as TrashBin } from "@/assets/svg/trash.svg";
+import PersonalNotiModal from "@components/TalentDetail/PersonalNotiModal";
 
 type FormValues = {
   evaluation: string;
 };
 
 const TalentDetail = () => {
-  const [isAgree, setIsAgree] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams() as { id: string };
   const { register, watch, handleSubmit } = useForm<FormValues>();
@@ -110,9 +109,6 @@ const TalentDetail = () => {
           >
             탈락 처리
           </button>
-          {/* <button className="cursor-pointer rounded-md bg-blue-500 px-6 py-3 text-white">
-            개별 알림 보내기
-          </button> */}
           <label
             htmlFor="my-modal"
             className="cursor-pointer rounded-md bg-blue-500 px-6 py-3 text-white"
@@ -121,54 +117,7 @@ const TalentDetail = () => {
           </label>
 
           {/* 모달 */}
-          {/* <input type="checkbox" id="my-modal" className="modal-toggle" />
-          <div className="modal">
-            <div className="modal-box">
-              <h3 className="Head4Semibold text-gray-800">개별 알림 보내기</h3>
-
-              <textarea
-                placeholder="입력해 주세요"
-                className="Caption1Medium textarea-bordered textarea textarea-lg min-h-[120px] w-full resize-none"
-                maxLength={MAX_LENGTH}
-                onChange={handleInput}
-              ></textarea>
-              <div className="Caption1Medium text-gray-300">
-                <span>{inputCount.toLocaleString()}</span>
-                <span>/{MAX_LENGTH.toLocaleString()}자</span>
-              </div>
-
-              <div className="form-control mt-16 mb-6">
-                <div className="flex justify-center gap-4">
-                  <input
-                    type="checkbox"
-                    className="h-5 w-5 border-gray-400 checked:bg-blue-500"
-                    onClick={() => setIsAgree(!isAgree)}
-                  />
-
-                  <span className="label-text">
-                    알림을 보내면 취소가 불가능함을 인지합니다
-                  </span>
-                </div>
-              </div>
-              <div className="modal-action flex justify-center">
-                <label htmlFor="my-modal">
-                  <button
-                    disabled={!isAgree || !inputCount}
-                    className="SubHead2Semibold flex items-center gap-2 rounded-md bg-blue-500 px-14 py-3 text-white disabled:bg-gray-200"
-                  >
-                    알림 보내기
-                    <SendingIcon />
-                  </button>
-                </label>
-              </div>
-
-              <div className="modal-action">
-                <label htmlFor="my-modal" className="btn">
-                  Yay!
-                </label>
-              </div>
-            </div>
-          </div> */}
+          <PersonalNotiModal />
         </div>
       </div>
 
@@ -316,7 +265,7 @@ const TalentDetail = () => {
               className="SubHead2Medium cursor-pointer text-gray-400"
             >
               {isEditing ? (
-                <Edit onClick={(e) => setMeetingDate()} />
+                <Edit onClick={setMeetingDate} />
               ) : (
                 <Edit onClick={() => setisEditing(!isEditing)} />
               )}

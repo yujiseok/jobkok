@@ -4,7 +4,7 @@ import { client } from "./axios";
 
 // 인재 상세 정보 조회
 export const getDetailInfo = async (applyId: number) => {
-  const { data }: AxiosResponse<ITalentDetail> = await client({
+  const { data } = await client({
     method: "GET",
     url: `/apply/${applyId}`,
   });

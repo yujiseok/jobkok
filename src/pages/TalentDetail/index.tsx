@@ -22,6 +22,7 @@ const TalentDetail = () => {
   const { id } = useParams();
   const numId = Number(id);
   const { register, watch, handleSubmit } = useForm();
+  const [isEditing, setisEditing] = useState(false);
 
   useEffect(() => {
     const getDetail = async () => {
@@ -227,25 +228,58 @@ const TalentDetail = () => {
           <div className="interview-container flex justify-between gap-4 rounded-md border-2 border-gray-50 bg-white px-5 py-4">
             <div className="interview-time-container flex justify-between">
               <div className="flex gap-4">
-                <p className="SubHead1Semibold">면접 관련 정보</p>
+                <p className="SubHead1Semibold">면접 정보</p>
                 <div className="flex justify-center gap-4">
-                  <div className="flex items-center gap-3">
-                    <span className="Caption1Medium text-gray-400">
-                      면접 날짜
-                    </span>
-                    <span className="BodyBody2">미정</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <span className="Caption1Medium text-gray-400">
-                      면접 시간
-                    </span>
-                    <span className="BodyBody2">미정</span>
-                  </div>
+                  {isEditing ? (
+                    <>
+                      <fieldset className="flex items-center gap-3">
+                        <label
+                          className="Caption1Medium text-gray-400"
+                          htmlFor="interviewDate"
+                        >
+                          면접 날짜
+                        </label>
+                        <input
+                          className="BodyBody2"
+                          type="date"
+                          id="interviewDate"
+                        />
+                      </fieldset>
+                      <fieldset className="flex items-center gap-3">
+                        <label
+                          className="Caption1Medium text-gray-400"
+                          htmlFor="interviewDate"
+                        >
+                          면접 날짜
+                        </label>
+                        <input
+                          className="BodyBody2"
+                          type="time"
+                          id="interviewDate"
+                        />
+                      </fieldset>
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex items-center gap-3">
+                        <span className="Caption1Medium text-gray-400">
+                          면접 날짜
+                        </span>
+                        <span className="BodyBody2">미정</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <span className="Caption1Medium text-gray-400">
+                          면접 시간
+                        </span>
+                        <span className="BodyBody2">미정</span>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
             <button className="SubHead2Medium cursor-pointer text-gray-400">
-              <Edit />
+              <Edit onClick={() => setisEditing(!isEditing)} />
             </button>
           </div>
 

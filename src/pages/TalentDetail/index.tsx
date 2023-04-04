@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { addComment, getDetailInfo } from "@/api/talentDetail";
+import {
+  addComment,
+  checkApplication,
+  getDetailInfo,
+} from "@/api/talentDetail";
 import { ReactComponent as Tick } from "@/assets/svg/archive-tick.svg";
 import { ReactComponent as Back } from "@/assets/svg/backspace.svg";
 import { ReactComponent as Edit } from "@/assets/svg/edit-icon.svg";
@@ -30,7 +34,10 @@ const TalentDetail = () => {
 
   const onSubmit = async (data) => {
     const res = await addComment(numId, data);
-    console.log(res);
+  };
+
+  const checkTalent = async () => {
+    const res = await checkApplication(numId);
   };
 
   return (
@@ -59,7 +66,10 @@ const TalentDetail = () => {
           </p>
         </div>
         <div className="SubHead2Semibold flex items-start gap-4 rounded-md">
-          <button className="cursor-pointer rounded-md bg-blue-50 px-6 py-3 text-blue-500">
+          <button
+            onClick={checkTalent}
+            className="cursor-pointer rounded-md bg-blue-50 px-6 py-3 text-blue-500"
+          >
             서류 검토
           </button>
           <button className="cursor-pointer rounded-md bg-error-50 px-6 py-3 text-error-400">

@@ -38,3 +38,12 @@ export const assortLikeTalent = async (applyId: number) => {
   });
   return data;
 };
+
+// 서류 검토 처리
+export const checkApplication = async (applyId: number) => {
+  const { data } = await client({
+    method: "PUT",
+    url: `apply/check/${applyId}`,
+  });
+  return data;
+};

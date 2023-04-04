@@ -59,7 +59,7 @@ const Email = ({ setStep }: Props) => {
     handleSubmit,
     setValue,
     getValues,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isDirty },
   } = useForm<NewUser>({
     mode: "onChange",
     resolver: zodResolver(schema),
@@ -126,7 +126,7 @@ const Email = ({ setStep }: Props) => {
         <button
           className="SubHead1Semibold my-5 mb-12 h-[48px] w-[430px] self-center rounded-lg bg-blue-50 text-blue-400"
           type="submit"
-          disabled={isSubmitting}
+          disabled={isSubmitting && isDirty}
           onClick={() => {
             setStep(2);
           }}

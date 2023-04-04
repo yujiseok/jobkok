@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   addComment,
+  assortFailTalent,
   checkApplication,
   getDetailInfo,
 } from "@/api/talentDetail";
@@ -40,6 +41,11 @@ const TalentDetail = () => {
     const res = await checkApplication(numId);
   };
 
+  const failTalent = async () => {
+    const res = await assortFailTalent(numId);
+    console.log(res);
+  };
+
   return (
     <>
       <div className="breadcrumbs flex justify-end pb-10 pt-4 text-sm">
@@ -72,7 +78,10 @@ const TalentDetail = () => {
           >
             서류 검토
           </button>
-          <button className="cursor-pointer rounded-md bg-error-50 px-6 py-3 text-error-400">
+          <button
+            onClick={failTalent}
+            className="cursor-pointer rounded-md bg-error-50 px-6 py-3 text-error-400"
+          >
             탈락 처리
           </button>
           {/* <button className="cursor-pointer rounded-md bg-blue-500 px-6 py-3 text-white">

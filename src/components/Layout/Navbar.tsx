@@ -1,6 +1,15 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { postLogout } from "@/api/auth";
 import { ReactComponent as NavProfile } from "@/assets/svg/nav-profile.svg";
 const Navbar = () => {
+  const navigate = useNavigate();
+  const handleLogout = async () => {
+    const res = await postLogout();
+    if (res.message === "로그아웃 되었습니다.") {
+      navigate("/sign-in");
+    }
+  };
+
   return (
     <nav className="min-h-16 fixed top-0 z-20 w-full bg-white">
       <div className="min-h-16 mx-auto flex max-w-7xl items-center justify-between px-4">
@@ -68,7 +77,10 @@ const Navbar = () => {
               </Link>
             </li>
             <li>
-              <a className="hover:bg-gray-0 hover:text-gray-900 active:bg-gray-0">
+              <a
+                className="hover:bg-gray-0 hover:text-gray-900 active:bg-gray-0"
+                onClick={handleLogout}
+              >
                 로그아웃
               </a>
             </li>

@@ -27,7 +27,6 @@ const SignUp = () => {
             }}
           />
         ) : null}
-
         <div>
           {step === 1 && <Email setStep={setStep} />}
           {step === 2 && <Password setStep={setStep} />}

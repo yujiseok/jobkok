@@ -1,5 +1,7 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, NavLink, useLocation } from "react-router-dom";
 import { postLogout } from "@/api/auth";
+import { ReactComponent as ChevronDown } from "@/assets/svg/chevron-down.svg";
+import { ReactComponent as Logo } from "@/assets/svg/logo.svg";
 import { ReactComponent as NavProfile } from "@/assets/svg/nav-profile.svg";
 const Navbar = () => {
   const navigate = useNavigate();
@@ -10,28 +12,31 @@ const Navbar = () => {
     }
   };
 
+  const { pathname } = useLocation();
   return (
     <nav className="min-h-16 fixed top-0 z-20 w-full bg-white">
       <div className="min-h-16 mx-auto flex max-w-7xl items-center justify-between px-4">
-        <div className="flex items-center gap-16 ">
-          <Link to="/" className="text-2xl">
+        <div className="flex items-center gap-16">
+          <Link to="/" className="flex items-center gap-2 text-2xl">
+            <Logo />
             <h2 className="Head3Semibold text-blue-400">Jobkok</h2>
           </Link>
-          <ul className="SubHead1Medium flex cursor-pointer gap-12">
+          <ul className="SubHead1Medium flex cursor-pointer items-center gap-12">
             {NavItems.map((item) =>
               item.name === "인재 관리" ? (
                 <div key={item.name} className="dropdown-hover dropdown">
                   <li tabIndex={0}>
-                    <Link to={item.href} className="flex">
+                    <Link
+                      to={item.href}
+                      className={`${
+                        pathname.includes(item.href.split("/")[1]) &&
+                        pathname.split("/")[2] !== "fail"
+                          ? "text-blue-400"
+                          : ""
+                      } flex  items-center`}
+                    >
                       {item.name}
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="24"
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
-                      </svg>
+                      <ChevronDown />
                     </Link>
                     <ul className="dropdown-content menu rounded-box w-52 bg-white p-2 shadow">
                       <li>
@@ -47,7 +52,14 @@ const Navbar = () => {
                 </div>
               ) : (
                 <li key={item.name}>
-                  <Link to={item.href}>{item.name}</Link>
+                  <NavLink
+                    className={({ isActive }) =>
+                      isActive ? "text-blue-400" : ""
+                    }
+                    to={item.href}
+                  >
+                    {item.name}
+                  </NavLink>
                 </li>
               ),
             )}
@@ -58,22 +70,15 @@ const Navbar = () => {
           <NavProfile />
           <div className="dropdown flex items-center">
             <p>잡콕 미술학원</p>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="24"
-              viewBox="0 0 24 24"
-            >
-              <path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
-            </svg>
+            <ChevronDown />
           </div>
-          <ul className="dropdown-content menu rounded-box absolute top-7 flex w-52 bg-white p-2 shadow before:bg-error-400">
+          <ul className="dropdown-content menu rounded-box absolute top-9 flex w-52 bg-white p-2 shadow">
             <li>
               <Link
                 to="/change-user-info"
                 className="hover:bg-gray-0 hover:text-gray-900 active:bg-gray-0"
               >
-                기업 정보 변경{" "}
+                기업 정보 변경
               </Link>
             </li>
             <li>

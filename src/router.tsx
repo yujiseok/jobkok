@@ -152,18 +152,6 @@ const router: RemixRouter = createBrowserRouter([
         element: <Navigate to="/talent/management" />,
       },
       {
-        path: "/sign-up",
-        element: <SignUp />,
-      },
-      {
-        path: "/sign-in",
-        element: <SignIn />,
-      },
-      {
-        path: "/find-user-info",
-        element: <FindUserInfo />,
-      },
-      {
         path: "/confirm-password",
         element: <ConfirmPassword />,
       },
@@ -213,7 +201,11 @@ const router: RemixRouter = createBrowserRouter([
           },
           {
             path: "detail/:id",
-            element: <TalentDetail />,
+            element: (
+              <Suspense fallback={<Spinner />}>
+                <TalentDetail />,
+              </Suspense>
+            ),
           },
           {
             path: "fail",
@@ -226,6 +218,18 @@ const router: RemixRouter = createBrowserRouter([
         ],
       },
     ],
+  },
+  {
+    path: "/sign-up",
+    element: <SignUp />,
+  },
+  {
+    path: "/sign-in",
+    element: <SignIn />,
+  },
+  {
+    path: "/find-user-info",
+    element: <FindUserInfo />,
   },
   {
     path: "/applicant",

@@ -8,6 +8,7 @@ import {
   assortLikeTalent,
   checkApplication,
   getDetailInfo,
+  setMeeting,
 } from "@/api/talentDetail";
 import { ReactComponent as TickBlue } from "@/assets/svg/archive-tick-blue.svg";
 import { ReactComponent as Tick } from "@/assets/svg/archive-tick.svg";
@@ -28,6 +29,8 @@ const TalentDetail = () => {
   const { register, watch, handleSubmit } = useForm<FormValues>();
   const [isEditing, setisEditing] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
+  const [interviewDate, setInterviewDate] = useState("");
+  const [interviewTime, setInterviewTime] = useState("");
 
   const { data: talentInfo } = useQuery({
     queryKey: ["talentInfo"],
@@ -53,7 +56,22 @@ const TalentDetail = () => {
     setIsLiked(true);
   };
 
-  // if (!talentInfo) return <div>"정보가 없습니다!"</div>;
+  const handleInterviewDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInterviewDate(e.target.value);
+  };
+
+  const handleInterviewTime = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const time = e.target.value + ":00";
+    setInterviewTime(time);
+  };
+
+  const setMeetingDate = async (e: React.MouseEvent<SVGSVGElement>) => {
+    // const newTime = interviewTime + ":00";
+    // const res = await setMeeting(id, interviewDate, interviewTime);
+    // console.log(res);
+    setisEditing(false);
+  };
+
   return (
     <>
       <div className="breadcrumbs flex justify-end pb-10 pt-4 text-sm">
@@ -240,7 +258,7 @@ const TalentDetail = () => {
         <div className=" flex flex-[0.4] flex-col gap-4">
           <div className="interview-container flex justify-between gap-4 rounded-md border-2 border-gray-50 bg-white px-5 py-4">
             <div className="interview-time-container flex justify-between">
-              <div className="flex gap-4">
+              <form className="flex gap-4">
                 <p className="SubHead1Semibold">면접 정보</p>
                 <div className="flex justify-center gap-4">
                   {isEditing ? (
@@ -248,27 +266,29 @@ const TalentDetail = () => {
                       <fieldset className="flex items-center gap-3">
                         <label
                           className="Caption1Medium text-gray-400"
-                          htmlFor="interviewDate"
+                          htmlFor="meetingDate"
                         >
                           면접 날짜
                         </label>
                         <input
-                          className="BodyBody2"
+                          className="BodyBody3"
                           type="date"
-                          id="interviewDate"
+                          id="meetingDate"
+                          onChange={handleInterviewDate}
                         />
                       </fieldset>
                       <fieldset className="flex items-center gap-3">
                         <label
                           className="Caption1Medium text-gray-400"
-                          htmlFor="interviewDate"
+                          htmlFor="interviewTime"
                         >
-                          면접 날짜
+                          면접 시간
                         </label>
                         <input
-                          className="BodyBody2"
+                          className="BodyBody3"
                           type="time"
-                          id="interviewDate"
+                          id="interviewTime"
+                          onChange={handleInterviewTime}
                         />
                       </fieldset>
                     </>
@@ -289,10 +309,17 @@ const TalentDetail = () => {
                     </>
                   )}
                 </div>
-              </div>
+              </form>
             </div>
-            <button className="SubHead2Medium cursor-pointer text-gray-400">
-              <Edit onClick={() => setisEditing(!isEditing)} />
+            <button
+              type="submit"
+              className="SubHead2Medium cursor-pointer text-gray-400"
+            >
+              {isEditing ? (
+                <Edit onClick={(e) => setMeetingDate()} />
+              ) : (
+                <Edit onClick={() => setisEditing(!isEditing)} />
+              )}
             </button>
           </div>
 

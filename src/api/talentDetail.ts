@@ -47,3 +47,17 @@ export const checkApplication = async (applyId: string) => {
   });
   return data;
 };
+
+// 면접 날짜 지정
+export const setMeeting = async (
+  applyId: string,
+  interviewDate: string,
+  interviewTime: string,
+) => {
+  const { data } = await client({
+    method: "PUT",
+    url: `apply/set_meeting/${applyId}`,
+    data: { interviewDate, interviewTime },
+  });
+  return data;
+};

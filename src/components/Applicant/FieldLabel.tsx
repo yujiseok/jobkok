@@ -9,7 +9,7 @@ const FieldLabel = ({
 }) => {
   return (
     <label
-      className={`${className} Caption1Medium text-gray-600
+      className={`${className} Caption1Medium whitespace-nowrap text-gray-600
         `}
       htmlFor={htmlFor}
     >

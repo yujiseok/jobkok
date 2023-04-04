@@ -44,3 +44,14 @@ export const KEYWORDS_CHECK = [
   "배려심 있어요",
   "결근 안해요",
 ];
+
+export const REQUIRED_FIELD = ["자기소개", "경력", "나의 키워드"];
+
+export const OPTIONAL_FIELD = [
+  "최종학력",
+  "자격증",
+  "수상내역",
+  "어학능력",
+  "취업우대사항",
+  "기타이력서",
+];

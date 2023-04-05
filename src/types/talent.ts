@@ -1,15 +1,37 @@
-export interface IStatus {
+export interface IResponse<T> {
   state: number;
   result: string;
-  data: {
-    totalCount: string;
-    todayCount: string;
-    process: string;
-    processFinish: string;
-  };
+  message?: string;
+  data: T;
 }
-interface ITalentBase {
-  applyId?: number;
+
+export interface IFormData {
+  id: number;
+  uploader: any;
+  title: string;
+  contents: string;
+  keywordStandard: string;
+  resumeTitle: string;
+  recruitUrl: string;
+  ongoing: boolean;
+  procedure: string;
+  docsStart: string;
+  docsEnd: string;
+  meetStart: string;
+  meetEnd: string;
+  confirmStart: string;
+  confirmEnd: string;
+}
+
+export interface IStatus {
+  totalCount: string;
+  todayCount: string;
+  process: string;
+  processFinish: string;
+}
+
+export interface ITalentBase {
+  applyId?: string;
   applyName: string;
   applyPhone: string;
   applyEmail: string;
@@ -49,4 +71,11 @@ export interface IRegisteredForm {
   recruitContent: string;
   recruitProcedure: string;
   createdTime: string;
+}
+
+export interface IKanban {
+  [key: string]: any;
+  title: string;
+  id: string;
+  applicant: ITalent[];
 }

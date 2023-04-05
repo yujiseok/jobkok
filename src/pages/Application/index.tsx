@@ -2,9 +2,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import * as z from "zod";
-import { ReactComponent as IconArrowLeft } from "@/assets/applicant/arrowLeft.svg";
-import { ReactComponent as IconComplete } from "@/assets/applicant/complete.svg";
-import { ReactComponent as IconIncomplete } from "@/assets/applicant/incomplete.svg";
+import { ReactComponent as IconComplete } from "@/assets/svg/check-round-full-blue.svg.svg";
+import { ReactComponent as IconIncomplete } from "@/assets/svg/check-round-line-gray.svg";
+import { ReactComponent as IconArrowLeft } from "@/assets/svg/chevron-left-white.svg";
 
 import {
   EDULEVEL_OPTION,

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import * as z from "zod";
-import { ReactComponent as IconLogo } from "@/assets/applicant/logo.svg";
+import { ReactComponent as IconLogo } from "@/assets/svg/blue-logo.svg";
 import AuthEnter from "@components/Applicant/AuthEnter";
 import AuthLabel from "@components/Applicant/AuthLabel";
 import AuthRow from "@components/Applicant/AuthRow";

@@ -1,5 +1,5 @@
-import { ReactComponent as IconSelect } from "@/assets/applicant/select.svg";
-import { ReactComponent as IconSelected } from "@/assets/applicant/selected.svg";
+import { ReactComponent as IconSelected } from "@/assets/svg/check-blue.svg";
+import { ReactComponent as IconSelect } from "@/assets/svg/check-gray.svg";
 
 const FieldCheckbox = ({
   children,

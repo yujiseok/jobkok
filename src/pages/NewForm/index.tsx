@@ -1,5 +1,5 @@
-import { ReactComponent as IconArrowLeft } from "@/assets/new-form/arrow-left.svg";
-import { ReactComponent as IconEdit } from "@/assets/new-form/edit.svg";
+import { ReactComponent as IconChevronLeft } from "@/assets/svg/chevron-left.svg";
+import { ReactComponent as IconEdit } from "@/assets/svg/edit-icon.svg";
 import { KEYWORDS_CHECK } from "@/constants/applicant";
 import ContentsBox from "@components/NewForm/ContentsBox";
 import RequiredBadge from "@components/NewForm/RequiredBadge";
@@ -8,7 +8,7 @@ const NewForm = () => {
   return (
     <div className="p-16">
       <div className="mb-[63px] flex justify-between">
-        <IconArrowLeft />
+        <IconChevronLeft />
         <div className="flex justify-center gap-3">
           <span className="SubHead2Semibold h-[28px] w-[84px] rounded border border-gray-50 bg-gray-0 py-1 px-1.5 text-center text-blue-400">
             접수 진행중

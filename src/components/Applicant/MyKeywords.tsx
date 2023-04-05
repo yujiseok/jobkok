@@ -1,4 +1,4 @@
-import { ReactComponent as IconSelect } from "@/assets/applicant/select.svg";
+import { ReactComponent as IconSelect } from "@/assets/svg/check-gray.svg";
 import { KEYWORDS_CHECK } from "@/constants/applicant";
 import FieldBox from "@components/Applicant/FieldBox";
 import FieldLegend from "@components/Applicant/FieldLegend";

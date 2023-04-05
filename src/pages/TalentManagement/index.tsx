@@ -25,6 +25,7 @@ import { ReactComponent as Stats } from "@/assets/svg/stats.svg";
 import { ReactComponent as User } from "@/assets/svg/user.svg";
 import useAllTalentQuery from "@/lib/hooks/useAllTalentQuery";
 import useDnD from "@/lib/hooks/useDnD";
+import useFormList from "@/lib/hooks/useFormList";
 import useFormStatusQuery from "@/lib/hooks/useFormStatusQuery";
 import formatDate from "@/lib/utils/formatDate";
 import talentByProcedure from "@/lib/utils/talentByProcedure";
@@ -41,9 +42,8 @@ import { WhiteContainer } from "@components/Talent/WhiteContainer";
 const TalentManagement = () => {
   const { data: formData } = useQuery({
     queryKey: ["form"],
-    queryFn: () => getFormList("false"),
+    queryFn: () => getFormList("true"),
     suspense: true,
-    refetchOnWindowFocus: false,
   });
 
   // 폼 없을 시
@@ -176,12 +176,11 @@ const TalentManagement = () => {
   }
 
   // 폼 있을 시
-  const [recruitId, setRecruitId] = useState(`${formData?.data[0]?.id}` ?? "");
-  const [data, onDragEnd] = useDnD(kanbanData);
+  const [recruitId, handleChangeFormList] = useFormList(
+    formData?.data[0]?.id as number,
+  );
 
-  const handleChangeStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setRecruitId(e.target.value);
-  };
+  const [data, onDragEnd] = useDnD(kanbanData);
 
   const allTalent = useAllTalentQuery(recruitId);
   const formStatus = useFormStatusQuery(recruitId);
@@ -195,7 +194,7 @@ const TalentManagement = () => {
             <div className="SubHead2Semibold">
               <select
                 className="bg-transparent pr-3 outline-none"
-                onChange={handleChangeStatus}
+                onChange={handleChangeFormList}
               >
                 {formData?.data.map((item) => (
                   <option

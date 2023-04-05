@@ -1,13 +1,14 @@
-import ConfirmDocsBtn from "@components/TalentDetail/ConfirmDocsBtn";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { getDetailInfo } from "@/api/talentDetail";
 import Breadcrumbs from "@components/TalentDetail/Breadcrumbs";
+import ConfirmDocsBtn from "@components/TalentDetail/ConfirmDocsBtn";
+import ConfirmFailBtn from "@components/TalentDetail/ConfirmFailBtn";
 import ConfirmFailModal from "@components/TalentDetail/ConfirmFailModal";
 import EvaluationNote from "@components/TalentDetail/EvaluationNote";
 import TalentDetailHeading from "@components/TalentDetail/Heading";
 import InterviewInfo from "@components/TalentDetail/InterviewInfo";
-import PersonalNotiModal from "@components/TalentDetail/PersonalNotiModal";
+import PersonalNotiBtn from "@components/TalentDetail/PersonalNotiBtn";
 import ProfileCard from "@components/TalentDetail/ProfileCard";
 import Timeline from "@components/TalentDetail/Timeline";
 
@@ -27,20 +28,8 @@ const TalentDetail = () => {
         <TalentDetailHeading />
         <div className="SubHead2Semibold flex items-start gap-4 rounded-md">
           <ConfirmDocsBtn />
-          <label
-            htmlFor="confirm-fail-modal"
-            className="cursor-pointer rounded-md bg-error-50 px-6 py-3 text-error-400"
-          >
-            탈락 처리
-            <ConfirmFailModal />
-          </label>
-          <label
-            htmlFor="personal-noti-modal"
-            className="cursor-pointer rounded-md bg-blue-500 px-6 py-3 text-white"
-          >
-            개별 알림 보내기
-          </label>
-          <PersonalNotiModal />
+          <ConfirmFailBtn />
+          <PersonalNotiBtn />
         </div>
       </section>
 

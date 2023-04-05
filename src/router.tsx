@@ -194,7 +194,11 @@ const router: RemixRouter = createBrowserRouter([
         children: [
           {
             path: "management",
-            element: <TalentManagement />,
+            element: (
+              <Suspense fallback={<Spinner />}>
+                <TalentManagement />
+              </Suspense>
+            ),
           },
           {
             path: "status",

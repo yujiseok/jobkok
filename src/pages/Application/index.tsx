@@ -105,7 +105,7 @@ const Application = () => {
   };
 
   return (
-    <>
+    <main className="mx-auto max-w-7xl">
       <header className="absolute left-0 right-0 h-[148px] bg-blue-400 py-[56px]">
         <div className="relative mx-auto flex max-w-7xl justify-center">
           <IconArrowLeft className="absolute left-[62px]" />
@@ -667,7 +667,7 @@ const Application = () => {
           </div>
         </section>
       </div>
-    </>
+    </main>
   );
 };
 export default Application;

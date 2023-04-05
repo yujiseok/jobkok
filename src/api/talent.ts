@@ -113,13 +113,13 @@ export const getFailedTalent = async ({ queryKey }: QueryFunctionContext) => {
   if (filter === "wish") {
     const filteredData = data.filter((item) => item.wish === true);
 
-    return { filteredData, totalPages: Math.ceil(totalPages / 10) };
+    return { filteredData, totalPages: Math.floor(filteredData.length / 10) };
   }
 
   if (filter === "applyDelete") {
     const filteredData = data.filter((item) => item.applyDelete === true);
 
-    return { filteredData, totalPages: Math.ceil(totalPages / 10) };
+    return { filteredData, totalPages: Math.floor(filteredData.length / 10) };
   }
 
   return { data, totalPages };

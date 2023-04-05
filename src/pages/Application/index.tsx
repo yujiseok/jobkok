@@ -5,11 +5,10 @@ import * as z from "zod";
 import { ReactComponent as IconArrowLeft } from "@/assets/applicant/arrowLeft.svg";
 import { ReactComponent as IconComplete } from "@/assets/applicant/complete.svg";
 import { ReactComponent as IconIncomplete } from "@/assets/applicant/incomplete.svg";
-import { ReactComponent as IconSelect } from "@/assets/applicant/select.svg";
+
 import {
   EDULEVEL_OPTION,
   EDUSTATUS_OPTION,
-  KEYWORDS_CHECK,
   LANGUAGELEVEL_OPTION,
   MILITARY_OPTION,
   OPTIONAL_FIELD,
@@ -18,8 +17,7 @@ import {
   TERMS_SENSITIVE,
 } from "@/constants/applicant";
 import AsideBox from "@components/Applicant//AsideBox";
-import DefDesc from "@components/Applicant//DefDesc";
-import DefTerm from "@components/Applicant//DefTerm";
+import ActionBtn from "@components/Applicant/ActionBtn";
 import AsideHeading from "@components/Applicant/AsideHeading";
 import FieldBox from "@components/Applicant/FieldBox";
 import FielCheckbox from "@components/Applicant/FieldCheckbox";
@@ -28,6 +26,7 @@ import FieldLabel from "@components/Applicant/FieldLabel";
 import FieldLegend from "@components/Applicant/FieldLegend";
 import FieldParagraph from "@components/Applicant/FieldParagraph";
 import FieldRow from "@components/Applicant/FieldRow";
+import MyKeywords from "@components/Applicant/MyKeywords";
 import SubmitBtn from "@components/Applicant/SubmitBtn";
 
 const schema = z.object({
@@ -61,8 +60,8 @@ const schema = z.object({
   agree: z.boolean().refine((val) => val),
 
   // 기타이력서
-  portfolio: z.string().url("올바른 링크를 입력해주세요."),
-  resume: z.string().url("올바른 링크를 입력해주세요."),
+  portfolio: z.string().url("올바른 URL 형식이 아닙니다."),
+  link: z.string().url("올바른 URL 형식이 아닙니다."),
 
   // 어학능력
   languageName: z.string().nonempty(),
@@ -121,12 +120,20 @@ const Application = () => {
             </h4>
             <dl>
               <div className="mb-[26px] flex gap-3.5">
-                <DefTerm>지원서 접수 마감일</DefTerm>
-                <DefDesc>23/03/30</DefDesc>
+                <dt className="Caption1Medium w-[90px] text-gray-600">
+                  지원서 접수 마감일
+                </dt>
+                <dd className="SubHead2Medium w-[130px] text-gray-600">
+                  23/03/30
+                </dd>
               </div>
               <div className="flex gap-3.5">
-                <DefTerm>기업 면접 가능 기간</DefTerm>
-                <DefDesc>23/03/31 ~ 23/04/01</DefDesc>
+                <dt className="Caption1Medium w-[90px] text-gray-600">
+                  기업 면접 가능 기간
+                </dt>
+                <dd className="SubHead2Medium w-[130px] text-gray-600">
+                  23/03/31 ~ 23/04/01
+                </dd>
               </div>
             </dl>
           </AsideBox>
@@ -176,7 +183,13 @@ const Application = () => {
                 <p className="Head4Medium text-gray-700">
                   본인 대해 자유롭게 서술해주세요.
                 </p>
-                <FieldInputBox className="h-[272px]">
+                <div
+                  className={`flex h-[272px] items-center gap-4 rounded-lg border  bg-gray-0 px-6 ${
+                    errors.resumeContent
+                      ? " border-error-400"
+                      : " border-gray-100"
+                  }`}
+                >
                   <FieldLabel className="w-20" htmlFor="resumeContent">
                     지원자 작성란
                   </FieldLabel>
@@ -187,7 +200,7 @@ const Application = () => {
                     maxLength={1000}
                     {...register("resumeContent")}
                   ></textarea>
-                </FieldInputBox>
+                </div>
                 <div className="Caption1Medium mt-[-16px] text-gray-400">
                   {watch().resumeContent?.length}
                   /1000자(공백포함)
@@ -199,7 +212,7 @@ const Application = () => {
                   경력(필수)
                 </FieldLegend>
                 <FieldRow>
-                  <FieldInputBox>
+                  <FieldInputBox errors={errors.careerName}>
                     <FieldLabel htmlFor="careerName">일한곳</FieldLabel>
                     <input
                       className="max-w-[214px] focus:outline-none"
@@ -210,7 +223,7 @@ const Application = () => {
                       {...register("careerName")}
                     />
                   </FieldInputBox>
-                  <FieldInputBox>
+                  <FieldInputBox errors={errors.careerPeriodStart}>
                     <FieldLabel htmlFor="careerPeriodStart">시작일</FieldLabel>
                     <input
                       className="max-w-[120px] focus:outline-none"
@@ -220,7 +233,7 @@ const Application = () => {
                       {...register("careerPeriodStart")}
                     />
                   </FieldInputBox>
-                  <FieldInputBox>
+                  <FieldInputBox errors={errors.careerPeriodEnd}>
                     <FieldLabel htmlFor="careerPeriodEnd">마감일</FieldLabel>
                     <input
                       className="max-w-[120px] focus:outline-none"
@@ -231,7 +244,13 @@ const Application = () => {
                     />
                   </FieldInputBox>
                 </FieldRow>
-                <FieldInputBox className="h-[272px]">
+                <div
+                  className={`flex h-[272px] items-center gap-4 rounded-lg border bg-gray-0 px-6 ${
+                    errors.careerDetail
+                      ? " border-error-400"
+                      : " border-gray-100"
+                  }`}
+                >
                   <FieldLabel className="w-20" htmlFor="careerDetail">
                     상세 내용
                   </FieldLabel>
@@ -242,7 +261,7 @@ const Application = () => {
                     maxLength={1000}
                     {...register("careerDetail")}
                   ></textarea>
-                </FieldInputBox>
+                </div>
                 <div className="Caption1Medium mt-[-16px] text-gray-400">
                   {watch().careerDetail?.length}
                   /1000자(공백포함)
@@ -252,7 +271,7 @@ const Application = () => {
               <FieldBox>
                 <FieldLegend>최종학력</FieldLegend>
                 <FieldRow>
-                  <FieldInputBox>
+                  <FieldInputBox errors={errors.eduName}>
                     <FieldLabel htmlFor="eduName">학교명</FieldLabel>
                     <input
                       className="max-w-[200px] bg-transparent focus:outline-none"
@@ -263,7 +282,7 @@ const Application = () => {
                       {...register("eduName")}
                     />
                   </FieldInputBox>
-                  <FieldInputBox>
+                  <FieldInputBox errors={errors.eduMajor}>
                     <FieldLabel htmlFor="eduMajor">전공</FieldLabel>
                     <input
                       className="max-w-[190px] bg-transparent focus:outline-none"
@@ -274,7 +293,7 @@ const Application = () => {
                       {...register("eduMajor")}
                     />
                   </FieldInputBox>
-                  <FieldInputBox>
+                  <FieldInputBox errors={errors.eduLevel}>
                     <label className="sr-only" htmlFor="eduLevel">
                       년제
                     </label>
@@ -292,7 +311,7 @@ const Application = () => {
                       })}
                     </select>
                   </FieldInputBox>
-                  <FieldInputBox>
+                  <FieldInputBox errors={errors.eduStatus}>
                     <label className="sr-only" htmlFor="eduStatus">
                       졸업상태
                     </label>
@@ -310,7 +329,7 @@ const Application = () => {
                       })}
                     </select>
                   </FieldInputBox>
-                  <FieldInputBox>
+                  <FieldInputBox errors={errors.eduPeriodStart}>
                     <FieldLabel htmlFor="eduPeriodStart">입학날짜</FieldLabel>
                     <input
                       className="max-w-[120px] focus:outline-none"
@@ -320,12 +339,12 @@ const Application = () => {
                       {...register("eduPeriodStart")}
                     />
                   </FieldInputBox>
-                  <FieldInputBox>
-                    <FieldLabel htmlFor="careerPeriodEnd">졸업날짜</FieldLabel>
+                  <FieldInputBox errors={errors.eduPeriodEnd}>
+                    <FieldLabel htmlFor="eduPeriodEnd">졸업날짜</FieldLabel>
                     <input
                       className="max-w-[120px] focus:outline-none"
                       type="date"
-                      id="careerPeriodEnd"
+                      id="eduPeriodEnd"
                       onKeyDown={handleKeyDown}
                       {...register("eduPeriodEnd")}
                     />
@@ -336,7 +355,7 @@ const Application = () => {
               <FieldBox>
                 <FieldLegend>자격증</FieldLegend>
                 <FieldRow>
-                  <FieldInputBox>
+                  <FieldInputBox errors={errors.certificateName}>
                     <FieldLabel htmlFor="certificateName">
                       자격증 이름
                     </FieldLabel>
@@ -349,7 +368,7 @@ const Application = () => {
                       {...register("certificateName")}
                     />
                   </FieldInputBox>
-                  <FieldInputBox>
+                  <FieldInputBox errors={errors.certificatePublisher}>
                     <FieldLabel htmlFor="certificatePublisher">
                       발생처
                     </FieldLabel>
@@ -362,7 +381,7 @@ const Application = () => {
                       {...register("certificatePublisher")}
                     />
                   </FieldInputBox>
-                  <FieldInputBox>
+                  <FieldInputBox errors={errors.certificateDate}>
                     <FieldLabel htmlFor="certificateDate">취득일</FieldLabel>
                     <input
                       className="max-w-[120px] bg-transparent focus:outline-none "
@@ -378,7 +397,7 @@ const Application = () => {
               <FieldBox>
                 <FieldLegend>수상내역</FieldLegend>
                 <FieldRow>
-                  <FieldInputBox>
+                  <FieldInputBox errors={errors.awardsName}>
                     <FieldLabel htmlFor="awardsName">수상명</FieldLabel>
                     <input
                       className="max-w-[150px] bg-transparent focus:outline-none"
@@ -389,7 +408,7 @@ const Application = () => {
                       {...register("awardsName")}
                     />
                   </FieldInputBox>
-                  <FieldInputBox>
+                  <FieldInputBox errors={errors.awardsCompany}>
                     <FieldLabel htmlFor="awardsCompany">수여기관</FieldLabel>
                     <input
                       className="max-w-[160px] bg-transparent focus:outline-none"
@@ -400,7 +419,7 @@ const Application = () => {
                       {...register("awardsCompany")}
                     />
                   </FieldInputBox>
-                  <FieldInputBox>
+                  <FieldInputBox errors={errors.awardsDate}>
                     <FieldLabel htmlFor="awardsDate">수상일</FieldLabel>
                     <input
                       className="max-w-[120px] bg-transparent  focus:outline-none"
@@ -461,7 +480,7 @@ const Application = () => {
                       {...register("subsidy")}
                     />
                   </FielCheckbox>
-                  <FieldInputBox>
+                  <FieldInputBox errors={errors.military}>
                     <label className="sr-only" htmlFor="military">
                       병역사항
                     </label>
@@ -482,7 +501,7 @@ const Application = () => {
                 </FieldRow>
                 <FielCheckbox className="h-[86px] w-full">
                   <label
-                    className="SubHead2Semibold text-gray-600"
+                    className="SubHead2Semibold mr-6 text-gray-600"
                     htmlFor="agree"
                   >
                     민감정보 제공 안내
@@ -502,7 +521,7 @@ const Application = () => {
               <FieldBox>
                 <FieldLegend>어학능력</FieldLegend>
                 <FieldRow>
-                  <FieldInputBox>
+                  <FieldInputBox errors={errors.languageName}>
                     <FieldLabel htmlFor="languageName">언어</FieldLabel>
                     <input
                       className="focus:outline-none"
@@ -513,7 +532,7 @@ const Application = () => {
                       {...register("languageName")}
                     />
                   </FieldInputBox>
-                  <FieldInputBox>
+                  <FieldInputBox errors={errors.languageLevel}>
                     <label className="sr-only" htmlFor="languageLevel">
                       수준
                     </label>
@@ -537,53 +556,43 @@ const Application = () => {
               <FieldBox>
                 <FieldLegend>기타 이력서</FieldLegend>
                 <FieldRow>
-                  <FieldInputBox>
-                    <FieldLabel htmlFor="portfolio">포트폴리오 링크</FieldLabel>
-                    <input
-                      className="focus:outline-none"
-                      type="url"
-                      id="portfolio"
-                      placeholder="링크를 첨부해주세요."
-                      {...register("portfolio")}
-                    />
-                  </FieldInputBox>
-                  <p className="mt-2 text-sm text-rose-500">
-                    {errors.portfolio?.message}
-                  </p>
-                  <FieldInputBox>
-                    <FieldLabel htmlFor="resume">기타 링크</FieldLabel>
-                    <input
-                      className="focus:outline-none"
-                      type="url"
-                      id="resume"
-                      placeholder="링크를 첨부해주세요."
-                      {...register("resume")}
-                    />
-                  </FieldInputBox>
-                  <p className="mt-2 text-sm text-rose-500">
-                    {errors.resume?.message}
-                  </p>
+                  <div>
+                    <FieldInputBox errors={errors.portfolio}>
+                      <FieldLabel htmlFor="portfolio">
+                        포트폴리오 링크
+                      </FieldLabel>
+                      <input
+                        className="focus:outline-none"
+                        type="url"
+                        id="portfolio"
+                        placeholder="링크를 첨부해주세요."
+                        {...register("portfolio")}
+                      />
+                    </FieldInputBox>
+                    <p className="mt-2 text-sm text-error-400">
+                      {errors.portfolio?.message}
+                    </p>
+                  </div>
+                  <div>
+                    <FieldInputBox errors={errors.link}>
+                      <FieldLabel htmlFor="link">기타 링크</FieldLabel>
+                      <input
+                        className="focus:outline-none"
+                        type="url"
+                        id="link"
+                        placeholder="링크를 첨부해주세요."
+                        {...register("link")}
+                      />
+                    </FieldInputBox>
+                    <p className="mt-2 text-sm text-error-400">
+                      {errors.link?.message}
+                    </p>
+                  </div>
                 </FieldRow>
               </FieldBox>
               {/* 나의키워드 */}
-              <FieldBox>
-                <FieldLegend>나의 키워드(필수)</FieldLegend>
-                <FieldParagraph>
-                  해당되는 항목의 체크박스에 체크해주세요.
-                </FieldParagraph>
-                <div className="grid h-[108px] max-w-[820px] grid-cols-5 gap-2">
-                  {KEYWORDS_CHECK.map((keyword) => (
-                    <button
-                      className="SubHead2Semibold flex items-center justify-center gap-1 rounded-lg border border-gray-100 py-2.5 text-gray-500"
-                      key={keyword}
-                      type="button"
-                    >
-                      <IconSelect />
-                      {keyword}
-                    </button>
-                  ))}
-                </div>
-              </FieldBox>
+              <MyKeywords />
+              {/* 약관동의 */}
               <FieldBox>
                 <FieldLegend>약관동의</FieldLegend>
                 <FieldParagraph>
@@ -606,7 +615,7 @@ const Application = () => {
                       id="agree"
                       {...register("agree")}
                     />
-                    <p className="SubHead2Medium h-[54px] max-w-[540px] overflow-auto text-gray-300">
+                    <p className="SubHead2Medium h-[54px] max-w-[500px] overflow-auto text-gray-300">
                       {content.description}
                     </p>
                   </FielCheckbox>
@@ -615,7 +624,7 @@ const Application = () => {
             </div>
           </form>
           <div className="mt-8 flex justify-between">
-            <button
+            <ActionBtn
               className="SubHead1Semibold rounded-md bg-blue-50 py-2.5 px-6 text-blue-500"
               type="button"
               onClick={() => {
@@ -627,7 +636,7 @@ const Application = () => {
               }}
             >
               이전
-            </button>
+            </ActionBtn>
             <SubmitBtn
               className="w-[147px]"
               type="button"

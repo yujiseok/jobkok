@@ -1,4 +1,5 @@
 import type { AxiosResponse } from "axios";
+import { AxiosError } from "axios";
 import { auth } from "./axios";
 
 export const postSignIn = async (useremail: string, password: string) => {
@@ -17,7 +18,9 @@ export const postSignIn = async (useremail: string, password: string) => {
     }
     return data;
   } catch (error: any) {
-    console.log("로그인 api 에러", error);
+    if (error instanceof AxiosError) {
+      console.log("로그인 api 에러", error);
+    }
   }
 };
 
@@ -31,8 +34,10 @@ export const postLogout = async () => {
       localStorage.removeItem("token");
     }
     return data;
-  } catch (error: any) {
-    console.log("로그아웃 api 에러", error);
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      console.log("로그아웃 api 에러", error);
+    }
   }
 };
 
@@ -53,13 +58,15 @@ export const postSignUp = async (
         password,
         memberPhone: phone,
         companyNum: registration,
-        companyName: companyName,
+        companyName,
         ceoName: ceo,
       },
     });
     return data;
-  } catch (error: any) {
-    console.error("회원가입 api 에러", error);
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      console.error("회원가입 api 에러", error);
+    }
   }
 };
 
@@ -75,8 +82,10 @@ export const postEmailCheck = async (useremail: string) => {
     });
     // 성공 data.message : 중복된 이메일이 존재하지 않습니다.
     return data;
-  } catch (error: any) {
-    console.log("이메일 중복확인 api 에러", error);
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      console.log("이메일 중복확인 api 에러", error);
+    }
   }
 };
 
@@ -99,6 +108,8 @@ export const putResetPassword = async (
     // 성공 data.message: 비밀번호를 변경하였습니다
     return data;
   } catch (error: any) {
-    console.log("비밀번호 변경 api 에러", error);
+    if (error instanceof AxiosError) {
+      console.log("비밀번호 변경 api 에러", error);
+    }
   }
 };

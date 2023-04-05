@@ -20,26 +20,32 @@ const initialState: SignUpState = {
 };
 
 export const signUpSlice = createSlice({
-  name: "postSignUp",
+  name: "signUp",
   initialState,
   reducers: {
     fillEmail(state, action) {
-      state.useremail = action.payload;
+      const content = action.payload;
+      state.useremail = content;
     },
     fillPassword(state, action) {
-      state.password = action.payload;
+      const content = action.payload;
+      state.password = content;
     },
     fillPhone(state, action) {
-      state.phone = action.payload;
+      const content = action.payload;
+      state.phone = content;
     },
     fillCompanyName(state, action) {
-      state.companyName = action.payload;
+      const content = action.payload;
+      state.companyName = content;
     },
     fillCeo(state, action) {
-      state.ceo = action.payload;
+      const content = action.payload;
+      state.ceo = content;
     },
     fillRegistration(state, action) {
-      state.registration = action.payload;
+      const content = action.payload;
+      state.registration = content;
     },
     submitForm(state) {
       if (

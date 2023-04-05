@@ -1,9 +1,10 @@
 import type { Router as RemixRouter } from "@remix-run/router/dist/router";
 import { Suspense } from "react";
-import { createBrowserRouter, Navigate, RouteObject } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import Spinner from "@components/Common/Spinner";
 import Layout from "@components/Layout/Layout";
+import OtherLayout from "@components/Layout/OtherLayout";
 import ApplicantAuth from "@pages/ApplicantAuth";
 import Application from "@pages/Application";
 import ChangeUserInfo from "@pages/ChangeUserInfo";
@@ -236,19 +237,24 @@ const router: RemixRouter = createBrowserRouter([
     element: <SignIn />,
   },
   {
-    path: "/applicant",
+    element: <OtherLayout />,
     children: [
       {
-        path: "auth",
-        element: <ApplicantAuth />,
-      },
-      {
-        path: "application",
-        element: <Application />,
-      },
-      {
-        path: "completion",
-        element: <Completion />,
+        path: "/applicant",
+        children: [
+          {
+            path: "auth",
+            element: <ApplicantAuth />,
+          },
+          {
+            path: "application",
+            element: <Application />,
+          },
+          {
+            path: "completion",
+            element: <Completion />,
+          },
+        ],
       },
     ],
   },

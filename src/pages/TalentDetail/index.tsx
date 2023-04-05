@@ -4,9 +4,7 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   addComment,
-  assortFailTalent,
   assortLikeTalent,
-  checkApplication,
   getDetailInfo,
   setMeeting,
 } from "@/api/talentDetail";
@@ -17,6 +15,9 @@ import { ReactComponent as Edit } from "@/assets/svg/edit-icon.svg";
 import { ReactComponent as Profile } from "@/assets/svg/profile-detail.svg";
 import { ReactComponent as TrashBin } from "@/assets/svg/trash.svg";
 import Breadcrumbs from "@components/TalentDetail/Breadcrumbs";
+import ConfirmDocsModal from "@components/TalentDetail/ConfirmDocsModal";
+import ConfirmFailModal from "@components/TalentDetail/ConfirmFailModal";
+import ConfirmPassModal from "@components/TalentDetail/ConfirmPassModal";
 import PersonalNotiModal from "@components/TalentDetail/PersonalNotiModal";
 
 type FormValues = {
@@ -43,14 +44,6 @@ const TalentDetail = () => {
     console.log(res);
   };
 
-  const checkTalent = async () => {
-    const res = await checkApplication(id);
-  };
-
-  const failTalent = async () => {
-    const res = await assortFailTalent(id);
-  };
-
   const handleWishApplicant = async () => {
     const res = await assortLikeTalent(id);
     setIsLiked(true);
@@ -74,8 +67,8 @@ const TalentDetail = () => {
 
   return (
     <div className="relative pt-8">
+      <ConfirmFailModal />
       <Breadcrumbs />
-
       <div className="flex justify-between">
         <div>
           <div className="relative mb-3 flex items-center gap-6">
@@ -88,25 +81,27 @@ const TalentDetail = () => {
           </p>
         </div>
         <div className="SubHead2Semibold flex items-start gap-4 rounded-md">
-          <button
-            onClick={checkTalent}
+          <label
+            htmlFor="confirm-docs-modal"
             className="cursor-pointer rounded-md bg-blue-50 px-6 py-3 text-blue-500"
           >
             서류 검토
-          </button>
-          <button
-            onClick={failTalent}
+            <ConfirmDocsModal />
+          </label>
+
+          <label
+            htmlFor="confirm-fail-modal"
             className="cursor-pointer rounded-md bg-error-50 px-6 py-3 text-error-400"
           >
             탈락 처리
-          </button>
+            <ConfirmFailModal />
+          </label>
           <label
-            htmlFor="my-modal"
+            htmlFor="personal-noti-modal"
             className="cursor-pointer rounded-md bg-blue-500 px-6 py-3 text-white"
           >
             개별 알림 보내기
           </label>
-
           {/* 모달 */}
           <PersonalNotiModal />
         </div>
@@ -148,9 +143,14 @@ const TalentDetail = () => {
                     {talentInfo?.applyEmail}
                   </p>
                 </div>
-                <button className="SubHead2Semibold cursor-pointer rounded-md bg-blue-50 px-6 py-3 text-blue-400">
+
+                <label
+                  htmlFor="confirm-pass-modal"
+                  className="SubHead2Semibold cursor-pointer rounded-md bg-blue-50 px-6 py-3 text-blue-500"
+                >
                   채용 확정
-                </button>
+                </label>
+                <ConfirmPassModal />
               </div>
               <div className="badge-container mt-10 flex max-w-[280px] flex-wrap gap-x-2 gap-y-6px">
                 <div className="SubHead2Semibold rounded-sm bg-gray-200 p-1 text-blue-25">

@@ -2,8 +2,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import type * as z from "zod";
-import { ReactComponent as Arrow } from "@/assets/svg/arrow-right.svg";
 import { ReactComponent as Bluelogo } from "@/assets/svg/blue-logo.svg";
+import { ReactComponent as Arrow } from "@/assets/svg/chevron-right.svg";
 import { ReactComponent as Check } from "@/assets/svg/round-check.svg";
 import type { NewUser } from "./Email";
 import { schema } from "./Email";
@@ -138,10 +138,10 @@ const UserInfo = ({ setStep }: Props) => {
       <div className="SubHead2Semibold flex justify-center">
         <Check className="mr-1" />
         <p className="text-gray-400">이메일 생성 및 인증</p>
-        <Arrow className="mx-2" />
+        <Arrow className="mx-2 mt-1" />
         <Check className="mr-1" />
         <p className="text-gray-400">비밀번호 설정</p>
-        <Arrow className="mx-2" />
+        <Arrow className="mx-2 mt-1" />
         <p className="text-gray-800">기업 및 개인정보 등록</p>
       </div>
     </>

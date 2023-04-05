@@ -55,7 +55,8 @@ module.exports = {
         pretendard: ["Pretendard"],
       },
       boxShadow: {
-        job: " 0px 2px 5px rgba(0, 19, 51, 0.1), 0px 0px 0px rgba(0, 19, 51, 0.1);",
+        job: "0px 2px 5px rgba(0, 19, 51, 0.1), 0px 0px 0px rgba(0, 19, 51, 0.1);",
+        job2: "0 0 18px 0 rgba(191, 192, 196, 0.18)",
         blue: "0px 0px 18px rgba(83, 120, 230, 0.18);",
       },
       spacing: {

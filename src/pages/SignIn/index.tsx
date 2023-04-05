@@ -2,8 +2,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import * as z from "zod";
+import { postSignIn } from "@/api/auth";
 import { ReactComponent as Bluelogo } from "@/assets/svg/blue-logo.svg";
 import { ReactComponent as Eyeclose } from "@/assets/svg/eye-close.svg";
 import { ReactComponent as Eyeopen } from "@/assets/svg/eye-open.svg";
@@ -32,13 +33,14 @@ const userSchema = z.object({
 export type User = z.infer<typeof userSchema>;
 
 const SignIn = () => {
+  const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies(["rememberEmail"]);
   const [isRemember, setIsRemember] = useState(false);
+  const [IsFail, setIsFail] = useState(false);
   const [showPw, setShowPw] = useState<IShowPw>({
     type: "password",
     visible: false,
   });
-
   // 새로고침 했을때 저장된 이메일 값 보여주기
   useEffect(() => {
     if (cookies.rememberEmail !== undefined) {
@@ -79,13 +81,19 @@ const SignIn = () => {
     mode: "onChange",
     resolver: zodResolver(userSchema),
   });
-  const onSubmit = (data: User) => {
-    // 로그인 api 수정 예정
+
+  const onSubmit = async (data: User) => {
+    const res = await postSignIn(data.useremail, data.password);
+    if (res.message === "로그인에 성공했습니다.") {
+      navigate("/");
+    } else {
+      setIsFail(true);
+    }
     console.log(data);
   };
 
   return (
-    <div className="flex h-screen bg-gray-0">
+    <div className="flex h-full bg-gray-0">
       <div className="my-[68px] mx-[195px] flex w-4/5 justify-center">
         <div>
           <Bluelogo className="mb-[52px]" />
@@ -94,7 +102,12 @@ const SignIn = () => {
             잡콕에 다시 오신 걸 환영해요
           </p>
           <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
-            <label className="Caption1Medium mb-1 text-gray-300">이메일</label>
+            <label
+              htmlFor="email"
+              className="Caption1Medium mb-1 text-gray-300"
+            >
+              이메일
+            </label>
             <div className="mb-6">
               <div
                 className={`flex h-[51px] w-[430px] items-center rounded-lg border border-solid bg-gray-0 px-6 after:text-gray-300 ${
@@ -105,6 +118,7 @@ const SignIn = () => {
               >
                 {/* 이메일 입력칸 */}
                 <input
+                  id="email"
                   placeholder="jobkok@gmail.com"
                   className="SubHead1Medium w-[365px] outline-none"
                   type="text"
@@ -129,7 +143,10 @@ const SignIn = () => {
             </div>
 
             {/* 패스워드 입력칸 */}
-            <label className="Caption1Medium mb-1 text-gray-300">
+            <label
+              htmlFor="password"
+              className="Caption1Medium mb-1 text-gray-300"
+            >
               비밀번호
             </label>
             <div
@@ -140,6 +157,7 @@ const SignIn = () => {
               }`}
             >
               <input
+                id="password"
                 type={showPw.type}
                 placeholder="비밀번호를 입력해 주세요"
                 className="SubHead1Medium w-[365px] outline-none"
@@ -158,7 +176,10 @@ const SignIn = () => {
             </div>
             {/* 오류 메세지 띄우기 */}
             <span className="Caption1Medium text-error-400">
-              {errors?.password?.message}
+              {errors?.password?.message ||
+                (IsFail && (
+                  <span>이메일 또는 비밀번호가 일치하지 않습니다.</span>
+                ))}
             </span>
             <div className="mt-4 mb-20 flex justify-between">
               <div>
@@ -187,7 +208,7 @@ const SignIn = () => {
                   : "bg-gray-200"
               }`}
               type="submit"
-              disabled={isSubmitting}
+              disabled={isSubmitting && IsFail}
             >
               로그인하기
             </button>

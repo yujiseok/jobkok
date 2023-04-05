@@ -1,9 +1,10 @@
 import { Outlet, ScrollRestoration } from "react-router-dom";
 import { ReactComponent as Logo } from "@/assets/svg/white-logo.svg";
+
 const OtherLayout = () => {
   return (
     <>
-      <main className="flex">
+      <main className="flex bg-white">
         <div className="h-screen w-[64%] min-w-[580px]">
           <Outlet />
         </div>

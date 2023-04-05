@@ -18,6 +18,7 @@ import Breadcrumbs from "@components/TalentDetail/Breadcrumbs";
 import ConfirmDocsModal from "@components/TalentDetail/ConfirmDocsModal";
 import ConfirmFailModal from "@components/TalentDetail/ConfirmFailModal";
 import ConfirmPassModal from "@components/TalentDetail/ConfirmPassModal";
+import EvaluationNote from "@components/TalentDetail/EvaluationNote";
 import PersonalNotiModal from "@components/TalentDetail/PersonalNotiModal";
 import Timeline from "@components/TalentDetail/Timeline";
 
@@ -39,11 +40,6 @@ const TalentDetail = () => {
     queryFn: () => getDetailInfo(id),
     suspense: true,
   });
-
-  const onSubmit = async (data: FormValues) => {
-    const res = await addComment(id, data.evaluation);
-    console.log(res);
-  };
 
   const handleWishApplicant = async () => {
     const res = await assortLikeTalent(id);
@@ -234,37 +230,7 @@ const TalentDetail = () => {
               )}
             </button>
           </div>
-
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="feedback-note flex-1 rounded-md border-2 border-gray-50 bg-white px-5 py-4"
-          >
-            <div className="flex items-center justify-between">
-              <p className="SubHead1Semibold">평가노트</p>
-              <button>
-                <Edit />
-              </button>
-            </div>
-            <p className="SubHead2Medium my-3 text-gray-400">
-              인재의 전반적인 평가와 인상을 작성해보세요
-            </p>
-
-            <textarea
-              defaultValue={
-                talentInfo?.evaluation
-                  ? talentInfo?.evaluation
-                  : "입력해 주세요"
-              }
-              className="Caption1Medium textarea-bordered textarea textarea-lg min-h-[120px] w-full resize-none"
-              maxLength={MAX_LENGTH}
-              {...register("evaluation")}
-            ></textarea>
-
-            <div className="Caption1Medium text-gray-300">
-              <span>{watch().evaluation?.length.toLocaleString()}</span>
-              <span>/{MAX_LENGTH.toLocaleString()}자</span>
-            </div>
-          </form>
+          <EvaluationNote id={id} />
         </div>
       </section>
 

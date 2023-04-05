@@ -247,16 +247,16 @@ const router: RemixRouter = createBrowserRouter([
             element: <ApplicantAuth />,
           },
           {
-            path: "application",
-            element: <Application />,
-          },
-          {
             path: "completion",
             element: <Completion />,
           },
         ],
       },
     ],
+  },
+  {
+    path: "/applicant/application",
+    element: <Application />,
   },
   {
     path: "*",

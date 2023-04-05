@@ -30,7 +30,7 @@ import MyKeywords from "@components/Applicant/MyKeywords";
 import SubmitBtn from "@components/Applicant/SubmitBtn";
 
 const schema = z.object({
-  // // 경력
+  // 경력
   careerName: z.string().nonempty(),
   careerPeriodStart: z.string().nonempty(),
   careerPeriodEnd: z.string().nonempty(),
@@ -53,11 +53,11 @@ const schema = z.object({
   certificateDate: z.string().nonempty(),
 
   // 취업우대사항
-  disability: z.boolean().refine((val) => val),
   veterans: z.boolean().refine((val) => val),
+  disability: z.boolean().refine((val) => val),
   subsidy: z.boolean().refine((val) => val),
   military: z.string().nonempty(),
-  agree: z.boolean().refine((val) => val),
+  sensitiveAgree: z.boolean().refine((val) => val),
 
   // 기타이력서
   portfolio: z.string().url("올바른 URL 형식이 아닙니다."),
@@ -75,6 +75,9 @@ const schema = z.object({
   // 나의 성격 키워드
 
   // 약관
+  requiredAgree: z.boolean().refine((val) => val),
+  optionalAgree: z.boolean().refine((val) => val),
+  consignAgree: z.boolean().refine((val) => val),
 });
 
 type IApplicationForm = z.infer<typeof schema>;
@@ -438,43 +441,34 @@ const Application = () => {
                   본인이 해당하는 항목을 선택해주세요.
                 </FieldParagraph>
                 <FieldRow>
-                  <FielCheckbox>
-                    <label
-                      className="SubHead1Semibold text-gray-500"
-                      htmlFor="veterans"
-                    >
-                      국가보훈
-                    </label>
+                  <FielCheckbox
+                    htmlFor="veterans"
+                    inputValue={watch().veterans}
+                  >
+                    국가보훈
                     <input
-                      className="hidden"
+                      className="sr-only"
                       type="checkbox"
                       id="veterans"
                       {...register("veterans")}
                     />
                   </FielCheckbox>
-                  <FielCheckbox>
-                    <label
-                      className="SubHead1Semibold text-gray-500"
-                      htmlFor="disability"
-                    >
-                      장애
-                    </label>
+                  <FielCheckbox
+                    htmlFor="disability"
+                    inputValue={watch().disability}
+                  >
+                    장애
                     <input
-                      className="hidden"
+                      className="sr-only"
                       type="checkbox"
                       id="disability"
                       {...register("disability")}
                     />
                   </FielCheckbox>
-                  <FielCheckbox>
-                    <label
-                      className="SubHead1Semibold text-gray-500"
-                      htmlFor="subsidy"
-                    >
-                      고용지원금
-                    </label>
+                  <FielCheckbox htmlFor="subsidy" inputValue={watch().subsidy}>
+                    고용지원금
                     <input
-                      className="hidden"
+                      className="sr-only"
                       type="checkbox"
                       id="subsidy"
                       {...register("subsidy")}
@@ -499,20 +493,19 @@ const Application = () => {
                     </select>
                   </FieldInputBox>
                 </FieldRow>
-                <FielCheckbox className="h-[86px] w-full">
-                  <label
-                    className="SubHead2Semibold mr-6 text-gray-600"
-                    htmlFor="agree"
-                  >
-                    민감정보 제공 안내
-                  </label>
+                <FielCheckbox
+                  className="SubHead2Semibold h-[86px] w-full text-gray-600"
+                  htmlFor="sensitiveAgree"
+                  inputValue={watch().sensitiveAgree}
+                >
+                  민감정보 제공 안내
                   <input
-                    className="hidden"
+                    className="sr-only"
                     type="checkbox"
-                    id="agree"
-                    {...register("agree")}
+                    id="sensitiveAgree"
+                    {...register("sensitiveAgree")}
                   />
-                  <p className="SubHead2Medium h-[54px] max-w-[540px] overflow-auto text-gray-300">
+                  <p className="SubHead2Medium ml-6 h-[54px] max-w-[540px] overflow-auto text-gray-300">
                     {TERMS_SENSITIVE}
                   </p>
                 </FielCheckbox>
@@ -598,28 +591,54 @@ const Application = () => {
                 <FieldParagraph>
                   지원하려면 약관동의가 필요합니다.
                 </FieldParagraph>
-                {TERMS_APPLY.map((content) => (
-                  <FielCheckbox
-                    className="h-[86px] w-full gap-3 py-4"
-                    key={content.title}
-                  >
-                    <label
-                      className="SubHead2Semibold text-gray-600"
-                      htmlFor="agree"
-                    >
-                      {content.title}
-                    </label>
-                    <input
-                      className="hidden"
-                      type="checkbox"
-                      id="agree"
-                      {...register("agree")}
-                    />
-                    <p className="SubHead2Medium h-[54px] max-w-[500px] overflow-auto text-gray-300">
-                      {content.description}
-                    </p>
-                  </FielCheckbox>
-                ))}
+                <FielCheckbox
+                  className="SubHead2Semibold h-[86px] w-full gap-3 py-4 text-gray-600"
+                  htmlFor="requiredAgree"
+                  inputValue={watch().requiredAgree}
+                >
+                  {TERMS_APPLY[0].title}
+                  <input
+                    className="sr-only"
+                    type="checkbox"
+                    id="requiredAgree"
+                    {...register("requiredAgree")}
+                  />
+                  <p className="SubHead2Medium h-[54px] max-w-[500px] overflow-auto text-gray-300">
+                    {TERMS_APPLY[0].description}
+                  </p>
+                </FielCheckbox>
+                <FielCheckbox
+                  className="SubHead2Semibold h-[86px] w-full gap-3 py-4 text-gray-600"
+                  htmlFor="optionalAgree"
+                  inputValue={watch().optionalAgree}
+                >
+                  {TERMS_APPLY[1].title}
+                  <input
+                    className="sr-only"
+                    type="checkbox"
+                    id="optionalAgree"
+                    {...register("optionalAgree")}
+                  />
+                  <p className="SubHead2Medium h-[54px] max-w-[500px] overflow-auto text-gray-300">
+                    {TERMS_APPLY[1].description}
+                  </p>
+                </FielCheckbox>
+                <FielCheckbox
+                  className="SubHead2Semibold h-[86px] w-full gap-3 py-4 text-gray-600"
+                  htmlFor="consignAgree"
+                  inputValue={watch().consignAgree}
+                >
+                  {TERMS_APPLY[2].title}
+                  <input
+                    className="sr-only"
+                    type="checkbox"
+                    id="consignAgree"
+                    {...register("consignAgree")}
+                  />
+                  <p className="SubHead2Medium h-[54px] max-w-[500px] overflow-auto text-gray-300">
+                    {TERMS_APPLY[2].description}
+                  </p>
+                </FielCheckbox>
               </FieldBox>
             </div>
           </form>

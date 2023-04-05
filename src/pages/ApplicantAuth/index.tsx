@@ -100,7 +100,7 @@ const ApplicantAuth = () => {
           <IconLogo />
         </h1>
         <div className="mb-[58px]">
-          <h2 className="Head2Semibold mb-2 text-[#333]">지원자 인증</h2>
+          <h2 className="Head2Semibold mb-2 text-title-gray">지원자 인증</h2>
           <p className="SubHead1Medium text-gray-600">
             해당 정보는 기업에게 제공되는 개인정보 입니다.
           </p>

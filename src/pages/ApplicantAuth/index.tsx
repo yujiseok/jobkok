@@ -94,8 +94,8 @@ const ApplicantAuth = () => {
   };
 
   return (
-    <div className="flex justify-center p-16">
-      <section className="w-[430px]">
+    <div className="flex h-screen justify-center p-16">
+      <section className="relative w-[430px]">
         <h1 className="mb-[52.8px]">
           <IconLogo />
         </h1>
@@ -205,17 +205,17 @@ const ApplicantAuth = () => {
               </AuthRow>
             )}
           </form>
-          <button
-            className={`SubHead1Semibold h-11 w-full rounded-lg  py-2.5 px-6 text-gray-0 ${
-              isCertified && isValid ? "bg-blue-500" : "bg-gray-200"
-            }`}
-            type="submit"
-            onClick={handleSubmit(onSubmit)}
-            disabled={isSubmitting}
-          >
-            지원서 작성하기
-          </button>
         </div>
+        <button
+          className={`SubHead1Semibold absolute bottom-0 h-11 w-full rounded-lg  py-2.5 px-6 text-gray-0 ${
+            isCertified && isValid ? "bg-blue-500" : "bg-gray-200"
+          }`}
+          type="submit"
+          onClick={handleSubmit(onSubmit)}
+          disabled={isSubmitting}
+        >
+          지원서 작성하기
+        </button>
       </section>
     </div>
   );

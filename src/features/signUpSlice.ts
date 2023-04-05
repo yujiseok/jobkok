@@ -24,28 +24,22 @@ export const signUpSlice = createSlice({
   initialState,
   reducers: {
     fillEmail(state, action) {
-      const content = action.payload;
-      state.useremail = content;
+      state.useremail = action.payload;
     },
     fillPassword(state, action) {
-      const content = action.payload;
-      state.password = content;
+      state.password = action.payload;
     },
     fillPhone(state, action) {
-      const content = action.payload;
-      state.phone = content;
+      state.phone = action.payload;
     },
     fillCompanyName(state, action) {
-      const content = action.payload;
-      state.companyName = content;
+      state.companyName = action.payload;
     },
     fillCeo(state, action) {
-      const content = action.payload;
-      state.ceo = content;
+      state.ceo = action.payload;
     },
     fillRegistration(state, action) {
-      const content = action.payload;
-      state.registration = content;
+      state.registration = action.payload;
     },
     submitForm(state) {
       if (

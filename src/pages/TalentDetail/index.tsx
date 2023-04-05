@@ -1,37 +1,22 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import {
-  addComment,
-  assortLikeTalent,
-  getDetailInfo,
-  setMeeting,
-} from "@/api/talentDetail";
-import { ReactComponent as TickBlue } from "@/assets/svg/archive-tick-blue.svg";
-import { ReactComponent as Tick } from "@/assets/svg/archive-tick.svg";
+import { useNavigate, useParams } from "react-router-dom";
+import { getDetailInfo, setMeeting } from "@/api/talentDetail";
 import { ReactComponent as Back } from "@/assets/svg/backspace.svg";
 import { ReactComponent as Edit } from "@/assets/svg/edit-icon.svg";
-import { ReactComponent as Profile } from "@/assets/svg/profile-detail.svg";
-import { ReactComponent as TrashBin } from "@/assets/svg/trash.svg";
 import Breadcrumbs from "@components/TalentDetail/Breadcrumbs";
 import ConfirmDocsModal from "@components/TalentDetail/ConfirmDocsModal";
 import ConfirmFailModal from "@components/TalentDetail/ConfirmFailModal";
-import ConfirmPassModal from "@components/TalentDetail/ConfirmPassModal";
 import EvaluationNote from "@components/TalentDetail/EvaluationNote";
 import PersonalNotiModal from "@components/TalentDetail/PersonalNotiModal";
+import ProfileCard from "@components/TalentDetail/ProfileCard";
 import Timeline from "@components/TalentDetail/Timeline";
-
-type FormValues = {
-  evaluation: string;
-};
 
 const TalentDetail = () => {
   const navigate = useNavigate();
   const { id } = useParams() as { id: string };
-  const { register, watch, handleSubmit } = useForm<FormValues>();
   const [isEditing, setisEditing] = useState(false);
-  const [isLiked, setIsLiked] = useState(false);
   const [interviewDate, setInterviewDate] = useState("");
   const [interviewTime, setInterviewTime] = useState("");
 
@@ -40,11 +25,6 @@ const TalentDetail = () => {
     queryFn: () => getDetailInfo(id),
     suspense: true,
   });
-
-  const handleWishApplicant = async () => {
-    const res = await assortLikeTalent(id);
-    setIsLiked(true);
-  };
 
   const handleInterviewDate = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInterviewDate(e.target.value);
@@ -106,56 +86,7 @@ const TalentDetail = () => {
 
       <section className="applicant-container mt-12 flex gap-5">
         <div className="applicant-left flex-[0.6]">
-          <div className="info-container flex gap-10 rounded-md border-2 border-gray-50 bg-white p-8">
-            <div className="applicant-avatar avatar">
-              <div className="rounded-xl">
-                <Profile className="bg-blue-50" />
-              </div>
-            </div>
-            <div className="flex flex-1 flex-col">
-              <div className="applicant-detail flex items-start justify-between">
-                <div className="flex flex-col">
-                  <div className="flex items-center">
-                    <p className="Head4Semibold mb-1 mr-[0.625rem]">
-                      {talentInfo?.applyName}
-                    </p>
-                    <div className="flex cursor-pointer gap-2">
-                      {isLiked ? (
-                        <button onClick={() => setIsLiked(false)}>
-                          <TickBlue />
-                        </button>
-                      ) : (
-                        <button onClick={handleWishApplicant}>
-                          <Tick />{" "}
-                        </button>
-                      )}
-
-                      <TrashBin />
-                    </div>
-                  </div>
-                  <p className="SubHead2Medium text-gray-600">
-                    {talentInfo?.applyPhone}
-                  </p>
-                  <p className="SubHead2Medium text-gray-600">
-                    {talentInfo?.applyEmail}
-                  </p>
-                </div>
-
-                <label
-                  htmlFor="confirm-pass-modal"
-                  className="SubHead2Semibold cursor-pointer rounded-md bg-blue-50 px-6 py-3 text-blue-500"
-                >
-                  채용 확정
-                </label>
-                <ConfirmPassModal />
-              </div>
-              <div className="badge-container mt-10 flex max-w-[280px] flex-wrap gap-x-2 gap-y-6px">
-                <div className="SubHead2Semibold rounded-sm bg-gray-200 p-1 text-blue-25">
-                  # {talentInfo?.keywords}
-                </div>
-              </div>
-            </div>
-          </div>
+          <ProfileCard id={id} />
           <Timeline />
         </div>
 

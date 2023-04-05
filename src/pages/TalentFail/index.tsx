@@ -9,7 +9,7 @@ import { ReactComponent as HeartMemoji } from "@/assets/svg/heart-memoji.svg";
 import { ReactComponent as Search } from "@/assets/svg/search.svg";
 import { ReactComponent as Trash } from "@/assets/svg/trash.svg";
 import useFailedTalentQuery from "@/lib/hooks/useFailedTalentQuery";
-import useFormDataQuery from "@/lib/hooks/useFormDataQuery";
+// import useFormDataQuery from "@/lib/hooks/useFormDataQuery";
 import useFormList from "@/lib/hooks/useFormList";
 import useLikeMutate from "@/lib/hooks/useLikeMutate";
 import usePagination from "@/lib/hooks/usePagination";

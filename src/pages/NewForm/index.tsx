@@ -34,6 +34,11 @@ const NewForm = () => {
     resolver: zodResolver(schema),
   });
 
+  // 뒤로가기 : 폼링크 관리 페이지로 이동
+  const handleBackBtn = () => {
+    navigate("/form");
+  };
+
   // 임시저장
   const handleTempSaveBtn = () => {
     confirm("해당 기능은 개발 예정인 기능입니다.");
@@ -51,8 +56,9 @@ const NewForm = () => {
 
   return (
     <div className="px-[56px] pb-[164px] pt-0">
+      {/* 최상단 */}
       <div className="mb-[63px] flex justify-between">
-        <IconChevronLeft />
+        <IconChevronLeft onClick={handleBackBtn} />
         <div className="flex justify-center gap-3">
           <ProcessBadge>채용진행중</ProcessBadge>
           <EditTypeBadge>SELF</EditTypeBadge>

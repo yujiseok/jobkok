@@ -19,6 +19,7 @@ import ConfirmDocsModal from "@components/TalentDetail/ConfirmDocsModal";
 import ConfirmFailModal from "@components/TalentDetail/ConfirmFailModal";
 import ConfirmPassModal from "@components/TalentDetail/ConfirmPassModal";
 import PersonalNotiModal from "@components/TalentDetail/PersonalNotiModal";
+import Timeline from "@components/TalentDetail/Timeline";
 
 type FormValues = {
   evaluation: string;
@@ -156,52 +157,10 @@ const TalentDetail = () => {
                 <div className="SubHead2Semibold rounded-sm bg-gray-200 p-1 text-blue-25">
                   # {talentInfo?.keywords}
                 </div>
-                <div className="SubHead2Semibold rounded-sm bg-gray-200 p-1 text-blue-25">
-                  # {talentInfo?.keywords}
-                </div>
-                <div className="SubHead2Semibold rounded-sm bg-gray-200 p-1 text-blue-25">
-                  # {talentInfo?.keywords}
-                </div>
-                <div className="SubHead2Semibold rounded-sm bg-gray-200 p-1 text-blue-25">
-                  # {talentInfo?.keywords}
-                </div>
-                <div className="SubHead2Semibold rounded-sm bg-gray-200 p-1 text-blue-25">
-                  # {talentInfo?.keywords}
-                </div>
               </div>
             </div>
           </div>
-
-          <div className="timeline-container mt-4 rounded-md border-2 border-gray-50 bg-white p-10">
-            <p className="Head4Semibold pb-2">타임라인</p>
-            <p className="SubHead2Medium pb-12 text-gray-400">
-              인재의 채용 절차단계를 확인해보세요
-            </p>
-
-            <ul className="steps w-full">
-              {[
-                { label: "최초 접수", date: talentInfo?.createdTime },
-                { label: "서류 검토", date: talentInfo?.checkApply },
-                { label: "면접일", date: talentInfo?.meeting },
-                {
-                  label: "최종 합격",
-                  date: talentInfo?.pass !== "false" && talentInfo?.pass,
-                },
-              ].map(({ label, date }, index) => (
-                <li
-                  key={index}
-                  className={`step ${
-                    date
-                      ? "before:!bg-blue-400 after:!bg-blue-400 after:!text-gray-0"
-                      : ""
-                  }`}
-                >
-                  <p>{label}</p>
-                  <p>{date ? date.slice(0, 10) : "-"}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <Timeline />
         </div>
 
         <div className=" flex flex-[0.4] flex-col gap-4">
@@ -317,14 +276,11 @@ const TalentDetail = () => {
         </p>
         <div className="min-h-28 mt-11 rounded-md border bg-white px-11 py-4 pb-20">
           <ul className="SubHead1Semibold tabs w-full justify-between">
-            <li className="tab text-lg font-bold">자기소개</li>
-            <li className="tab text-lg font-bold">경력</li>
-            <li className="tab text-lg font-bold">최종학력</li>
-            <li className="tab text-lg font-bold">자격증</li>
-            <li className="tab text-lg font-bold">수상내역</li>
-            <li className="tab text-lg font-bold">어학능력</li>
-            <li className="tab text-lg font-bold">기타이력</li>
-            <li className="tab text-lg font-bold">취업우대사항</li>
+            {DETAIL_TAB_MENU.map((menu) => (
+              <li key={menu} className="tab text-lg font-bold">
+                {menu}
+              </li>
+            ))}
           </ul>
         </div>
       </div>
@@ -334,3 +290,14 @@ const TalentDetail = () => {
 export default TalentDetail;
 
 const MAX_LENGTH = 1000;
+
+const DETAIL_TAB_MENU = [
+  "자기소개",
+  "경력",
+  "최종학력",
+  "자격증",
+  "수상 내역",
+  "어학 능력",
+  "기타 이력",
+  "취업 우대 사항",
+];

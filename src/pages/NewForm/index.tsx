@@ -1,10 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import * as z from "zod";
 import { ReactComponent as IconChevronLeft } from "@/assets/svg/chevron-left.svg";
 import { ReactComponent as IconEdit } from "@/assets/svg/edit-icon.svg";
 import { KEYWORDS_CHECK } from "@/constants/applicant";
-import FieldBox from "@components/Applicant/FieldBox";
 import ContentsBox from "@components/NewForm/ContentsBox";
 import EditTypeBadge from "@components/NewForm/EditTypeBadge";
 import ProcessBadge from "@components/NewForm/ProcessBadge";
@@ -13,13 +13,15 @@ import RequiredBadge from "@components/NewForm/RequiredBadge";
 const schema = z.object({
   formTitle: z.string().nonempty(),
   applicationTitle: z.string().nonempty(),
-  interviewPeriod: z.string().nonempty(),
+  interviewStartPeriod: z.string().nonempty(),
+  interviewEndPeriod: z.string().nonempty(),
   applicationPeriod: z.string().nonempty(),
 });
 
 type IRecuiteForm = z.infer<typeof schema>;
 
 const NewForm = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -31,6 +33,16 @@ const NewForm = () => {
     mode: "onChange",
     resolver: zodResolver(schema),
   });
+
+  // 임시저장
+  const handleTempSaveBtn = () => {
+    confirm("해당 기능은 개발 예정인 기능입니다.");
+  };
+
+  // 삭제
+  const handleDelBtn = () => {
+    navigate("/form");
+  };
 
   // 폼 제출 : 인증됐으면 페이지이동, 안됐으면 인증코드에 focus
   const onSubmit = async (data: IRecuiteForm) => {
@@ -61,12 +73,14 @@ const NewForm = () => {
           <button
             className="SubHead1Semibold mr-4 rounded-lg bg-blue-50 py-2.5 px-6 text-blue-400"
             type="button"
+            onClick={handleTempSaveBtn}
           >
             임시저장
           </button>
           <button
             className="SubHead1Semibold rounded-lg bg-error-50 py-2.5 px-6 text-error-400"
             type="button"
+            onClick={handleDelBtn}
           >
             삭제
           </button>
@@ -108,8 +122,14 @@ const NewForm = () => {
               </label>
               <input
                 type="date"
-                id="interviewPeriod"
-                {...register("interviewPeriod")}
+                id="interviewStartPeriod"
+                {...register("interviewStartPeriod")}
+              />
+              <span>~</span>
+              <input
+                type="date"
+                id="interviewEndPeriod"
+                {...register("interviewEndPeriod")}
               />
             </fieldset>
             <fieldset className="flex items-center gap-6">

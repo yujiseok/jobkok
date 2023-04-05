@@ -12,6 +12,8 @@ import useDnD from "@/lib/hooks/useDnD";
 import usePagination from "@/lib/hooks/usePagination";
 import formatDate from "@/lib/utils/formatDate";
 import makeString from "@/lib/utils/makeString";
+import talentByProcedure from "@/lib/utils/talentByProcedure";
+import type { IKanban } from "@/types/talent";
 import Banner from "@components/Common/Banner";
 import InterviewBadge from "@components/Talent/InterviewBadge";
 import NumberBadge from "@components/Talent/NumberBadge";
@@ -19,7 +21,7 @@ import PreferentialBadge from "@components/Talent/PreferentialBadge";
 import TKeywordBadge from "@components/Talent/TKeywordBadge";
 
 const TalentStatus = () => {
-  const [data, onDragEnd] = useDnD(mockData);
+  const [data, onDragEnd] = useDnD(kanbanData);
   const { page, offset, handleClick } = usePagination();
   const totalPage = data && Math.ceil(data?.length / LIMIT);
   return (
@@ -49,47 +51,48 @@ const TalentStatus = () => {
         <DragDropContext onDragEnd={onDragEnd}>
           {/* grid grid-cols-3 grid-rows-1 */}
           <div className="flex items-start justify-between gap-6">
-            {data.map((section) => (
-              <Droppable key={section.id} droppableId={section.id}>
+            {data.map((applicant) => (
+              <Droppable key={applicant.id} droppableId={applicant.id}>
                 {(provided) => (
                   <div
                     {...provided.droppableProps}
                     ref={provided.innerRef}
                     className={`flex-1 rounded-xl border border-gray-50 bg-gray-0 pl-8 pr-4 ${
-                      section.tasks.length ? "pb-12" : "pb-0"
+                      applicant.applicant.length ? "pb-12" : "pb-0"
                     }`}
                   >
                     <div className="flex items-center justify-between pr-4">
                       <div className="flex items-center py-5">
                         <span className="SubHead1Semibold">
-                          {section.title}
+                          {applicant.title}
                         </span>
-                        <NumberBadge id={section.id}>
-                          {section.tasks.length}
+                        <NumberBadge id={applicant.id}>
+                          {applicant.applicant.length}
                         </NumberBadge>
                       </div>
-                      {section.id === "서류 검토" ? (
+                      {applicant.id === "면접" ? (
                         <button>
                           <Calendar />
                         </button>
-                      ) : section.id === "최종 조율" ? (
-                        <button
-                          className={`rounded-md border bg-gray-0 px-5 py-[0.3438rem] ${
-                            section.tasks.length
+                      ) : applicant.id === "최종조율" ? (
+                        <label
+                          htmlFor="modal"
+                          className={`cursor-pointer rounded-md border bg-gray-0 px-5 py-[0.3438rem] ${
+                            applicant.applicant.length
                               ? " border-blue-500  text-blue-500"
-                              : "border-gray-200 text-gray-200"
+                              : "pointer-events-none border-gray-200 text-gray-200"
                           }`}
                         >
                           채용 확정
-                        </button>
+                        </label>
                       ) : null}
                     </div>
 
                     <div className="flex max-h-[54.75rem] flex-col gap-4 overflow-y-auto overflow-x-hidden py-1 pr-3">
-                      {section.tasks.map((task, index) => (
+                      {applicant.applicant.map((item, index) => (
                         <Draggable
-                          key={task.id}
-                          draggableId={task.id}
+                          key={item.applyName}
+                          draggableId={item.applyName}
                           index={index}
                         >
                           {(provided, snapshot) => (
@@ -108,14 +111,14 @@ const TalentStatus = () => {
                             >
                               <div className="flex items-center justify-between">
                                 <Link
-                                  to="/talent/detail/1"
+                                  to={`/talent/detail/${item.applyId}`}
                                   className="flex items-center gap-2"
                                 >
                                   <div className="rounded-md bg-blue-50">
                                     <HeartMemoji />
                                   </div>
                                   <span className="SubHead1Semibold">
-                                    김잡콕
+                                    {item.applyName}
                                   </span>
                                   <ChevronRight />
                                 </Link>
@@ -129,7 +132,8 @@ const TalentStatus = () => {
                                   우대사항 <span>2</span>/<span>5</span>
                                 </PreferentialBadge>
                                 <PreferentialBadge>
-                                  키워드 <span>2</span>/<span>5</span>
+                                  키워드 <span>{item.keywords.length}</span>/
+                                  <span>5</span>
                                 </PreferentialBadge>
                               </div>
                               <div className="flex items-center justify-between">
@@ -137,7 +141,7 @@ const TalentStatus = () => {
                                   className="Caption1Medium text-gray-300"
                                   dateTime={new Date().toLocaleDateString()}
                                 >
-                                  {new Date().toLocaleDateString()}
+                                  {formatDate(item.createdTime)}
                                 </time>
 
                                 <InterviewBadge>
@@ -312,50 +316,75 @@ const TalentStatus = () => {
   );
 };
 
-const mockData = [
-  {
-    id: "서류 검토",
-    title: " 서류 검토",
-    tasks: [
-      {
-        id: "b",
-        title: "Learn JavaScript",
-      },
-      {
-        id: "c",
-        title: "Learn Next",
-      },
-      {
-        id: "d",
-        title: "Learn React",
-      },
-    ],
-  },
-  {
-    id: "면접 진행",
-    title: "면접 진행",
-    tasks: [
-      {
-        id: "f",
-        title: "Learn CSS",
-      },
-      {
-        id: "g",
-        title: "Learn TypeScript",
-      },
-    ],
-  },
-  {
-    id: "최종 조율",
-    title: "최종 조율",
-    tasks: [
-      {
-        id: "i",
-        title: "Learn HTML",
-      },
-    ],
-  },
-];
+const mockData = {
+  state: 200,
+  result: "success",
+  data: [
+    {
+      applyId: "1",
+      applyName: "김김김",
+      applyPhone: "010-1111-1111",
+      applyEmail: "applyTest@test.com",
+      resumeContent: "저는 홍길동 입니다 !",
+      applyPortfolio: "https://portfolio.portfolio",
+      applyProcedure: "면접진행",
+      evaluation: "나쁘지 않음",
+      pass: false,
+      createdTime: "2023-03-21T13:04:30",
+      applyDelete: false,
+      keywords: [""],
+      wish: true,
+    },
+    {
+      applyId: "2",
+      applyName: "김이박",
+      applyPhone: "010-1111-1111",
+      applyEmail: "applyTest@test.com",
+      resumeContent: "저는 길동홍 입니다 !",
+      applyPortfolio: "https://portfolio.portfolio",
+      applyProcedure: "서류제출",
+      evaluation: "나쁘지 않음",
+      pass: false,
+      createdTime: "2023-03-21T13:04:30",
+      applyDelete: false,
+      keywords: [""],
+      wish: true,
+    },
+    {
+      applyId: "3",
+      applyName: "존안",
+      applyPhone: "010-2222-2222",
+      applyEmail: "applyTest2@test.com",
+      resumeContent: "저는 홍길동 입니다 !",
+      applyPortfolio: "https://portfolio.portfolio",
+      applyProcedure: "서류제출",
+      evaluation: "별로임",
+      pass: false,
+      createdTime: "2023-03-21T13:31:30",
+      applyDelete: false,
+      keywords: [""],
+      wish: false,
+    },
+    {
+      applyId: "4",
+      applyName: "김철수",
+      applyPhone: "010-2222-2222",
+      applyEmail: "applyTest2@test.com",
+      resumeContent: "저는 홍길동 입니다 !",
+      applyPortfolio: "https://portfolio.portfolio",
+      applyProcedure: "최종조율",
+      evaluation: "별로임",
+      pass: false,
+      createdTime: "2023-03-21T13:31:30",
+      applyDelete: false,
+      keywords: [""],
+      wish: false,
+    },
+  ],
+};
+
+const kanbanData: IKanban[] = talentByProcedure(mockData);
+console.log(kanbanData);
 
 const numberArr = Array(6)
   .fill(1)

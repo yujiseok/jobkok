@@ -10,20 +10,20 @@ const Layout = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  useEffect(() => {
-    if (
-      !localStorage.getItem("token") &&
-      pathname !== "/sign-in" &&
-      pathname !== "/sign-up"
-    ) {
-      navigate("/sign-in");
-    } else if (
-      localStorage.getItem("token") &&
-      (pathname === "/sign-in" || pathname === "/sign-up")
-    ) {
-      navigate("/");
-    }
-  });
+  // useEffect(() => {
+  //   if (
+  //     !localStorage.getItem("token") &&
+  //     pathname !== "/sign-in" &&
+  //     pathname !== "/sign-up"
+  //   ) {
+  //     navigate("/sign-in");
+  //   } else if (
+  //     localStorage.getItem("token") &&
+  //     (pathname === "/sign-in" || pathname === "/sign-up")
+  //   ) {
+  //     navigate("/");
+  //   }
+  // });
 
   return (
     <>

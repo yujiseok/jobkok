@@ -30,8 +30,8 @@ import formatDate from "@/lib/utils/formatDate";
 import talentByProcedure from "@/lib/utils/talentByProcedure";
 import type { IKanban } from "@/types/talent";
 import Banner from "@components/Common/Banner";
+import ModalForLater from "@components/Common/ModalForLater";
 import InterviewBadge from "@components/Talent/InterviewBadge";
-import ModalForLater from "@components/Talent/ModalForLater";
 import NumberBadge from "@components/Talent/NumberBadge";
 import PreferentialBadge from "@components/Talent/PreferentialBadge";
 import Slider from "@components/Talent/Slider";
@@ -484,7 +484,7 @@ const TalentManagement = () => {
           </DragDropContext>
         )}
       </section>
-      <ModalForLater />
+      <ModalForLater id="modal" />
     </>
   );
 };
@@ -602,6 +602,5 @@ const mockData = {
 };
 
 const kanbanData: IKanban[] = talentByProcedure(mockData);
-console.log(kanbanData);
 
 export default TalentManagement;

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ReactComponent as Back } from "@/assets/svg/arrow-back.svg";
 import { ReactComponent as Banner } from "@/assets/svg/jobkok-banner.svg";
 import Complete from "@components/Signup/Complete";
@@ -10,7 +10,6 @@ import UserInfo from "@components/Signup/UserInfo";
 
 const SignUp = () => {
   const navigate = useNavigate();
-  const { pathname } = useLocation();
   const [step, setStep] = useState<number>(1);
   if (step === 0) {
     navigate("/sign-in");

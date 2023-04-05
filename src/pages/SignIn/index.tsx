@@ -18,7 +18,7 @@ export interface IShowPw {
 }
 
 // schema 유효성 검사
-const userSchema = z.object({
+export const userSchema = z.object({
   useremail: z
     .string()
     .min(1, "이메일을 입력해 주세요.")
@@ -93,7 +93,7 @@ const SignIn = () => {
   };
 
   return (
-    <div className="flex h-full bg-gray-0">
+    <div className="flex h-full overflow-y-hidden bg-gray-0">
       <div className="my-[68px] mx-[195px] flex w-4/5 justify-center">
         <div>
           <Bluelogo className="mb-[52px]" />

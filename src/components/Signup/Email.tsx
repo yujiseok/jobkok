@@ -1,9 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import * as z from "zod";
-import { ReactComponent as Arrow } from "@/assets/svg/arrow-right.svg";
 import { ReactComponent as Bluelogo } from "@/assets/svg/blue-logo.svg";
+import { ReactComponent as Arrow } from "@/assets/svg/chevron-right.svg";
 import { ReactComponent as Xicon } from "@/assets/svg/x-icon.svg";
 import {
   CEO_REGEX,
@@ -11,11 +12,13 @@ import {
   PW_REGEX,
   REGISTRATION_REGEX,
 } from "@/constants/signup";
+import { userSchema } from "@pages/SignIn";
 
 type Props = {
   setStep: React.Dispatch<React.SetStateAction<number>>;
 };
 
+const nschema = userSchema.extend({});
 // schema 유효성 검사
 export const schema = z
   .object({
@@ -54,6 +57,7 @@ export const schema = z
 export type NewUser = z.infer<typeof schema>;
 
 const Email = ({ setStep }: Props) => {
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -136,9 +140,9 @@ const Email = ({ setStep }: Props) => {
       </form>
       <div className="SubHead2Semibold flex justify-center">
         <p className="text-gray-800">이메일 생성 및 인증</p>
-        <Arrow className="mx-2" />
+        <Arrow className="mx-2 mt-1" />
         <p className="text-gray-400">비밀번호 설정</p>
-        <Arrow className="mx-2" />
+        <Arrow className="mx-2 mt-1" />
         <p className="text-gray-400">기업 및 개인정보 등록</p>
       </div>
     </>

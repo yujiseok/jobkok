@@ -1,30 +1,61 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 import { ReactComponent as IconChevronLeft } from "@/assets/svg/chevron-left.svg";
 import { ReactComponent as IconEdit } from "@/assets/svg/edit-icon.svg";
 import { KEYWORDS_CHECK } from "@/constants/applicant";
+import FieldBox from "@components/Applicant/FieldBox";
 import ContentsBox from "@components/NewForm/ContentsBox";
+import EditTypeBadge from "@components/NewForm/EditTypeBadge";
+import ProcessBadge from "@components/NewForm/ProcessBadge";
 import RequiredBadge from "@components/NewForm/RequiredBadge";
 
+const schema = z.object({
+  formTitle: z.string().nonempty(),
+  applicationTitle: z.string().nonempty(),
+  interviewPeriod: z.string().nonempty(),
+  applicationPeriod: z.string().nonempty(),
+});
+
+type IRecuiteForm = z.infer<typeof schema>;
+
 const NewForm = () => {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setFocus,
+    getValues,
+    formState: { errors, isSubmitting, isValid },
+  } = useForm<IRecuiteForm>({
+    mode: "onChange",
+    resolver: zodResolver(schema),
+  });
+
+  // 폼 제출 : 인증됐으면 페이지이동, 안됐으면 인증코드에 focus
+  const onSubmit = async (data: IRecuiteForm) => {
+    console.log(data);
+  };
+
   return (
-    <div className="p-16">
+    <div className="px-[56px] pb-[164px] pt-0">
       <div className="mb-[63px] flex justify-between">
         <IconChevronLeft />
         <div className="flex justify-center gap-3">
-          <span className="SubHead2Semibold h-[28px] w-[84px] rounded border border-gray-50 bg-gray-0 py-1 px-1.5 text-center text-blue-400">
-            접수 진행중
-          </span>
-          <span className="SubHead2Semibold h-[28px] w-[84px] rounded bg-blue-400 p-1.5 text-center text-blue-25">
-            SELF
-          </span>
-          <h2>
-            <input
-              className="h-[46px] w-full rounded-lg border border-gray-100 bg-gray-0 px-6 py-3.5"
-              type="text"
-              id="applicationTitle"
-              placeholder="폼 이름을 입력해주세요."
-            />
-          </h2>
-          <IconEdit />
+          <ProcessBadge>채용진행중</ProcessBadge>
+          <EditTypeBadge>SELF</EditTypeBadge>
+          <div className="flex items-center gap-3">
+            <h2>
+              <input
+                className="Head3Semibold h-[46px] min-w-[420px] rounded-lg border border-gray-100 bg-gray-0 py-3.5 px-2 text-center text-gray-800"
+                type="text"
+                id="formTitle"
+                placeholder="폼 이름을 입력해주세요."
+                {...register("formTitle")}
+              />
+            </h2>
+            <IconEdit />
+          </div>
         </div>
         <div>
           <button
@@ -49,7 +80,10 @@ const NewForm = () => {
           </p>
         </ContentsBox>
         <ContentsBox>
-          <form className="flex flex-col gap-4">
+          <form
+            className="flex flex-col gap-4"
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <fieldset className="flex items-center gap-6">
               <label
                 className="SubHead1Semibold w-[116px] text-gray-800"
@@ -62,6 +96,7 @@ const NewForm = () => {
                 type="text"
                 id="applicationTitle"
                 placeholder="인재에게 보일 지원서 이름을 작성해주세요."
+                {...register("applicationTitle")}
               />
             </fieldset>
             <fieldset className="flex items-center gap-6">
@@ -71,7 +106,11 @@ const NewForm = () => {
               >
                 면접가능 기간
               </label>
-              <input type="date" id="interviewPeriod" />
+              <input
+                type="date"
+                id="interviewPeriod"
+                {...register("interviewPeriod")}
+              />
             </fieldset>
             <fieldset className="flex items-center gap-6">
               <label
@@ -80,7 +119,11 @@ const NewForm = () => {
               >
                 지원서 접수 마감일
               </label>
-              <input type="date" id="applicationPeriod" />
+              <input
+                type="date"
+                id="applicationPeriod"
+                {...register("applicationPeriod")}
+              />
             </fieldset>
           </form>
         </ContentsBox>
@@ -131,13 +174,15 @@ const NewForm = () => {
           </label>
           <input className="order-1" type="checkbox" id="agree" />
         </div>
-        <button
-          className="SubHead1Semibold h-11 w-[106px] rounded-lg bg-gray-200 px-6 py-2.5 text-gray-0"
-          type="button"
-        >
-          작성완료
-        </button>
       </div>
+      <button
+        className="SubHead1Semibold h-11 w-[106px] rounded-lg bg-gray-200 px-6 py-2.5 text-gray-0"
+        type="submit"
+        onClick={handleSubmit(onSubmit)}
+        disabled={isSubmitting}
+      >
+        작성완료
+      </button>
     </div>
   );
 };

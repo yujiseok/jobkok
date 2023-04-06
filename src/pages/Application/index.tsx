@@ -106,12 +106,12 @@ const Application = () => {
 
       <div className="flex gap-6 px-16 pt-[192px] pb-[108px]">
         <aside className="sticky top-0 order-2 h-full pt-[45px]">
-          <div className="mb-4 pt-[26px] pr-[26px] pb-[27px] pl-6">
+          <div className="applicant-aside-box mb-4 pt-[26px] pr-[26px] pb-[27px] pl-6">
             <h4 className="Head4Semibold mb-[24.5px] text-gray-900">
               지원서 일정
             </h4>
             <dl>
-              <div className="applicant-aside-box mb-[26px] flex gap-3.5">
+              <div className="mb-[26px] flex gap-3.5">
                 <dt className="Caption1Medium w-[90px] text-gray-600">
                   지원서 접수 마감일
                 </dt>

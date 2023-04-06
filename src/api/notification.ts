@@ -100,3 +100,13 @@ export const getAllTalentList = async (
 
   return data;
 };
+
+//절차 선택
+export const setProcedure = async (recruitId: string, noticeStep: string) => {
+  const { data } = await client({
+    method: "POST",
+    url: "/notice/select",
+    data: "recruitId, noticeStep",
+  });
+  return data.data;
+};

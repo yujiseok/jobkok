@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { searchApplicant } from "@/api/notification";
+import { searchApplicant, setProcedure } from "@/api/notification";
 import { getFormList } from "@/api/talent";
 import { assortLikeTalent } from "@/api/talentDetail";
 import { ReactComponent as Profile } from "@/assets/svg/heart-memoji.svg";
@@ -30,6 +30,8 @@ const Notification = () => {
   const queryClient = useQueryClient();
   const [searchParams, setSearchParams] = useSearchParams();
   const applyProcedure = searchParams.get("applyProcedure") ?? "all";
+  const noticeStep = searchParams.get("noticeStep") ?? "all";
+  const [defaultMsg, setDefaultMsg] = useState("");
 
   // 폼 선택하기
   const { data: formData } = useQuery({
@@ -65,6 +67,16 @@ const Notification = () => {
     searchInput.current!.value = "";
   };
 
+  const handleNotiChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSearchParams({
+      noticeStep: e.target.value,
+    });
+    const stepMsg = await setProcedure(recruitId, e.target.value);
+    setDefaultMsg(stepMsg);
+  };
+
+  console.log(noticeStep);
+
   return (
     <>
       <Banner className="h-16">
@@ -99,17 +111,13 @@ const Notification = () => {
 
       <section className="mt-9 flex gap-14 rounded-md border-2 border-solid bg-base-100 pt-10 pb-11 pl-6 pr-8 shadow">
         <div className="flex-[0.4] p-0">
-          {/* <select className="bg-transparent outline-none">
-            {applyProcedure.map((procedure, i) => (
-              <option key={i}>{procedure}</option>
-            ))}
-          </select> */}
           <select
             className="outline-none"
             onChange={handleChange}
             value={applyProcedure}
           >
             <option disabled>인재를 선택하세요</option>
+            <option value="all">전체</option>
             <option value="docs_pass">서류 합격</option>
             <option value="meet_proposal">면접 조율</option>
             <option value="final_pass">최종 합격</option>
@@ -222,10 +230,14 @@ const Notification = () => {
           <div className="mb-12 mt-12 flex  items-center justify-between">
             <h2 className="Head3Semibold">알림 보내기</h2>
 
-            <select className="rounded-md bg-blue-50 py-[10px] pr-5 pl-6 text-blue-500 focus:outline-transparent">
-              {applicantProcedure.map((procedure, i) => (
-                <option key={i}>{procedure}</option>
-              ))}
+            <select
+              className="rounded-md bg-blue-50 py-[10px] pr-5 pl-6 text-blue-500 focus:outline-transparent"
+              onChange={handleNotiChange}
+              value={noticeStep}
+            >
+              <option value="DOCS_PASS">서류 합격</option>
+              <option value="MEET_PROPOSAL">면접 조율</option>
+              <option value="FINAL_PASS">최종 합격</option>
             </select>
           </div>
 
@@ -239,10 +251,11 @@ const Notification = () => {
           </div>
 
           <textarea
-            placeholder="안녕하세요. 귀하께서 서류 전형에 합격하여 면접 제안드립니다."
+            // placeholder="절차를 선택하시면 기본 메세지가 제공됩니다."
             className="SubHead1Medium textarea-bordered textarea textarea-lg min-h-[300px] w-full resize-none"
             maxLength={MAX_LENGTH}
             onChange={handleInput}
+            value={defaultMsg}
           ></textarea>
           <div className="BodyBody3 mt-2 text-gray-300">
             <span>{inputCount.toLocaleString()}</span>

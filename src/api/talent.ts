@@ -1,3 +1,4 @@
+import type { QueryFunctionContext } from "@tanstack/react-query";
 import type { AxiosResponse } from "axios";
 import type {
   IEditSuccess,
@@ -87,21 +88,55 @@ export const passTalent = async (applyId: string) => {
 };
 
 // 등록 채용폼 조회
-export const getRegisteredForm = async () => {
+export const getRegisteredForm = async (page: string) => {
   const { data }: AxiosResponse<IRegisteredForm> = await client({
     method: "GET",
-    url: "drop/home",
+    url: `drop/home?size=10&page=${page}`,
   });
 
   return data;
 };
 
 // 탈락 인재 조회
-export const getFailedTalent = async (recruitId: string) => {
-  const { data }: AxiosResponse<IFailedTalent[]> = await client({
+export const getFailedTalent = async ({ queryKey }: QueryFunctionContext) => {
+  const [_, recruitId, page, filter] = queryKey;
+
+  const res = await client({
     method: "GET",
-    url: `/drop/view-applicant/${recruitId}`,
+    url: `/drop/view-applicant/${recruitId}?size=10&page=${page}`,
   });
+
+  const totalPages: number = res.data.data.totalPages;
+
+  const data: IFailedTalent[] = res.data.data.content;
+
+  if (filter === "wish") {
+    const filteredData = data.filter((item) => item.wish === true);
+
+    return { filteredData, totalPages: Math.floor(filteredData.length / 10) };
+  }
+
+  if (filter === "applyDelete") {
+    const filteredData = data.filter((item) => item.applyDelete === true);
+
+    return { filteredData, totalPages: Math.floor(filteredData.length / 10) };
+  }
+
+  return { data, totalPages };
+};
+
+// 탈락 인재 검색
+export const searchFailedTalent = async (
+  applyName: string,
+  recruitId: string,
+) => {
+  const res = await client({
+    method: "GET",
+    url: `drop/view-applicant/search?applyName=${applyName}&recruitId=${recruitId}`,
+  });
+
+  // 데이터 타입을 다시 정해야?
+  const data: IFailedTalent[] = res.data.data.content;
 
   return data;
 };

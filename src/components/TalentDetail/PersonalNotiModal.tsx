@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useParams } from "react-router-dom";
+import { sendEmail } from "@/api/notification";
 import { ReactComponent as SendingIcon } from "@/assets/svg/send.svg";
 import { applicantProcedure } from "@/constants/applicantProcedure";
 import useInputLength from "@/lib/hooks/useInputLength";
@@ -6,10 +8,26 @@ import useInputLength from "@/lib/hooks/useInputLength";
 const PersonalNotiModal = () => {
   const [isAgree, setIsAgree] = useState(false);
   const [inputCount, handleInput] = useInputLength(MAX_LENGTH);
+  const { id } = useParams();
+
+  const handleEmail = async () => {
+    // const res = await sendEmail(
+    //   recruitId,
+    //   id,
+    //   mailContent,
+    //   noticeStep,
+    //   interviewDate,
+    // );
+    // console.log(res);
+  };
 
   return (
     <>
-      <input type="checkbox" id="my-modal" className="modal-toggle" />
+      <input
+        type="checkbox"
+        id="personal-noti-modal"
+        className="modal-toggle"
+      />
       <div className="modal">
         <div className="modal-box px-8 pt-9 pb-10">
           <div className="flex items-center justify-between">
@@ -28,6 +46,7 @@ const PersonalNotiModal = () => {
             maxLength={MAX_LENGTH}
             onChange={handleInput}
           ></textarea>
+
           <div className="BodyBody3 mt-2 text-gray-300">
             <span>{inputCount.toLocaleString()}</span>
             <span>/{MAX_LENGTH.toLocaleString()}자</span>
@@ -48,14 +67,23 @@ const PersonalNotiModal = () => {
           </div>
 
           <div className="modal-action flex justify-center">
-            <button type="submit">
+            <button
+              type="submit"
+              className="SubHead2Semibold h-[44px] w-[160px] cursor-pointer rounded-md bg-blue-500  text-white disabled:cursor-default disabled:bg-gray-200"
+              // disabled={!isAgree || !inputCount}
+              onClick={handleEmail}
+            >
               <label
-                htmlFor="my-modal"
-                // disabled={!isAgree || !inputCount}
-                className="SubHead2Semibold flex cursor-pointer items-center gap-2 rounded-md bg-blue-500 px-14 py-3 text-white disabled:bg-gray-200"
+                htmlFor="personal-noti-modal"
+                className=" flex items-center justify-center gap-2"
               >
                 알림 보내기
                 <SendingIcon />
+              </label>
+            </button>
+            <button className="SubHead2Semibold h-[44px] w-[160px] cursor-pointer rounded-md  border-[1px] border-blue-500  text-blue-500">
+              <label htmlFor="personal-noti-modal" className="cursor-pointer">
+                취소
               </label>
             </button>
           </div>

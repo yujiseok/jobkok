@@ -1,8 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { getAllTalent } from "@/api/talent";
+import type { ITalent } from "@/types/talent";
 
 const useAllTalentQuery = (recruitId: string, applyProcedure: string) => {
-  const filteredData = (data, step) => {
+  const filteredData = (data: ITalent[], step: string) => {
     console.log(data);
     data.filter((item) => item.applyProcedure === step);
   };

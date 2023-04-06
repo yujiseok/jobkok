@@ -4,11 +4,11 @@ import axios from "axios";
 const token = localStorage.getItem("token");
 
 const config: AxiosRequestConfig = {
-  baseURL: "http://cb5d2f2b-4932-4853-a635-3028c5f2032e.mock.pstmn.io/",
+  baseURL: "https://jobkok.shop ",
 };
 
 const authConfig: AxiosRequestConfig = {
-  baseURL: "http://cb5d2f2b-4932-4853-a635-3028c5f2032e.mock.pstmn.io/",
+  baseURL: "https://jobkok.shop ",
   headers: {
     Authorization: `Bearer ${token}`,
   },

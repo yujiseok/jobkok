@@ -72,7 +72,11 @@ const ApplicantAuth = () => {
 
   // 인증완료 버튼
   const handelConfirmCode = async () => {
-    if (errors.authCode) {
+    if (
+      getValues().authCode === undefined ||
+      getValues().authCode === "" ||
+      errors.authCode
+    ) {
       setFocus("authCode");
       // 이메일 인증 API 성공값 추가 필요 : 실패시 confirm("올바른 인증코드를 입력해주세요")
     } else {

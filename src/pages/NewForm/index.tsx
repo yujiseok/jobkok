@@ -1,10 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import * as z from "zod";
 import { ReactComponent as IconChevronLeft } from "@/assets/svg/chevron-left.svg";
 import { ReactComponent as IconEdit } from "@/assets/svg/edit-icon.svg";
 import { KEYWORDS_CHECK } from "@/constants/applicant";
+import { ADD_INFO } from "@/constants/formNew";
 import ContentsBox from "@components/NewForm/ContentsBox";
 import EditTypeBadge from "@components/NewForm/EditTypeBadge";
 import ProcessBadge from "@components/NewForm/ProcessBadge";
@@ -22,6 +24,7 @@ type IRecuiteForm = z.infer<typeof schema>;
 
 const NewForm = () => {
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState(0);
   const {
     register,
     handleSubmit,
@@ -53,6 +56,8 @@ const NewForm = () => {
   const onSubmit = async (data: IRecuiteForm) => {
     console.log(data);
   };
+
+  console.log(activeTab);
 
   return (
     <div className="px-[56px] pb-[164px] pt-0">
@@ -92,7 +97,7 @@ const NewForm = () => {
           </button>
         </div>
       </div>
-      <div className="flex flex-col gap-6">
+      <div className="mb-10 flex flex-col gap-6">
         <ContentsBox className="h-[71px] gap-6">
           <h3 className="SubHead1Semibold text-gray-800">생성된 지원서 링크</h3>
           <p className="SubHead2Medium text-gray-300">
@@ -161,14 +166,44 @@ const NewForm = () => {
             <RequiredBadge>이메일</RequiredBadge>
           </div>
         </ContentsBox>
-        <ContentsBox className="mb-10">
-          <section className="mb-10">
-            <h3 className="SubHead1Semibold mb-10 text-gray-800">
-              인재 추가 정보
-            </h3>
-            <p>디자인 변경중</p>
-          </section>
-        </ContentsBox>
+        <div className="flex gap-8">
+          <ContentsBox className="w-[190px] flex-col gap-4">
+            <h3 className="SubHead1Semibold text-gray-800">인재 추가 정보</h3>
+            <ul>
+              {ADD_INFO.map((field) => {
+                return (
+                  <li
+                    key={field.title}
+                    className="flex h-[48px] w-[126px] items-center justify-between py-[15px]"
+                  >
+                    <label htmlFor={field.title}>{field.title}</label>
+                    <input
+                      type="checkbox"
+                      id={field.title}
+                      className="toggle toggle-sm"
+                    />
+                  </li>
+                );
+              })}
+            </ul>
+          </ContentsBox>
+          <div className="w-full max-w-[930px] rounded-lg border-[1.5px] border-gray-50 bg-gray-0 p-0">
+            <ul className="tab h-[66px] p-0">
+              {ADD_INFO.map((field, index) => {
+                return (
+                  <li
+                    className="tab-bordered tab"
+                    key={field.title}
+                    onClick={() => setActiveTab(index)}
+                  >
+                    {field.title}
+                  </li>
+                );
+              })}
+            </ul>
+            <div>{ADD_INFO[activeTab].content}</div>
+          </div>
+        </div>
       </div>
       <ContentsBox className="mb-[52px] flex flex-col gap-8 py-[68px]">
         <div className="flex flex-col items-center gap-3">

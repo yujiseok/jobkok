@@ -46,7 +46,7 @@ const TalentManagement = () => {
   });
   const [data, onDragEnd] = useDnD(kanbanData);
   const [recruitId, handleChangeFormList] = useFormList(
-    formData?.message === "SUCCESS" ? formData?.data[0]?.id : "",
+    formData?.result === "SUCCESS" ? formData?.data[0]?.id : "",
   );
 
   const formStatus = useFormStatusQuery(recruitId);

@@ -28,7 +28,7 @@ const TalentFail = () => {
   });
 
   const [recruitId, handleChangeFormList] = useFormList(
-    formData?.message === "SUCCESS" ? formData?.data[0]?.id : "",
+    formData?.result === "SUCCESS" ? formData?.data[0]?.id : "",
   );
   const [searchParams, setSearchParams] = useSearchParams();
   const filter = searchParams.get("filter") ?? "all";

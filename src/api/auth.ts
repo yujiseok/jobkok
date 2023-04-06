@@ -13,11 +13,11 @@ export const postSignIn = async (useremail: string, password: string) => {
       },
     });
     localStorage.clear();
-    if (data.message === "로그인에 성공했습니다.") {
+    if (data.status === "로그인에 성공했습니다.") {
       localStorage.setItem("token", data.data.accessToken);
     }
     return data;
-  } catch (error: any) {
+  } catch (error) {
     if (error instanceof AxiosError) {
       console.log("로그인 api 에러", error);
     }
@@ -107,7 +107,7 @@ export const putResetPassword = async (
     });
     // 성공 data.message: 비밀번호를 변경하였습니다
     return data;
-  } catch (error: any) {
+  } catch (error) {
     if (error instanceof AxiosError) {
       console.log("비밀번호 변경 api 에러", error);
     }

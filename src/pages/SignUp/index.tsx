@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ReactComponent as Back } from "@/assets/svg/arrow-back.svg";
-import { ReactComponent as Banner } from "@/assets/svg/jobkok-banner.svg";
 import Complete from "@components/Signup/Complete";
 import Email from "@components/Signup/Email";
 import Password from "@components/Signup/Password";
@@ -16,11 +15,11 @@ const SignUp = () => {
   }
 
   return (
-    <div className="flex h-screen bg-gray-0">
-      <div className="my-[68px] ml-[64px] mr-[195px] flex w-4/5 justify-center">
+    <div className="flex h-screen justify-center p-16">
+      <div className="flex">
         {step !== 5 ? (
           <Back
-            className="mr-44 cursor-pointer"
+            className="mr-28 cursor-pointer"
             onClick={() => {
               setStep(step - 1);
             }}
@@ -33,9 +32,6 @@ const SignUp = () => {
           {step === 4 && <UserInfo setStep={setStep} />}
           {step === 5 && <Complete />}
         </div>
-      </div>
-      <div>
-        <Banner />
       </div>
     </div>
   );

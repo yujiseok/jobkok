@@ -8,7 +8,7 @@ import { persistor, store } from "./app/store";
 import "./index.css";
 
 const queryClient = new QueryClient({
-  defaultOptions: { queries: { refetchOnWindowFocus: false } },
+  defaultOptions: { queries: { refetchOnWindowFocus: false, suspense: true } },
 });
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(

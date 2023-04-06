@@ -37,7 +37,7 @@ export const sendEmail = async (
   applyId: string,
   mailContent: string,
   noticeStep: string,
-  interviewDate: string,
+  interviewDate?: string,
 ) => {
   const { data } = await client({
     method: "POST",
@@ -103,10 +103,12 @@ export const getAllTalentList = async (
 
 //절차 선택
 export const setProcedure = async (recruitId: string, noticeStep: string) => {
+  // console.log(noticeStep);
   const { data } = await client({
     method: "POST",
     url: "/notice/select",
-    data: "recruitId, noticeStep",
+    data: { recruitId, noticeStep },
   });
+  console.log(data.data);
   return data.data;
 };

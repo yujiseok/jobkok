@@ -1,7 +1,8 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
-import { searchApplicant, setProcedure } from "@/api/notification";
+import { searchApplicant, sendEmail, setProcedure } from "@/api/notification";
 import { getFormList } from "@/api/talent";
 import { assortLikeTalent } from "@/api/talentDetail";
 import { ReactComponent as Profile } from "@/assets/svg/heart-memoji.svg";
@@ -15,6 +16,7 @@ import useGetTalentQuery from "@/lib/hooks/useGetTalentQuery";
 import useInputLength from "@/lib/hooks/useInputLength";
 import usePagination from "@/lib/hooks/usePagination";
 import useSearchTalent from "@/lib/hooks/useSearchTalent";
+import useSelectForm from "@/lib/hooks/useSelectForm";
 import formatDate from "@/lib/utils/formatDate";
 import makeString from "@/lib/utils/makeString";
 import Banner from "@components/Common/Banner";
@@ -22,39 +24,36 @@ import BlueBadge from "@components/Notification/BlueBadge";
 import PurpleBadge from "@components/Notification/Purplebadge";
 import RedBadge from "@components/Notification/RedBadge";
 
+type FormValues = {
+  mailContent: string;
+};
+
 const Notification = () => {
   const [inputCount, handleInput] = useInputLength(MAX_LENGTH);
   const [isAgree, setIsAgree] = useState(false);
   const { page, offset, handleClick } = usePagination();
-  const { searchInput, applyName, handleSearchBar } = useSearchTalent();
+  const formData = useSelectForm();
   const queryClient = useQueryClient();
   const [searchParams, setSearchParams] = useSearchParams();
   const applyProcedure = searchParams.get("applyProcedure") ?? "all";
   const noticeStep = searchParams.get("noticeStep") ?? "all";
   const [defaultMsg, setDefaultMsg] = useState("");
+  const { register, watch, handleSubmit } = useForm<FormValues>();
 
-  // 폼 선택하기
-  const { data: formData } = useQuery({
-    queryKey: ["form"],
-    queryFn: () => getFormList("false"),
-    suspense: true,
-    refetchOnWindowFocus: false,
-  });
+  // const onSubmit = async (data: FormValues) => {
+  //   const res = await setProcedure(recruitId, applyId, mailContent, noticeStep);
+  // };
 
   const totalPage = formData && Math.ceil(formData?.data?.length / LIMIT);
 
   // recruitId 만 가져오기
   const [recruitId, setRecruitId] = useState(`${formData?.data[0]?.id}`);
 
-  // 이름 검색으로 찾기
-  const { data: searchTalent } = useQuery({
-    queryKey: ["searchTalent", applyName, recruitId],
-    queryFn: () => searchApplicant(applyName, recruitId),
-    // enabled: false,
-  });
+  const { searchInput, handleSearchBar, searchTalent, isSearch } =
+    useSearchTalent(recruitId);
 
   //폼과 절차에 따라 인재 목록 보여주기
-  const allTalent = useAllTalentQuery(recruitId, applyProcedure);
+  const allTalent = useAllTalentQuery(recruitId);
 
   const handleChangeStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setRecruitId(e.target.value);
@@ -64,19 +63,17 @@ const Notification = () => {
     setSearchParams({
       applyProcedure: e.target.value,
     });
-    searchInput.current!.value = "";
   };
 
   const handleNotiChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSearchParams({
       noticeStep: e.target.value,
     });
+    console.log(e.target.value);
     const stepMsg = await setProcedure(recruitId, e.target.value);
     setDefaultMsg(stepMsg);
   };
-
-  console.log(noticeStep);
-
+  console.log(isSearch);
   return (
     <>
       <Banner className="h-16">
@@ -124,7 +121,7 @@ const Notification = () => {
           </select>
 
           <form
-            onSubmit={handleSearchBar}
+            // onSubmit={handleSearchBar}
             className="SubHead1Medium mx-6 mt-6 mb-6 flex justify-between rounded-md bg-blue-25  text-gray-400"
           >
             <label htmlFor="searchBar" className="w-full py-4 px-6 ">
@@ -153,38 +150,37 @@ const Notification = () => {
               </thead>
               <tbody>
                 {/* row */}
-                {allTalent?.data
-                  .slice(offset, offset + LIMIT)
-                  .map((item, i) => (
-                    <tr key={i}>
-                      <th>
-                        <input
-                          type="checkbox"
-                          className="h-5 w-5 border-gray-400 checked:bg-blue-500"
-                        />
-                      </th>
-                      <td className="SubHead1Semibold flex items-center gap-4 text-gray-600">
-                        <Profile className="rounded-md bg-gray-50" />
-                        {item.applyName}
-                      </td>
-                      <td>
-                        {item.applyProcedure === "서류 검토" ? (
-                          <BlueBadge>서류 검토</BlueBadge>
-                        ) : // eslint-disable-next-line no-constant-condition
-                        item.applyProcedure === "면접 진행" ? (
-                          <RedBadge>면접 진행</RedBadge>
-                        ) : (
-                          <PurpleBadge>최종 조율</PurpleBadge>
-                        )}
-                      </td>
-                      <td className="Caption1Medium text-gray-500">
-                        {formatDate(item.createdTime)}
-                      </td>
-                    </tr>
-                  ))}
+                {(isSearch ? searchTalent : allTalent)?.map((item, i) => (
+                  <tr key={i}>
+                    <th>
+                      <input
+                        type="checkbox"
+                        className="h-5 w-5 border-gray-400 checked:bg-blue-500"
+                      />
+                    </th>
+                    <td className="SubHead1Semibold flex items-center gap-4 text-gray-600">
+                      <Profile className="rounded-md bg-gray-50" />
+                      {item.applyName}
+                    </td>
+                    <td>
+                      {item.applyProcedure === "서류 검토" ? (
+                        <BlueBadge>서류 검토</BlueBadge>
+                      ) : // eslint-disable-next-line no-constant-condition
+                      item.applyProcedure === "면접 진행" ? (
+                        <RedBadge>면접 진행</RedBadge>
+                      ) : (
+                        <PurpleBadge>최종 조율</PurpleBadge>
+                      )}
+                    </td>
+                    <td className="Caption1Medium text-gray-500">
+                      {formatDate(item.createdTime)}
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
 
+            {/* 페이지네이션 */}
             <ul className="mt-12 flex justify-center gap-14">
               <li>
                 <button
@@ -235,6 +231,7 @@ const Notification = () => {
               onChange={handleNotiChange}
               value={noticeStep}
             >
+              <option>전체</option>
               <option value="DOCS_PASS">서류 합격</option>
               <option value="MEET_PROPOSAL">면접 조율</option>
               <option value="FINAL_PASS">최종 합격</option>
@@ -250,39 +247,46 @@ const Notification = () => {
             </div>
           </div>
 
-          <textarea
-            // placeholder="절차를 선택하시면 기본 메세지가 제공됩니다."
-            className="SubHead1Medium textarea-bordered textarea textarea-lg min-h-[300px] w-full resize-none"
-            maxLength={MAX_LENGTH}
-            onChange={handleInput}
-            value={defaultMsg}
-          ></textarea>
-          <div className="BodyBody3 mt-2 text-gray-300">
-            <span>{inputCount.toLocaleString()}</span>
-            <span>/{MAX_LENGTH.toLocaleString()}자</span>
-          </div>
-          <div className="form-control mt-16 mb-6">
-            <div className="flex justify-center gap-4">
-              <input
-                type="checkbox"
-                className="h-5 w-5 border-gray-400 checked:bg-blue-500"
-                onClick={() => setIsAgree(!isAgree)}
-              />
-
-              <span className="label-text">
-                알림을 보내면 취소가 불가능함을 인지합니다
-              </span>
+          <form
+            // onSubmit={handleSubmit(onSubmit)}
+            className="feedback-note flex-1 rounded-md border-2 border-gray-50 bg-white px-5 py-4"
+          >
+            <textarea
+              placeholder="절차를 선택하시면 기본 메세지가 제공됩니다."
+              className="SubHead1Medium textarea-bordered textarea textarea-lg min-h-[300px] w-full resize-none"
+              maxLength={MAX_LENGTH}
+              // onChange={handleInput}
+              defaultValue={defaultMsg}
+              {...register("mailContent")}
+            ></textarea>
+            <div className="BodyBody3 mt-2 text-gray-300">
+              <span>{watch().mailContent?.length.toLocaleString()}</span>
+              <span>/{MAX_LENGTH.toLocaleString()}자</span>
             </div>
-          </div>
-          <div className="flex justify-center">
-            <button
-              disabled={!isAgree || !inputCount}
-              className="SubHead2Semibold flex items-center gap-2 rounded-md bg-blue-500 px-14 py-3 text-white disabled:bg-gray-200"
-            >
-              알림 보내기
-              <SendingIcon />
-            </button>
-          </div>
+            <div className="form-control mt-16 mb-6">
+              <div className="flex justify-center gap-4">
+                <input
+                  type="checkbox"
+                  className="h-5 w-5 border-gray-400 checked:bg-blue-500"
+                  onClick={() => setIsAgree(!isAgree)}
+                />
+
+                <span className="label-text">
+                  알림을 보내면 취소가 불가능함을 인지합니다
+                </span>
+              </div>
+            </div>
+            <div className="flex justify-center">
+              <button
+                disabled={!isAgree || !inputCount}
+                className="SubHead2Semibold flex items-center gap-2 rounded-md bg-blue-500 px-14 py-3 text-white disabled:bg-gray-200"
+                // onClick={handleEmail}
+              >
+                알림 보내기
+                <SendingIcon />
+              </button>
+            </div>
+          </form>
         </div>
       </section>
     </>

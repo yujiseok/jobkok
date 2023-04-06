@@ -77,27 +77,6 @@ export const getAllTalentList = async (
   const data = res.data.data.content;
   console.log("data", data);
 
-  // if (applyProcedure === "docs_pass") {
-  //   const filteredData = data.filter(
-  //     (item) => item.applyProcedure === "docs_pass",
-  //   );
-  //   return filteredData;
-  // }
-
-  // if (applyProcedure === "meet_proposal") {
-  //   const filteredData = data.filter(
-  //     (item) => item.applyProcedure === "meet_proposal",
-  //   );
-  //   return filteredData;
-  // }
-
-  // if (applyProcedure === "final_pass") {
-  //   const filteredData = data.filter(
-  //     (item) => item.applyProcedure === "final_pass",
-  //   );
-  //   return filteredData;
-  // }
-
   return data;
 };
 

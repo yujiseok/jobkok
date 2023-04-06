@@ -1,49 +1,94 @@
-import { useRef, useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { searchApplicant } from "@/api/notification";
+import { getFormList } from "@/api/talent";
+import { assortLikeTalent } from "@/api/talentDetail";
 import { ReactComponent as Profile } from "@/assets/svg/heart-memoji.svg";
 import { ReactComponent as Search } from "@/assets/svg/search.svg";
 import { ReactComponent as SendingIcon } from "@/assets/svg/send.svg";
 import { applicantProcedure } from "@/constants/applicantProcedure";
-import { applyProcedure } from "@/constants/applyProcedure";
 import { LIMIT } from "@/constants/pagination";
+import useAllTalentQuery from "@/lib/hooks/useAllTalentQuery";
+import useAllTalentListQuery from "@/lib/hooks/useGetTalentQuery";
+import useGetTalentQuery from "@/lib/hooks/useGetTalentQuery";
 import useInputLength from "@/lib/hooks/useInputLength";
 import usePagination from "@/lib/hooks/usePagination";
+import useSearchTalent from "@/lib/hooks/useSearchTalent";
 import formatDate from "@/lib/utils/formatDate";
 import makeString from "@/lib/utils/makeString";
+import Banner from "@components/Common/Banner";
 import BlueBadge from "@components/Notification/BlueBadge";
 import PurpleBadge from "@components/Notification/Purplebadge";
-import NotiBadge from "@components/Notification/RedBadge";
 import RedBadge from "@components/Notification/RedBadge";
 
 const Notification = () => {
   const [inputCount, handleInput] = useInputLength(MAX_LENGTH);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const searchByName = searchParams.get("searchName");
   const [isAgree, setIsAgree] = useState(false);
   const { page, offset, handleClick } = usePagination();
-  const totalPage = data && Math.ceil(data?.content?.length / LIMIT);
-  const btnLimint = 5;
+  const { searchInput, applyName, handleSearchBar } = useSearchTalent();
+  const queryClient = useQueryClient();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const applyProcedure = searchParams.get("applyProcedure") ?? "all";
 
-  console.log(isAgree);
+  // 폼 선택하기
+  const { data: formData } = useQuery({
+    queryKey: ["form"],
+    queryFn: () => getFormList("false"),
+    suspense: true,
+    refetchOnWindowFocus: false,
+  });
 
-  const handleSearchBar = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!searchInput?.current?.value) return;
-    setSearchParams({ searchByName: searchInput.current.value.trim() });
+  const totalPage = formData && Math.ceil(formData?.data?.length / LIMIT);
+
+  // recruitId 만 가져오기
+  const [recruitId, setRecruitId] = useState(`${formData?.data[0]?.id}`);
+
+  // 이름 검색으로 찾기
+  const { data: searchTalent } = useQuery({
+    queryKey: ["searchTalent", applyName, recruitId],
+    queryFn: () => searchApplicant(applyName, recruitId),
+    // enabled: false,
+  });
+
+  //폼과 절차에 따라 인재 목록 보여주기
+  const allTalent = useAllTalentQuery(recruitId, applyProcedure);
+
+  const handleChangeStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setRecruitId(e.target.value);
   };
 
-  const searchInput = useRef<HTMLInputElement>(null);
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSearchParams({
+      applyProcedure: e.target.value,
+    });
+    searchInput.current!.value = "";
+  };
+
   return (
     <>
-      <section className="absolute top-16 left-0 h-16 w-full bg-blue-400 py-12">
+      <Banner className="h-16">
         <div className="mx-auto flex h-full max-w-7xl items-center">
-          <select className="SubHead2Semibold select w-[500px] bg-blue-400 px-3 text-gray-0 focus:outline-transparent">
-            <option>스마트스토어 상세페이지 디자이너 지원서 폼</option>
-            <option>스마트스토어 상세페이지 디자이너 지원서 폼</option>
-            <option>스마트스토어 상세페이지 디자이너 지원서 폼</option>
-          </select>
+          <div className="flex items-center justify-between ">
+            <div className="SubHead2Semibold">
+              <select
+                className="bg-transparent pr-3 outline-none"
+                onChange={handleChangeStatus}
+              >
+                {formData?.data.map((item) => (
+                  <option
+                    key={item.id}
+                    value={item.id}
+                    className="text-gray-900"
+                  >
+                    {item.title}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
         </div>
-      </section>
+      </Banner>
 
       <div className="mt-[100px]">
         <h1 className="Head3Semibold text-gray-900">단체 알림 센터</h1>
@@ -54,11 +99,20 @@ const Notification = () => {
 
       <section className="mt-9 flex gap-14 rounded-md border-2 border-solid bg-base-100 pt-10 pb-11 pl-6 pr-8 shadow">
         <div className="flex-[0.4] p-0">
-          <select className="select focus:outline-transparent">
-            <option disabled>단계를 선택하세요</option>
+          {/* <select className="bg-transparent outline-none">
             {applyProcedure.map((procedure, i) => (
               <option key={i}>{procedure}</option>
             ))}
+          </select> */}
+          <select
+            className="outline-none"
+            onChange={handleChange}
+            value={applyProcedure}
+          >
+            <option disabled>인재를 선택하세요</option>
+            <option value="docs_pass">서류 합격</option>
+            <option value="meet_proposal">면접 조율</option>
+            <option value="final_pass">최종 합격</option>
           </select>
 
           <form
@@ -91,33 +145,35 @@ const Notification = () => {
               </thead>
               <tbody>
                 {/* row */}
-                {data.content.slice(offset, offset + LIMIT).map((item) => (
-                  <tr key={item.applyId}>
-                    <th>
-                      <input
-                        type="checkbox"
-                        className="h-5 w-5 border-gray-400 checked:bg-blue-500"
-                      />
-                    </th>
-                    <td className="SubHead1Semibold flex items-center gap-4 text-gray-600">
-                      <Profile className="rounded-md bg-gray-50" />
-                      {item.applyName}
-                    </td>
-                    <td>
-                      {item.applyProcedure === "서류 검토" ? (
-                        <BlueBadge>서류 검토</BlueBadge>
-                      ) : // eslint-disable-next-line no-constant-condition
-                      item.applyProcedure === "면접 진행" ? (
-                        <RedBadge>면접 진행</RedBadge>
-                      ) : (
-                        <PurpleBadge>최종 조율</PurpleBadge>
-                      )}
-                    </td>
-                    <td className="Caption1Medium text-gray-500">
-                      {formatDate(item.createdTime)}
-                    </td>
-                  </tr>
-                ))}
+                {allTalent?.data
+                  .slice(offset, offset + LIMIT)
+                  .map((item, i) => (
+                    <tr key={i}>
+                      <th>
+                        <input
+                          type="checkbox"
+                          className="h-5 w-5 border-gray-400 checked:bg-blue-500"
+                        />
+                      </th>
+                      <td className="SubHead1Semibold flex items-center gap-4 text-gray-600">
+                        <Profile className="rounded-md bg-gray-50" />
+                        {item.applyName}
+                      </td>
+                      <td>
+                        {item.applyProcedure === "서류 검토" ? (
+                          <BlueBadge>서류 검토</BlueBadge>
+                        ) : // eslint-disable-next-line no-constant-condition
+                        item.applyProcedure === "면접 진행" ? (
+                          <RedBadge>면접 진행</RedBadge>
+                        ) : (
+                          <PurpleBadge>최종 조율</PurpleBadge>
+                        )}
+                      </td>
+                      <td className="Caption1Medium text-gray-500">
+                        {formatDate(item.createdTime)}
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
 
@@ -165,8 +221,8 @@ const Notification = () => {
         <div className="flex-[0.6]">
           <div className="mb-12 mt-12 flex  items-center justify-between">
             <h2 className="Head3Semibold">알림 보내기</h2>
-            <select className="select bg-blue-50 px-3 text-blue-500 focus:outline-transparent">
-              <option disabled>단계를 선택하세요</option>
+
+            <select className="rounded-md bg-blue-50 py-[10px] pr-5 pl-6 text-blue-500 focus:outline-transparent">
               {applicantProcedure.map((procedure, i) => (
                 <option key={i}>{procedure}</option>
               ))}
@@ -222,173 +278,3 @@ const Notification = () => {
 export default Notification;
 
 const MAX_LENGTH = 1000;
-
-const data = {
-  content: [
-    {
-      recruitId: 2,
-      recruitTitle: "제목1",
-      applyId: 2,
-      applyName: "지원자1",
-      applyPhone: "010-2222-3333",
-      applyEmail: "jisuno0915@gmail.com",
-      applyProcedure: "서류 검토",
-      applyDelete: false,
-      failApply: true,
-      wish: false,
-      createdTime: "2023-02-16T15:59:46.803305",
-      recentMessageTime: "2023-03-31T17:05:41.0287",
-      keywords: ["keyword1", "keyword2", "keyword3"],
-    },
-    {
-      recruitId: 2,
-      recruitTitle: "제목1",
-      applyId: 3,
-      applyName: "지원자2",
-      applyPhone: null,
-      applyEmail: "ydsn336@naver.com",
-      applyProcedure: "최종 조율",
-      applyDelete: false,
-      failApply: false,
-      wish: false,
-      createdTime: "2023-02-17T15:59:46.803305",
-      recentMessageTime: "2023-03-31T17:05:41.089688",
-      keywords: ["keyword1", "keyword2", "keyword3", "keyword6", "keyword8"],
-    },
-    {
-      recruitId: 2,
-      recruitTitle: "제목1",
-      applyId: 4,
-      applyName: "지원자3",
-      applyPhone: "010-2222-2121",
-      applyEmail: "c@test.com",
-      applyProcedure: "면접 진행",
-      applyDelete: true,
-      failApply: true,
-      wish: false,
-      createdTime: "2023-03-26T17:07:24.220008",
-      recentMessageTime: null,
-      keywords: ["keyword2", "keyword4", "keyword6", "keyword8", "keyword10"],
-    },
-    {
-      recruitId: 2,
-      recruitTitle: "제목1",
-      applyId: 8,
-      applyName: "지원자4",
-      applyPhone: "010-1111-1111",
-      applyEmail: "applyTest2@test.com",
-      applyProcedure: "서류 검토",
-      applyDelete: false,
-      failApply: true,
-      wish: false,
-      createdTime: "2023-03-27T20:48:44.871229",
-      recentMessageTime: null,
-      keywords: ["keyword1", "keyword4", "keyword6", "keyword7", "keyword8"],
-    },
-    {
-      recruitId: 2,
-      recruitTitle: "제목1",
-      applyId: 9,
-      applyName: "지원자5",
-      applyPhone: "010-1111-1111",
-      applyEmail: "applyTest3@test.com",
-      applyProcedure: "면접 진행",
-      applyDelete: false,
-      failApply: false,
-      wish: false,
-      createdTime: "2023-03-28T17:34:18.03024",
-      recentMessageTime: null,
-      keywords: ["keyword1", "keyword4", "keyword6", "keyword8", "keyword9"],
-    },
-    {
-      recruitId: 2,
-      recruitTitle: "제목1",
-      applyId: 10,
-      applyName: "지원자6",
-      applyPhone: "010-1111-1111",
-      applyEmail: "applyTest4@test.com",
-      applyProcedure: "최종 조율",
-      applyDelete: false,
-      failApply: false,
-      wish: false,
-      createdTime: "2023-03-28T19:54:23.735125",
-      recentMessageTime: null,
-      keywords: ["keyword1", "keyword4", "keyword6", "keyword8", "keyword10"],
-    },
-    {
-      recruitId: 2,
-      recruitTitle: "제목1",
-      applyId: 23,
-      applyName: "지원자7",
-      applyPhone: "010-1111-1111",
-      applyEmail: "applyTest7@test.com",
-      applyProcedure: "최종 조율",
-      applyDelete: false,
-      failApply: false,
-      wish: false,
-      createdTime: "2023-03-29T15:19:26.468342",
-      recentMessageTime: null,
-      keywords: ["keyword3", "keyword4", "keyword6", "keyword8", "keyword10"],
-    },
-    {
-      recruitId: 2,
-      recruitTitle: "제목1",
-      applyId: 32,
-      applyName: "지원자8",
-      applyPhone: "010-1111-1111",
-      applyEmail: "applyTest5@test.com",
-      applyProcedure: "서류 검토",
-      applyDelete: false,
-      failApply: false,
-      wish: false,
-      createdTime: "2023-03-29T15:34:44.146626",
-      recentMessageTime: null,
-      keywords: ["keyword3", "keyword4", "keyword6", "keyword8", "keyword10"],
-    },
-    {
-      recruitId: 2,
-      recruitTitle: "제목1",
-      applyId: 32,
-      applyName: "지원자9",
-      applyPhone: "010-1111-1111",
-      applyEmail: "applyTest5@test.com",
-      applyProcedure: "서류 검토",
-      applyDelete: false,
-      failApply: false,
-      wish: false,
-      createdTime: "2023-03-29T15:34:44.146626",
-      recentMessageTime: null,
-      keywords: ["keyword3", "keyword4", "keyword6", "keyword8", "keyword10"],
-    },
-    {
-      recruitId: 2,
-      recruitTitle: "제목1",
-      applyId: 32,
-      applyName: "지원자10",
-      applyPhone: "010-1111-1111",
-      applyEmail: "applyTest5@test.com",
-      applyProcedure: "최종 조율",
-      applyDelete: false,
-      failApply: false,
-      wish: false,
-      createdTime: "2023-03-29T15:34:44.146626",
-      recentMessageTime: null,
-      keywords: ["keyword3", "keyword4", "keyword6", "keyword8", "keyword10"],
-    },
-    {
-      recruitId: 2,
-      recruitTitle: "제목1",
-      applyId: 32,
-      applyName: "지원자11",
-      applyPhone: "010-1111-1111",
-      applyEmail: "applyTest5@test.com",
-      applyProcedure: "서류 검토",
-      applyDelete: false,
-      failApply: false,
-      wish: false,
-      createdTime: "2023-03-29T15:34:44.146626",
-      recentMessageTime: null,
-      keywords: ["keyword3", "keyword4", "keyword6", "keyword8", "keyword10"],
-    },
-  ],
-};

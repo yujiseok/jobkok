@@ -17,7 +17,7 @@ const FieldCareer = ({ handleKeyDown }: any) => {
             일한곳
           </label>
           <input
-            className="max-w-[214px] focus:outline-none"
+            className="max-w-[210px] focus:outline-none"
             type="text"
             id="careerName"
             maxLength={50}
@@ -51,7 +51,7 @@ const FieldCareer = ({ handleKeyDown }: any) => {
         </FieldInputBox>
       </div>
       <div
-        className={`flex h-[272px] items-center gap-4 rounded-lg border bg-gray-0 px-6 ${
+        className={`applicant-field-textarea-div ${
           errors.careerDetail ? " border-error-400" : " border-gray-100"
         }`}
       >
@@ -67,7 +67,7 @@ const FieldCareer = ({ handleKeyDown }: any) => {
         ></textarea>
       </div>
       <div className="Caption1Medium mt-[-16px] text-gray-400">
-        {watch().careerDetail?.length}
+        {watch().careerDetail === undefined ? 0 : watch().careerDetail?.length}
         /1000자(공백포함)
       </div>
     </div>

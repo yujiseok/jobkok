@@ -145,6 +145,10 @@ a {
     @apply flex flex-col gap-6 rounded-lg border border-gray-50 bg-gray-0 px-[42px] py-8;
   }
 
+  .applicant-field-textarea-div {
+    @apply flex h-[272px] items-center gap-4 rounded-lg border bg-gray-0 px-6;
+  }
+
   .applicant-field-label {
     @apply Caption1Medium whitespace-nowrap text-gray-600;
   }

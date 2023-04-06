@@ -14,7 +14,7 @@ const FieldCoverLetter = () => {
         본인 대해 자유롭게 서술해주세요.
       </p>
       <div
-        className={`flex h-[272px] items-center gap-4 rounded-lg border  bg-gray-0 px-6 ${
+        className={`applicant-field-textarea-div ${
           errors.resumeContent ? " border-error-400" : " border-gray-100"
         }`}
       >
@@ -30,7 +30,9 @@ const FieldCoverLetter = () => {
         ></textarea>
       </div>
       <div className="Caption1Medium mt-[-16px] text-gray-400">
-        {watch().resumeContent?.length}
+        {watch().resumeContent === undefined
+          ? 0
+          : watch().resumeContent?.length}
         /1000자(공백포함)
       </div>
     </div>

@@ -2,11 +2,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import * as z from "zod";
+
 import { ReactComponent as IconArrowLeft } from "@/assets/applicant/arrowLeft.svg";
 import { ReactComponent as IconComplete } from "@/assets/applicant/complete.svg";
 import { ReactComponent as IconIncomplete } from "@/assets/applicant/incomplete.svg";
 
 import { OPTIONAL_FIELD, REQUIRED_FIELD } from "@/constants/applicant";
+
 import FieldAwards from "@components/Applicant/field/FieldAwards";
 import FieldCareer from "@components/Applicant/field/FieldCareer";
 import FieldCertificate from "@components/Applicant/field/FieldCertificate";
@@ -85,8 +87,9 @@ const Application = () => {
 
   // 폼 제출
   const onSubmit = async (data: IApplicationForm) => {
-    console.log(data);
-    navigate("/applicant/completion");
+    if (confirm("제출 후에는 수정이 불가능합니다. 정말 제출하시겠습니까?")) {
+      navigate("/applicant/completion");
+    }
   };
 
   return (
@@ -171,11 +174,11 @@ const Application = () => {
                 {/* 경력 */}
                 <FieldCareer handleKeyDown={handleKeyDown} />
                 {/* 최종학력 */}
-                <FieldEdu />
+                <FieldEdu handleKeyDown={handleKeyDown} />
                 {/* 자격증 */}
-                <FieldCertificate />
+                <FieldCertificate handleKeyDown={handleKeyDown} />
                 {/* 수상내역 */}
-                <FieldAwards />
+                <FieldAwards handleKeyDown={handleKeyDown} />
                 {/* 취업우대사항 */}
                 <FieldPreference />
                 {/* 어학 */}
@@ -207,7 +210,7 @@ const Application = () => {
               className="submit-btn-active w-[147px]"
               type="button"
               onClick={methods.handleSubmit(onSubmit)}
-              // disabled={methods.isSubmitting}
+              disabled={methods.formState.isSubmitting}
             >
               제출하기
             </button>

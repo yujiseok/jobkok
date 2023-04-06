@@ -1,7 +1,4 @@
-import { useForm, useFormContext } from "react-hook-form";
-import FieldBox from "@components/Applicant/FieldBox";
-import FieldLegend from "@components/Applicant/FieldLegend";
-import FieldLabel from "../FieldLabel";
+import { useFormContext } from "react-hook-form";
 
 const CoverLetter = () => {
   const {
@@ -11,8 +8,8 @@ const CoverLetter = () => {
   } = useFormContext();
 
   return (
-    <FieldBox>
-      <FieldLegend>자기소개(필수)</FieldLegend>
+    <div className="applicant-field-box">
+      <legend className="applicant-field-legend">자기소개(필수)</legend>
       <p className="Head4Medium text-gray-700">
         본인 대해 자유롭게 서술해주세요.
       </p>
@@ -21,9 +18,9 @@ const CoverLetter = () => {
           errors.resumeContent ? " border-error-400" : " border-gray-100"
         }`}
       >
-        <FieldLabel className="w-20" htmlFor="resumeContent">
+        <label className="applicant-field-label w-20" htmlFor="resumeContent">
           지원자 작성란
-        </FieldLabel>
+        </label>
         <textarea
           className="h-full w-full resize-none py-4 focus:outline-none"
           id="resumeContent"
@@ -36,7 +33,7 @@ const CoverLetter = () => {
         {watch().resumeContent?.length}
         /1000자(공백포함)
       </div>
-    </FieldBox>
+    </div>
   );
 };
 export default CoverLetter;

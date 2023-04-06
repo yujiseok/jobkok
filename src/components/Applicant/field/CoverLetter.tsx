@@ -4,14 +4,23 @@ import FieldLegend from "@components/Applicant/FieldLegend";
 import FieldLabel from "../FieldLabel";
 
 const CoverLetter = () => {
-  const { register, watch } = useFormContext();
+  const {
+    register,
+    watch,
+    formState: { errors },
+  } = useFormContext();
+
   return (
     <FieldBox>
       <FieldLegend>자기소개(필수)</FieldLegend>
       <p className="Head4Medium text-gray-700">
         본인 대해 자유롭게 서술해주세요.
       </p>
-      <div className="flex h-[272px] items-center gap-4 rounded-lg border border-gray-100 bg-gray-0 px-6">
+      <div
+        className={`flex h-[272px] items-center gap-4 rounded-lg border  bg-gray-0 px-6 ${
+          errors.resumeContent ? " border-error-400" : " border-gray-100"
+        }`}
+      >
         <FieldLabel className="w-20" htmlFor="resumeContent">
           지원자 작성란
         </FieldLabel>

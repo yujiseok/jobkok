@@ -4,11 +4,11 @@ import axios from "axios";
 const token = localStorage.getItem("token");
 
 const config: AxiosRequestConfig = {
-  baseURL: "https://jobkok.shop ",
+  baseURL: "https://jobkok.shop",
 };
 
 const authConfig: AxiosRequestConfig = {
-  baseURL: "https://jobkok.shop ",
+  baseURL: "https://jobkok.shop",
   headers: {
     Authorization: `Bearer ${token}`,
   },

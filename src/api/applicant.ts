@@ -10,17 +10,20 @@ export const emailAuth = async (recurit_id: number, applyEmail: string) => {
       applyEmail: applyEmail,
     },
   });
-
+  console.log(data);
   return data;
 };
 
 // 지원자 이메일 중복확인
-export const emailDuplicatecheck = async (applyEmail: string) => {
+export const emailDuplicatecheck = async (
+  recurit_id: number,
+  applyEmail: string,
+) => {
   const { data }: AxiosResponse = await client({
     method: "GET",
-    url: `/view/check?email=${applyEmail}`,
+    url: `/view/check?email=${applyEmail}&recruitId=${recurit_id}`,
   });
-
+  console.log(data);
   return data;
 };
 

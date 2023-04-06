@@ -7,7 +7,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const handleLogout = async () => {
     const res = await postLogout();
-    if (res.message === "로그아웃 되었습니다.") {
+    if (res.state === 200) {
       navigate("/sign-in");
     }
   };

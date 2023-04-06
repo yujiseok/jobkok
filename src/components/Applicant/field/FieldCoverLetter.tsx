@@ -1,6 +1,6 @@
 import { useFormContext } from "react-hook-form";
 
-const CoverLetter = () => {
+const FieldCoverLetter = () => {
   const {
     register,
     watch,
@@ -36,4 +36,4 @@ const CoverLetter = () => {
     </div>
   );
 };
-export default CoverLetter;
+export default FieldCoverLetter;

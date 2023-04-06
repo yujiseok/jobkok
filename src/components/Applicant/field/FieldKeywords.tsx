@@ -1,14 +1,16 @@
-import { ReactComponent as IconSelect } from "@/assets/applicant/select.svg";
-import { KEYWORDS_CHECK } from "@/constants/applicant";
 import FieldBox from "@components/Applicant/FieldBox";
 import FieldLegend from "@components/Applicant/FieldLegend";
 import FieldParagraph from "@components/Applicant/FieldParagraph";
+import { ReactComponent as IconSelect } from "@/assets/applicant/select.svg";
+import { KEYWORDS_CHECK } from "@/constants/applicant";
 
-const MyKeywords = () => {
+const FieldKeywords = () => {
   return (
-    <FieldBox>
-      <FieldLegend>나의 키워드(필수)</FieldLegend>
-      <FieldParagraph>해당되는 항목의 체크박스에 체크해주세요.</FieldParagraph>
+    <div className="applicant-field-box">
+      <legend className="applicant-field-legend ">나의 키워드(필수)</legend>
+      <p className="applicant-field-Paragraph">
+        해당되는 항목의 체크박스에 체크해주세요.
+      </p>
       <div className="grid h-[108px] max-w-[820px] grid-cols-5 gap-2">
         {KEYWORDS_CHECK.map((keyword) => (
           <button
@@ -21,7 +23,7 @@ const MyKeywords = () => {
           </button>
         ))}
       </div>
-    </FieldBox>
+    </div>
   );
 };
-export default MyKeywords;
+export default FieldKeywords;

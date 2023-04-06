@@ -137,6 +137,10 @@ a {
 }
 
 @layer components {
+  .applicant-aside-heading {
+    @apply SubHead1Semibold text-gray-800;
+  }
+
   .applicant-field-box {
     @apply flex flex-col gap-6 rounded-lg border border-gray-50 bg-gray-0 px-[42px] py-8;
   }
@@ -147,5 +151,25 @@ a {
 
   .applicant-field-legend {
     @apply Head4Semibold text-gray-900;
+  }
+
+  .applicant-filed-row {
+    @apply flex flex-wrap gap-1.5;
+  }
+
+  .applicant-field-Paragraph {
+    @apply SubHead2Medium text-gray-600;
+  }
+
+  .applicant-aside-box {
+    @apply flex flex-col rounded-lg border-[1.5px] border-gray-50 bg-gray-0 px-[24px];
+  }
+
+  .submit-btn-active {
+    @apply SubHead1Semibold h-[56px] rounded-lg bg-blue-500 py-2.5 px-6 text-center text-gray-0 shadow-blue;
+  }
+
+  .action-btn-aactive {
+    @apply SubHead1Semibold rounded-md bg-blue-50 py-2.5 px-6 text-blue-500;
   }
 }

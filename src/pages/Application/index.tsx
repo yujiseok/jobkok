@@ -16,20 +16,10 @@ import {
   TERMS_APPLY,
   TERMS_SENSITIVE,
 } from "@/constants/applicant";
-import AsideBox from "@components/Applicant//AsideBox";
-import ActionBtn from "@components/Applicant/ActionBtn";
-import AsideHeading from "@components/Applicant/AsideHeading";
 import CoverLetter from "@components/Applicant/field/CoverLetter";
-import FieldBox from "@components/Applicant/FieldBox";
 import FielCheckbox from "@components/Applicant/FieldCheckbox";
 import FieldInputBox from "@components/Applicant/FieldInputBox";
-import FieldLabel from "@components/Applicant/FieldLabel";
-import FieldLegend from "@components/Applicant/FieldLegend";
-import FieldParagraph from "@components/Applicant/FieldParagraph";
-
-import FieldRow from "@components/Applicant/FieldRow";
 import MyKeywords from "@components/Applicant/MyKeywords";
-import SubmitBtn from "@components/Applicant/SubmitBtn";
 
 const schema = z.object({
   // 경력
@@ -123,12 +113,12 @@ const Application = () => {
 
       <div className="flex gap-6 px-16 pt-[192px] pb-[108px]">
         <aside className="sticky top-0 order-2 h-full pt-[45px]">
-          <AsideBox className="mb-4 pt-[26px] pr-[26px] pb-[27px] pl-6">
+          <div className="mb-4 pt-[26px] pr-[26px] pb-[27px] pl-6">
             <h4 className="Head4Semibold mb-[24.5px] text-gray-900">
               지원서 일정
             </h4>
             <dl>
-              <div className="mb-[26px] flex gap-3.5">
+              <div className="applicant-aside-box mb-[26px] flex gap-3.5">
                 <dt className="Caption1Medium w-[90px] text-gray-600">
                   지원서 접수 마감일
                 </dt>
@@ -145,14 +135,14 @@ const Application = () => {
                 </dd>
               </div>
             </dl>
-          </AsideBox>
-          <SubmitBtn className="mb-4 w-[284px]" type="submit">
+          </div>
+          <button className="submit-btn-active mb-4 w-[284px]" type="submit">
             지원서 제출
-          </SubmitBtn>
-          <AsideBox className="mb-1 pt-2.5 pr-[28px] pl-6 pb-4">
-            <AsideHeading className="h-10 w-[232px] border-b border-gray-50 py-2">
+          </button>
+          <div className="applicant-aside-box mb-1 pt-2.5 pr-[28px] pl-6 pb-4">
+            <h4 className="applicant-aside-heading h-10 w-[232px] border-b border-gray-50 py-2">
               필수입력사항
-            </AsideHeading>
+            </h4>
             <ul>
               {REQUIRED_FIELD.map((field) => (
                 <li className="flex h-10 w-[232px] items-end" key={field}>
@@ -161,11 +151,11 @@ const Application = () => {
                 </li>
               ))}
             </ul>
-          </AsideBox>
-          <AsideBox className="mb-1 pt-2.5 pr-[28px] pl-6 pb-4">
-            <AsideHeading className="h-10 w-[232px] border-b border-gray-50 py-2">
+          </div>
+          <div className="applicant-aside-box mb-1 pt-2.5 pr-[28px] pl-6 pb-4">
+            <h4 className="applicant-aside-heading h-10 w-[232px] border-b border-gray-50 py-2">
               선택입력사항
-            </AsideHeading>
+            </h4>
             <ul>
               {OPTIONAL_FIELD.map((field) => (
                 <li className="flex h-10 w-[232px] items-end" key={field}>
@@ -174,10 +164,10 @@ const Application = () => {
                 </li>
               ))}
             </ul>
-          </AsideBox>
-          <AsideBox className="h-[60px] justify-center">
-            <AsideHeading>약관동의</AsideHeading>
-          </AsideBox>
+          </div>
+          <div className="applicant-aside-box h-[60px] justify-center">
+            <h4 className="applicant-aside-heading">약관동의</h4>
+          </div>
         </aside>
 
         <section className="order-1 w-full">
@@ -190,13 +180,16 @@ const Application = () => {
                 {/* 자기소개 */}
                 <CoverLetter />
                 {/* 경력 */}
-                {/* <FieldBox>
-                  <FieldLegend className="text-xl font-bold">
-                    경력(필수)
-                  </FieldLegend>
-                  <FieldRow>
+                <div className="applicant-field-box">
+                  <legend className="applicant-field-legend">경력(필수)</legend>
+                  <div className="applicant-filed-row">
                     <FieldInputBox errors={errors.careerName}>
-                      <FieldLabel htmlFor="careerName">일한곳</FieldLabel>
+                      <label
+                        className="applicant-field-label"
+                        htmlFor="careerName"
+                      >
+                        일한곳
+                      </label>
                       <input
                         className="max-w-[214px] focus:outline-none"
                         type="text"
@@ -207,9 +200,12 @@ const Application = () => {
                       />
                     </FieldInputBox>
                     <FieldInputBox errors={errors.careerPeriodStart}>
-                      <FieldLabel htmlFor="careerPeriodStart">
+                      <label
+                        className="applicant-field-label"
+                        htmlFor="careerPeriodStart"
+                      >
                         시작일
-                      </FieldLabel>
+                      </label>
                       <input
                         className="max-w-[120px] focus:outline-none"
                         type="date"
@@ -219,7 +215,12 @@ const Application = () => {
                       />
                     </FieldInputBox>
                     <FieldInputBox errors={errors.careerPeriodEnd}>
-                      <FieldLabel htmlFor="careerPeriodEnd">마감일</FieldLabel>
+                      <label
+                        className="applicant-field-label"
+                        htmlFor="careerPeriodEnd"
+                      >
+                        마감일
+                      </label>
                       <input
                         className="max-w-[120px] focus:outline-none"
                         type="date"
@@ -228,7 +229,7 @@ const Application = () => {
                         {...register("careerPeriodEnd")}
                       />
                     </FieldInputBox>
-                  </FieldRow>
+                  </div>
                   <div
                     className={`flex h-[272px] items-center gap-4 rounded-lg border bg-gray-0 px-6 ${
                       errors.careerDetail
@@ -236,9 +237,12 @@ const Application = () => {
                         : " border-gray-100"
                     }`}
                   >
-                    <FieldLabel className="w-20" htmlFor="careerDetail">
+                    <label
+                      className="applicant-field-label w-20"
+                      htmlFor="careerDetail"
+                    >
                       상세 내용
-                    </FieldLabel>
+                    </label>
                     <textarea
                       className="h-full w-full resize-none py-4 focus:outline-none"
                       id="careerDetail"
@@ -251,13 +255,18 @@ const Application = () => {
                     {watch().careerDetail?.length}
                     /1000자(공백포함)
                   </div>
-                </FieldBox> */}
+                </div>
                 {/* 최종학력 */}
-                {/* <FieldBox>
-                  <FieldLegend>최종학력</FieldLegend>
-                  <FieldRow>
+                <div className="applicant-field-box">
+                  <legend className="applicant-field-legend">최종학력</legend>
+                  <div className="applicant-filed-row">
                     <FieldInputBox errors={errors.eduName}>
-                      <FieldLabel htmlFor="eduName">학교명</FieldLabel>
+                      <label
+                        className="applicant-field-label"
+                        htmlFor="eduName"
+                      >
+                        학교명
+                      </label>
                       <input
                         className="max-w-[200px] bg-transparent focus:outline-none"
                         type="text"
@@ -268,7 +277,12 @@ const Application = () => {
                       />
                     </FieldInputBox>
                     <FieldInputBox errors={errors.eduMajor}>
-                      <FieldLabel htmlFor="eduMajor">전공</FieldLabel>
+                      <label
+                        className="applicant-field-label"
+                        htmlFor="eduMajor"
+                      >
+                        전공
+                      </label>
                       <input
                         className="max-w-[190px] bg-transparent focus:outline-none"
                         type="text"
@@ -315,7 +329,12 @@ const Application = () => {
                       </select>
                     </FieldInputBox>
                     <FieldInputBox errors={errors.eduPeriodStart}>
-                      <FieldLabel htmlFor="eduPeriodStart">입학날짜</FieldLabel>
+                      <label
+                        className="applicant-field-label"
+                        htmlFor="eduPeriodStart"
+                      >
+                        입학날짜
+                      </label>
                       <input
                         className="max-w-[120px] focus:outline-none"
                         type="date"
@@ -325,7 +344,12 @@ const Application = () => {
                       />
                     </FieldInputBox>
                     <FieldInputBox errors={errors.eduPeriodEnd}>
-                      <FieldLabel htmlFor="eduPeriodEnd">졸업날짜</FieldLabel>
+                      <label
+                        className="applicant-field-label"
+                        htmlFor="eduPeriodEnd"
+                      >
+                        졸업날짜
+                      </label>
                       <input
                         className="max-w-[120px] focus:outline-none"
                         type="date"
@@ -334,16 +358,19 @@ const Application = () => {
                         {...register("eduPeriodEnd")}
                       />
                     </FieldInputBox>
-                  </FieldRow>
-                </FieldBox> */}
+                  </div>
+                </div>
                 {/* 자격증 */}
-                {/* <FieldBox>
-                  <FieldLegend>자격증</FieldLegend>
-                  <FieldRow>
+                <div className="applicant-field-box">
+                  <legend className="applicant-field-legend">자격증</legend>
+                  <div className="applicant-filed-row">
                     <FieldInputBox errors={errors.certificateName}>
-                      <FieldLabel htmlFor="certificateName">
+                      <label
+                        className="applicant-field-label"
+                        htmlFor="certificateName"
+                      >
                         자격증 이름
-                      </FieldLabel>
+                      </label>
                       <input
                         className="max-w-[160px] bg-transparent focus:outline-none"
                         type="text"
@@ -354,9 +381,12 @@ const Application = () => {
                       />
                     </FieldInputBox>
                     <FieldInputBox errors={errors.certificatePublisher}>
-                      <FieldLabel htmlFor="certificatePublisher">
+                      <label
+                        className="applicant-field-label"
+                        htmlFor="certificatePublisher"
+                      >
                         발생처
-                      </FieldLabel>
+                      </label>
                       <input
                         className="max-w-[140px] bg-transparent focus:outline-none "
                         type="text"
@@ -367,7 +397,12 @@ const Application = () => {
                       />
                     </FieldInputBox>
                     <FieldInputBox errors={errors.certificateDate}>
-                      <FieldLabel htmlFor="certificateDate">취득일</FieldLabel>
+                      <label
+                        className="applicant-field-label"
+                        htmlFor="certificateDate"
+                      >
+                        취득일
+                      </label>
                       <input
                         className="max-w-[120px] bg-transparent focus:outline-none "
                         type="date"
@@ -376,14 +411,19 @@ const Application = () => {
                         {...register("certificateDate")}
                       />
                     </FieldInputBox>
-                  </FieldRow>
-                </FieldBox> */}
+                  </div>
+                </div>
                 {/* 수상내역 */}
-                {/* <FieldBox>
-                  <FieldLegend>수상내역</FieldLegend>
-                  <FieldRow>
+                <div className="applicant-field-box">
+                  <legend className="applicant-field-legend">수상내역</legend>
+                  <div className="applicant-filed-row">
                     <FieldInputBox errors={errors.awardsName}>
-                      <FieldLabel htmlFor="awardsName">수상명</FieldLabel>
+                      <label
+                        className="applicant-field-label"
+                        htmlFor="awardsName"
+                      >
+                        수상명
+                      </label>
                       <input
                         className="max-w-[150px] bg-transparent focus:outline-none"
                         type="text"
@@ -394,7 +434,12 @@ const Application = () => {
                       />
                     </FieldInputBox>
                     <FieldInputBox errors={errors.awardsCompany}>
-                      <FieldLabel htmlFor="awardsCompany">수여기관</FieldLabel>
+                      <label
+                        className="applicant-field-label"
+                        htmlFor="awardsCompany"
+                      >
+                        수여기관
+                      </label>
                       <input
                         className="max-w-[160px] bg-transparent focus:outline-none"
                         type="text"
@@ -405,7 +450,12 @@ const Application = () => {
                       />
                     </FieldInputBox>
                     <FieldInputBox errors={errors.awardsDate}>
-                      <FieldLabel htmlFor="awardsDate">수상일</FieldLabel>
+                      <label
+                        className="applicant-field-label"
+                        htmlFor="awardsDate"
+                      >
+                        수상일
+                      </label>
                       <input
                         className="max-w-[120px] bg-transparent  focus:outline-none"
                         type="date"
@@ -414,15 +464,17 @@ const Application = () => {
                         {...register("awardsDate")}
                       />
                     </FieldInputBox>
-                  </FieldRow>
-                </FieldBox> */}
+                  </div>
+                </div>
                 {/* 취업우대사항 */}
-                {/* <FieldBox>
-                  <FieldLegend>취업우대사항</FieldLegend>
-                  <FieldParagraph>
+                <div className="applicant-field-box">
+                  <legend className="applicant-field-legend">
+                    취업우대사항
+                  </legend>
+                  <div className="applicant-field-Paragraph">
                     본인이 해당하는 항목을 선택해주세요.
-                  </FieldParagraph>
-                  <FieldRow>
+                  </div>
+                  <div className="applicant-filed-row">
                     <FielCheckbox
                       htmlFor="veterans"
                       inputValue={watch().veterans}
@@ -477,7 +529,7 @@ const Application = () => {
                         })}
                       </select>
                     </FieldInputBox>
-                  </FieldRow>
+                  </div>
                   <FielCheckbox
                     className="SubHead2Semibold h-[86px] w-full text-gray-600"
                     htmlFor="sensitiveAgree"
@@ -494,13 +546,18 @@ const Application = () => {
                       {TERMS_SENSITIVE}
                     </p>
                   </FielCheckbox>
-                </FieldBox> */}
+                </div>
                 {/* 어학 */}
-                {/* <FieldBox>
-                  <FieldLegend>어학능력</FieldLegend>
-                  <FieldRow>
+                <div className="applicant-field-box">
+                  <legend className="applicant-field-legend">어학능력</legend>
+                  <div className="applicant-filed-row">
                     <FieldInputBox errors={errors.languageName}>
-                      <FieldLabel htmlFor="languageName">언어</FieldLabel>
+                      <label
+                        className="applicant-field-label"
+                        htmlFor="languageName"
+                      >
+                        언어
+                      </label>
                       <input
                         className="focus:outline-none"
                         type="text"
@@ -528,17 +585,22 @@ const Application = () => {
                         })}
                       </select>
                     </FieldInputBox>
-                  </FieldRow>
-                </FieldBox> */}
+                  </div>
+                </div>
                 {/* 기타이력서 */}
-                {/* <FieldBox>
-                  <FieldLegend>기타 이력서</FieldLegend>
-                  <FieldRow>
+                <div className="applicant-field-box">
+                  <legend className="applicant-field-legend">
+                    기타 이력서
+                  </legend>
+                  <div className="applicant-filed-row">
                     <div>
                       <FieldInputBox errors={errors.portfolio}>
-                        <FieldLabel htmlFor="portfolio">
+                        <label
+                          className="applicant-field-label"
+                          htmlFor="portfolio"
+                        >
                           포트폴리오 링크
-                        </FieldLabel>
+                        </label>
                         <input
                           className="focus:outline-none"
                           type="url"
@@ -553,7 +615,9 @@ const Application = () => {
                     </div>
                     <div>
                       <FieldInputBox errors={errors.link}>
-                        <FieldLabel htmlFor="link">기타 링크</FieldLabel>
+                        <label className="applicant-field-label" htmlFor="link">
+                          기타 링크
+                        </label>
                         <input
                           className="focus:outline-none"
                           type="url"
@@ -566,16 +630,16 @@ const Application = () => {
                         {errors.link?.message}
                       </p>
                     </div>
-                  </FieldRow>
-                </FieldBox> */}
+                  </div>
+                </div>
                 {/* 나의키워드 */}
                 <MyKeywords />
                 {/* 약관동의 */}
-                {/* <FieldBox>
-                  <FieldLegend>약관동의</FieldLegend>
-                  <FieldParagraph>
+                <div className="applicant-field-box">
+                  <legend className="applicant-field-legend">약관동의</legend>
+                  <div className="applicant-field-Paragraph">
                     지원하려면 약관동의가 필요합니다.
-                  </FieldParagraph>
+                  </div>
                   <FielCheckbox
                     className="SubHead2Semibold h-[86px] w-full gap-3 py-4 text-gray-600"
                     htmlFor="requiredAgree"
@@ -624,13 +688,13 @@ const Application = () => {
                       {TERMS_APPLY[2].description}
                     </p>
                   </FielCheckbox>
-                </FieldBox> */}
+                </div>
               </div>
             </form>
           </FormProvider>
           <div className="mt-8 flex justify-between">
-            <ActionBtn
-              className="SubHead1Semibold rounded-md bg-blue-50 py-2.5 px-6 text-blue-500"
+            <button
+              className="action-btn-aactive"
               type="button"
               onClick={() => {
                 confirm(
@@ -641,15 +705,15 @@ const Application = () => {
               }}
             >
               이전
-            </ActionBtn>
-            <SubmitBtn
-              className="w-[147px]"
+            </button>
+            <button
+              className="submit-btn-active w-[147px]"
               type="button"
               onClick={methods.handleSubmit(onSubmit)}
               // disabled={methods.isSubmitting}
             >
               제출하기
-            </SubmitBtn>
+            </button>
           </div>
         </section>
       </div>

@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { getFormList } from "@/api/talent";
 import { ReactComponent as ArchiveTickBlue } from "@/assets/svg/archive-tick-blue.svg";
@@ -28,10 +27,26 @@ const TalentFail = () => {
     suspense: true,
   });
 
+  const [recruitId, handleChangeFormList] = useFormList(
+    formData?.message === "SUCCESS" ? formData?.data[0]?.id : "",
+  );
   const [searchParams, setSearchParams] = useSearchParams();
   const filter = searchParams.get("filter") ?? "all";
   const { page } = usePagination();
   const { likeMutate } = useLikeMutate();
+  const { searchInput, handleSearchBar, searchData } =
+    useSearchFailedQuery(recruitId);
+  const { failedTalent, totalPages } = useFailedTalentQuery(
+    recruitId,
+    page,
+    filter,
+  );
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSearchParams({
+      filter: e.target.value,
+    });
+    searchInput.current!.value = "";
+  };
 
   if (formData?.result === "FAIL") {
     return (
@@ -53,24 +68,6 @@ const TalentFail = () => {
       </Banner>
     );
   }
-
-  const [recruitId, handleChangeFormList] = useFormList(
-    formData?.data[0]?.id as number,
-  );
-  const { searchInput, handleSearchBar, searchData } =
-    useSearchFailedQuery(recruitId);
-  const { failedTalent, totalPages } = useFailedTalentQuery(
-    recruitId,
-    page,
-    filter,
-  );
-
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSearchParams({
-      filter: e.target.value,
-    });
-    searchInput.current!.value = "";
-  };
 
   return (
     <>

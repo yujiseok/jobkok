@@ -40,11 +40,17 @@ import SliderWrapper from "@components/Talent/SliderWrapper";
 import { WhiteContainer } from "@components/Talent/WhiteContainer";
 
 const TalentManagement = () => {
-  const { data: formData } = useQuery({
+  const { data: formData, isError } = useQuery({
     queryKey: ["form"],
     queryFn: () => getFormList("true"),
-    suspense: true,
   });
+  const [data, onDragEnd] = useDnD(kanbanData);
+  const [recruitId, handleChangeFormList] = useFormList(
+    formData?.message === "SUCCESS" ? formData?.data[0]?.id : "",
+  );
+
+  const formStatus = useFormStatusQuery(recruitId);
+  const { allTalent } = useAllTalentQuery(recruitId);
 
   // 폼 없을 시
   if (formData?.result === "FAIL") {
@@ -175,15 +181,6 @@ const TalentManagement = () => {
     );
   }
 
-  // 폼 있을 시
-  const [recruitId, handleChangeFormList] = useFormList(
-    formData?.data[0]?.id as number,
-  );
-
-  const [data, onDragEnd] = useDnD(kanbanData);
-
-  const allTalent = useAllTalentQuery(recruitId);
-  const formStatus = useFormStatusQuery(recruitId);
   // const kanbanData: IKanban[] = talentByProcedure(allTalent);
 
   return (

@@ -7,6 +7,6 @@ const useAllTalentQuery = (recruitId: string) => {
     queryFn: () => getAllTalent(recruitId as string),
     suspense: true,
   });
-  return data;
+  return data?.data;
 };
 export default useAllTalentQuery;

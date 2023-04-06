@@ -83,7 +83,7 @@ const SignIn = () => {
 
   const onSubmit = async (data: User) => {
     const res = await postSignIn(data.useremail, data.password);
-    if (res.message === "로그인에 성공했습니다.") {
+    if (res.state === 200) {
       navigate("/");
     } else {
       setIsFail(true);

@@ -64,6 +64,7 @@ const schema = z.object({
   awardsDate: z.string().nonempty(),
 
   // 나의 성격 키워드
+  keywords: z.array(z.string()).default([]),
 
   // 약관
   requiredAgree: z.boolean().refine((val) => val),

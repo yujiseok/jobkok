@@ -88,6 +88,7 @@ const Application = () => {
   // 폼 제출
   const onSubmit = async (data: IApplicationForm) => {
     if (confirm("제출 후에는 수정이 불가능합니다. 정말 제출하시겠습니까?")) {
+      console.log(data);
       navigate("/applicant/completion");
     }
   };

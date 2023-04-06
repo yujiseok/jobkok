@@ -3,7 +3,7 @@ import { TERMS_APPLY } from "@/constants/applicant";
 import FieldCheckbox from "@components/Applicant/FieldCheckbox";
 
 const FieldTermAgree = () => {
-  const { register, watch } = useFormContext();
+  const { watch } = useFormContext();
 
   return (
     <div className="applicant-field-box">
@@ -15,14 +15,8 @@ const FieldTermAgree = () => {
         className="SubHead2Semibold h-[86px] w-full gap-3 py-4 text-gray-600"
         htmlFor="requiredAgree"
         inputValue={watch().requiredAgree}
+        content={TERMS_APPLY[0].title}
       >
-        {TERMS_APPLY[0].title}
-        <input
-          className="sr-only"
-          type="checkbox"
-          id="requiredAgree"
-          {...register("requiredAgree")}
-        />
         <p className="SubHead2Medium h-[54px] max-w-[500px] overflow-auto text-gray-300">
           {TERMS_APPLY[0].description}
         </p>
@@ -31,14 +25,8 @@ const FieldTermAgree = () => {
         className="SubHead2Semibold h-[86px] w-full gap-3 py-4 text-gray-600"
         htmlFor="optionalAgree"
         inputValue={watch().optionalAgree}
+        content={TERMS_APPLY[1].title}
       >
-        {TERMS_APPLY[1].title}
-        <input
-          className="sr-only"
-          type="checkbox"
-          id="optionalAgree"
-          {...register("optionalAgree")}
-        />
         <p className="SubHead2Medium h-[54px] max-w-[500px] overflow-auto text-gray-300">
           {TERMS_APPLY[1].description}
         </p>
@@ -47,14 +35,8 @@ const FieldTermAgree = () => {
         className="SubHead2Semibold h-[86px] w-full gap-3 py-4 text-gray-600"
         htmlFor="consignAgree"
         inputValue={watch().consignAgree}
+        content={TERMS_APPLY[2].title}
       >
-        {TERMS_APPLY[2].title}
-        <input
-          className="sr-only"
-          type="checkbox"
-          id="consignAgree"
-          {...register("consignAgree")}
-        />
         <p className="SubHead2Medium h-[54px] max-w-[500px] overflow-auto text-gray-300">
           {TERMS_APPLY[2].description}
         </p>

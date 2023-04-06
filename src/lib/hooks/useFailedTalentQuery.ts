@@ -10,7 +10,6 @@ const useFailedTalentQuery = (
   const { data } = useQuery({
     queryKey: ["fail", recruitId, page, filter],
     queryFn: getFailedTalent,
-    suspense: true,
     // keepPreviousData: true,
   });
 

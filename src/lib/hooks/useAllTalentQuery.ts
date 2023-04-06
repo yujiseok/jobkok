@@ -2,11 +2,11 @@ import { useQuery } from "@tanstack/react-query";
 import { getAllTalent } from "@/api/talent";
 
 const useAllTalentQuery = (recruitId: string) => {
-  const { data } = useQuery({
+  const { data: allTalent, refetch: allTalentRefetch } = useQuery({
     queryKey: ["allTalent", recruitId],
     queryFn: () => getAllTalent(recruitId as string),
-    suspense: true,
+    enabled: false,
   });
-  return data;
+  return { allTalent, allTalentRefetch };
 };
 export default useAllTalentQuery;

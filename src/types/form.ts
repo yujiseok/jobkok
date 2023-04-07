@@ -5,13 +5,17 @@ export interface IResponse<T> {
   data: T;
 }
 
+// const now = new Date();
+// const docsStartValue = new Date().toISOString().split("T")[0] + "T00:00:00";
+// ("센스있어요, 꼼꼼해요, 잘 웃어요, 원칙적이에요, 습득력이 좋아요");
+
 // 채용폼 요청
 export interface IFormRequestData {
   type: boolean;
   title: string;
   contents: string;
   keywordStandard: string;
-  resumeTitle: "센스있어요, 꼼꼼해요, 잘 웃어요, 원칙적이에요, 습득력이 좋아요";
+  resumeTitle: string;
   ongoing: boolean;
   docsStart: string;
   docsEnd: string;

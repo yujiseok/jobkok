@@ -24,9 +24,6 @@ const FieldLink = () => {
               {...register("portfolio")}
             />
           </FieldInputBox>
-          <p className="mt-2 text-sm text-error-400">
-            {errors.portfolio?.message}
-          </p>
         </div>
         <div>
           <FieldInputBox errors={errors.link}>
@@ -41,7 +38,6 @@ const FieldLink = () => {
               {...register("link")}
             />
           </FieldInputBox>
-          <p className="mt-2 text-sm text-error-400">{errors.link?.message}</p>
         </div>
       </div>
     </div>

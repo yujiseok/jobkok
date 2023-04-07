@@ -69,45 +69,32 @@ export const postSignUp = async (
 
 // 아이디 중복체크 get / post 확인 필요!
 export const postEmailCheck = async (useremail: string) => {
-  try {
-    const { data }: AxiosResponse = await client.get("/auth/email_validation", {
-      memberEmail: useremail,
-    });
-    return data;
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      console.log("이메일 중복확인 api 에러", error);
-    }
-  }
+  const { data }: AxiosResponse = await client({
+    method: "GET",
+    url: "/auth/email_validation",
+    data: { memberEmail: useremail },
+  });
+  return data;
 };
 
 // 인증코드 발송
 export const getSendCode = async (useremail: string) => {
-  try {
-    const { data }: AxiosResponse = await client.get("/auth/user_validation", {
-      memberEmail: useremail,
-    });
-    return data;
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      console.log("코드 발송 api 에러", error);
-    }
-  }
+  const { data }: AxiosResponse = await client({
+    method: "GET",
+    url: "/auth/user_validation",
+    data: { memberEmail: useremail },
+  });
+  return data;
 };
 
 // 인증코드 확인
 export const getConfirmCode = async (useremail: string, code: number) => {
-  try {
-    const { data }: AxiosResponse = await client.get("/auth/code", {
-      memberEmail: useremail,
-      code,
-    });
-    return data;
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      console.log("인증코드 확인 api 에러", error);
-    }
-  }
+  const { data }: AxiosResponse = await client({
+    method: "GET",
+    url: "/auth/code",
+    data: { memberEmail: useremail, code },
+  });
+  return data;
 };
 
 // 비밀번호 변경

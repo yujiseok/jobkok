@@ -7,10 +7,12 @@ import { ReactComponent as IconChevronLeft } from "@/assets/svg/chevron-left.svg
 import { ReactComponent as IconEdit } from "@/assets/svg/edit-icon.svg";
 import { KEYWORDS_CHECK } from "@/constants/applicant";
 import { ADD_INFO } from "@/constants/formNew";
+// import Toast from "@components/Common/Toast";
 import ContentsBox from "@components/NewForm/ContentsBox";
 import EditTypeBadge from "@components/NewForm/EditTypeBadge";
 import ProcessBadge from "@components/NewForm/ProcessBadge";
 import RequiredBadge from "@components/NewForm/RequiredBadge";
+import SaveModal from "@components/NewForm/SaveModal";
 
 const schema = z.object({
   formTitle: z.string().nonempty(),
@@ -18,6 +20,8 @@ const schema = z.object({
   interviewStartPeriod: z.string().nonempty(),
   interviewEndPeriod: z.string().nonempty(),
   applicationPeriod: z.string().nonempty(),
+  question: z.string().nonempty(),
+  agree: z.boolean().refine((val) => val),
 });
 
 type IRecuiteForm = z.infer<typeof schema>;
@@ -25,13 +29,11 @@ type IRecuiteForm = z.infer<typeof schema>;
 const NewForm = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(0);
+  const [isSaveModal, setIsSaveModal] = useState(false);
   const {
     register,
     handleSubmit,
-    watch,
-    setFocus,
-    getValues,
-    formState: { errors, isSubmitting, isValid },
+    formState: { isValid },
   } = useForm<IRecuiteForm>({
     mode: "onChange",
     resolver: zodResolver(schema),
@@ -55,12 +57,14 @@ const NewForm = () => {
   // 폼 제출 : 인증됐으면 페이지이동, 안됐으면 인증코드에 focus
   const onSubmit = async (data: IRecuiteForm) => {
     console.log(data);
+    setIsSaveModal(true);
   };
 
-  console.log(activeTab);
-
   return (
-    <div className="px-[56px] pb-[164px] pt-0">
+    <form
+      className="px-[56px] pb-[164px] pt-0"
+      onSubmit={handleSubmit(onSubmit)}
+    >
       {/* 최상단 */}
       <div className="mb-[63px] flex justify-between">
         <IconChevronLeft onClick={handleBackBtn} />
@@ -97,6 +101,7 @@ const NewForm = () => {
           </button>
         </div>
       </div>
+      {/* 메인 내용 */}
       <div className="mb-10 flex flex-col gap-6">
         <ContentsBox className="h-[71px] gap-6">
           <h3 className="SubHead1Semibold text-gray-800">생성된 지원서 링크</h3>
@@ -105,10 +110,7 @@ const NewForm = () => {
           </p>
         </ContentsBox>
         <ContentsBox>
-          <form
-            className="flex flex-col gap-4"
-            onSubmit={handleSubmit(onSubmit)}
-          >
+          <div className="flex flex-col gap-4">
             <fieldset className="flex items-center gap-6">
               <label
                 className="SubHead1Semibold w-[116px] text-gray-800"
@@ -156,7 +158,7 @@ const NewForm = () => {
                 {...register("applicationPeriod")}
               />
             </fieldset>
-          </form>
+          </div>
         </ContentsBox>
         <ContentsBox className="flex flex-col items-baseline gap-4">
           <h3 className="SubHead1Semibold text-gray-800">인재 필수 수집정보</h3>
@@ -201,10 +203,27 @@ const NewForm = () => {
                 );
               })}
             </ul>
-            <div>{ADD_INFO[activeTab].content}</div>
+            <div>
+              {ADD_INFO[activeTab].content}
+              {ADD_INFO[activeTab].title === "자기소개" && (
+                <>
+                  <label htmlFor="question">
+                    기업이 원하는 자기소개 주제를 적어주세요.
+                  </label>
+                  <input
+                    className="input border border-gray-900"
+                    type="text"
+                    id="question"
+                    placeholder="ex) 지원동기를 포함하여 자기소개를 적어주세요."
+                    {...register("question")}
+                  />
+                </>
+              )}
+            </div>
           </div>
         </div>
       </div>
+      {/* 추천인재키워드 */}
       <ContentsBox className="mb-[52px] flex flex-col gap-8 py-[68px]">
         <div className="flex flex-col items-center gap-3">
           <h3 className="Head4Semibold text-black">추천 인재 키워드</h3>
@@ -224,6 +243,7 @@ const NewForm = () => {
           ))}
         </div>
       </ContentsBox>
+      {/* 약관 동의 */}
       <div className="flex flex-col items-center justify-center gap-[29px]">
         <div className="flex gap-2">
           <label
@@ -233,18 +253,25 @@ const NewForm = () => {
             기본설정 외에 입력하신 채용 공고가 다른 기업에게 노출될 수 있다는
             사실에 동의합니다.
           </label>
-          <input className="order-1" type="checkbox" id="agree" />
+          <input
+            className="order-1"
+            type="checkbox"
+            id="agree"
+            {...register("agree")}
+          />
         </div>
       </div>
+      {/* 제출완료 버튼 */}
       <button
-        className="SubHead1Semibold h-11 w-[106px] rounded-lg bg-gray-200 px-6 py-2.5 text-gray-0"
         type="submit"
-        onClick={handleSubmit(onSubmit)}
-        disabled={isSubmitting}
+        className={`SubHead1Semibold btn h-11 w-[106px] cursor-pointer rounded-lg px-6 py-2.5 text-gray-0 ${
+          isValid ? "bg-blue-500" : "bg-gray-200"
+        }`}
       >
         작성완료
       </button>
-    </div>
+      {isSaveModal && <SaveModal setIsSaveModal={setIsSaveModal} />}
+    </form>
   );
 };
 export default NewForm;

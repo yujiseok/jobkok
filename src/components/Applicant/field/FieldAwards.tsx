@@ -1,7 +1,8 @@
 import { useFormContext } from "react-hook-form";
+import type { IHandleKeyDown } from "@/types/application";
 import FieldInputBox from "../FieldInputBox";
 
-const FieldAwards = ({ handleKeyDown }: any) => {
+const FieldAwards = ({ handleKeyDown }: IHandleKeyDown) => {
   const {
     register,
     formState: { errors },

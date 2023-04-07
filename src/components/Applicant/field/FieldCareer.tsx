@@ -1,7 +1,8 @@
 import { useFormContext } from "react-hook-form";
+import type { IHandleKeyDown } from "@/types/application";
 import FieldInputBox from "@components/Applicant/FieldInputBox";
 
-const FieldCareer = ({ handleKeyDown }: any) => {
+const FieldCareer = ({ handleKeyDown }: IHandleKeyDown) => {
   const {
     register,
     watch,

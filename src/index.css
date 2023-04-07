@@ -153,7 +153,7 @@ a {
   }
 
   .applicant-field-box {
-    @apply flex flex-col gap-6 rounded-lg border border-gray-50 bg-gray-0 px-[42px] py-8;
+    @apply flex min-w-[777px] flex-col gap-6 rounded-lg border border-gray-50 bg-gray-0 px-[42px] py-8;
   }
 
   .applicant-field-textarea-div {

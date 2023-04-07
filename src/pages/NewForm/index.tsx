@@ -7,7 +7,7 @@ import { ReactComponent as IconChevronLeft } from "@/assets/svg/chevron-left.svg
 import { ReactComponent as IconEdit } from "@/assets/svg/edit-icon.svg";
 import { KEYWORDS_CHECK } from "@/constants/applicant";
 import { ADD_INFO } from "@/constants/formNew";
-// import Toast from "@components/Common/Toast";
+import ModalForLater from "@components/Common/ModalForLater";
 import ContentsBox from "@components/NewForm/ContentsBox";
 import EditTypeBadge from "@components/NewForm/EditTypeBadge";
 import ProcessBadge from "@components/NewForm/ProcessBadge";
@@ -44,11 +44,6 @@ const NewForm = () => {
     navigate("/form");
   };
 
-  // 임시저장
-  const handleTempSaveBtn = () => {
-    confirm("해당 기능은 개발 예정인 기능입니다.");
-  };
-
   // 삭제
   const handleDelBtn = () => {
     navigate("/form");
@@ -67,7 +62,7 @@ const NewForm = () => {
     >
       {/* 최상단 */}
       <div className="mb-[63px] flex justify-between">
-        <IconChevronLeft onClick={handleBackBtn} />
+        <IconChevronLeft className="cursor-pointer" onClick={handleBackBtn} />
         <div className="flex justify-center gap-3">
           <ProcessBadge>채용진행중</ProcessBadge>
           <EditTypeBadge>SELF</EditTypeBadge>
@@ -85,13 +80,12 @@ const NewForm = () => {
           </div>
         </div>
         <div>
-          <button
-            className="SubHead1Semibold mr-4 rounded-lg bg-blue-50 py-2.5 px-6 text-blue-400"
-            type="button"
-            onClick={handleTempSaveBtn}
+          <label
+            htmlFor="tempsave-modal"
+            className="SubHead1Semibold mr-4 cursor-pointer rounded-lg bg-blue-50 py-2.5 px-6 text-blue-400"
           >
             임시저장
-          </button>
+          </label>
           <button
             className="SubHead1Semibold rounded-lg bg-error-50 py-2.5 px-6 text-error-400"
             type="button"
@@ -224,7 +218,7 @@ const NewForm = () => {
         </div>
       </div>
       {/* 추천인재키워드 */}
-      <ContentsBox className="mb-[52px] flex flex-col gap-8 py-[68px]">
+      <ContentsBox className="mb-[52px] flex flex-col items-center gap-8 py-[68px]">
         <div className="flex flex-col items-center gap-3">
           <h3 className="Head4Semibold text-black">추천 인재 키워드</h3>
           <p className="SubHead2Medium text-gray-400">
@@ -260,17 +254,19 @@ const NewForm = () => {
             {...register("agree")}
           />
         </div>
+        {/* 제출완료 버튼 */}
+        <button
+          type="submit"
+          className={`SubHead1Semibold btn h-11 w-[106px] cursor-pointer rounded-lg border-transparent px-6 py-2.5 text-gray-0 ${
+            isValid ? "bg-blue-500" : "bg-gray-200"
+          }`}
+        >
+          작성완료
+        </button>
       </div>
-      {/* 제출완료 버튼 */}
-      <button
-        type="submit"
-        className={`SubHead1Semibold btn h-11 w-[106px] cursor-pointer rounded-lg px-6 py-2.5 text-gray-0 ${
-          isValid ? "bg-blue-500" : "bg-gray-200"
-        }`}
-      >
-        작성완료
-      </button>
+
       {isSaveModal && <SaveModal setIsSaveModal={setIsSaveModal} />}
+      <ModalForLater id={"tempsave-modal"} />
     </form>
   );
 };

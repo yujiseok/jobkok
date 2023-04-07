@@ -53,7 +53,7 @@ const Notification = () => {
     useSearchTalent(recruitId);
 
   //폼과 절차에 따라 인재 목록 보여주기
-  const allTalent = useAllTalentQuery(recruitId, applyProcedure);
+  const allTalent = useGetTalentQuery(recruitId, applyProcedure);
 
   const handleChangeStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setRecruitId(e.target.value);

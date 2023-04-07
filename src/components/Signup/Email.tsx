@@ -54,6 +54,7 @@ const Email = ({ setStep }: Props) => {
 
   // 이메일 중복 확인
   const handleConfirmEmail = async (data: any) => {
+    setIsConfirmed(true);
     const res = await postEmailCheck(data.useremail);
     if (errors.useremail) {
       return;

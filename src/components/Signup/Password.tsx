@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import * as z from "zod";
 import { ReactComponent as Bluelogo } from "@/assets/svg/blue-logo.svg";
 import { ReactComponent as Arrow } from "@/assets/svg/chevron-right.svg";
@@ -8,6 +9,7 @@ import { ReactComponent as Eyeclose } from "@/assets/svg/eye-close.svg";
 import { ReactComponent as Eyeopen } from "@/assets/svg/eye-open.svg";
 import { ReactComponent as Check } from "@/assets/svg/round-check.svg";
 import { PW_REGEX } from "@/constants/signup";
+import { fillPassword } from "@/features/signUpSlice";
 import type { IShowPw } from "@pages/SignIn";
 
 type Props = {
@@ -32,14 +34,14 @@ export const schema = z
     path: ["confirmPassword"],
   });
 
-export type NewUser = z.infer<typeof schema>;
+type NewUser = z.infer<typeof schema>;
 
 const Password = ({ setStep }: Props) => {
-  const [isConfirmed, setIsConfirmed] = useState(false);
   const [showPw, setShowPw] = useState<IShowPw>({
     type: "password",
     visible: false,
   });
+  const dispatch = useDispatch();
 
   const {
     register,
@@ -48,11 +50,13 @@ const Password = ({ setStep }: Props) => {
     getValues,
     formState: { errors, isSubmitting },
   } = useForm<NewUser>({
+    mode: "onChange",
     resolver: zodResolver(schema),
   });
   const onSubmit = (data: NewUser) => {
-    // 회원가입 api 수정 예정
+    dispatch(fillPassword(data.password));
     console.log(data);
+    setStep(3);
   };
 
   const handleToggle = (e: any) => {
@@ -63,12 +67,6 @@ const Password = ({ setStep }: Props) => {
       }
       return { type: "password", visible: false };
     });
-  };
-
-  const handleSetPassword = () => {
-    if (!isConfirmed) {
-      setStep(3);
-    }
   };
 
   return (
@@ -111,7 +109,13 @@ const Password = ({ setStep }: Props) => {
                 ) : null}
               </button>
             </div>
-            <div className="Caption1Medium mb-6 text-gray-400">
+            <div
+              className={`Caption1Medium mb-6 ${
+                !errors.password && getValues("password")
+                  ? "text-blue-500"
+                  : "text-gray-400"
+              }`}
+            >
               8~20자의 영문 대/소문자, 숫자, 특수문자 중 2가지 조합
             </div>
           </div>
@@ -121,7 +125,7 @@ const Password = ({ setStep }: Props) => {
           <div className="flex flex-col">
             <div
               className={`flex h-[51px] w-[430px] items-center rounded-lg border border-solid bg-gray-0 px-6 after:text-gray-300 ${
-                errors.password
+                errors.confirmPassword
                   ? "border-error-400"
                   : "border-gray-100 focus-within:border-blue-400"
               }`}
@@ -150,10 +154,11 @@ const Password = ({ setStep }: Props) => {
           </span>
         </div>
         <button
-          className="SubHead1Semibold my-5 mb-12 h-[48px] w-[430px] self-center rounded-lg bg-blue-50 text-blue-400"
+          className={`SubHead1Semibold my-5 mb-12 h-[48px] w-[430px] self-center rounded-lg text-gray-0 ${
+            getValues("confirmPassword") ? "bg-blue-500" : "bg-gray-200"
+          }`}
           type="submit"
           disabled={isSubmitting}
-          onClick={handleSetPassword}
         >
           다음으로
         </button>

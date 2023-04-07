@@ -7,7 +7,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const handleLogout = async () => {
     const res = await postLogout();
-    if (res.message === "로그아웃 되었습니다.") {
+    if (res.state === 200) {
       navigate("/sign-in");
     }
   };
@@ -99,6 +99,6 @@ export default Navbar;
 const NavItems = [
   { name: "인재 관리", href: "/talent/management" },
   { name: "탈락 인재 보관함", href: "/talent/fail" },
-  { name: "폼 링크 관리", href: "/form/new" },
+  { name: "폼 링크 관리", href: "/form" },
   { name: "알림 센터", href: "/notification" },
 ];

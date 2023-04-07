@@ -1,38 +1,106 @@
 import type { AxiosResponse } from "axios";
-import { auth } from "./axios";
+import { AxiosError } from "axios";
+import { client } from "./axios";
+
+client.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
 export const postSignIn = async (useremail: string, password: string) => {
   try {
-    const { data }: AxiosResponse = await auth({
-      // post 확인 후 수정 필요
-      method: "GET",
-      url: "auth/login",
-      data: {
-        memberEmail: useremail,
-        password,
-      },
+    const { data }: AxiosResponse = await client.post("/auth/login", {
+      memberEmail: useremail,
+      password,
     });
     localStorage.clear();
-    if (data.message === "로그인에 성공했습니다.") {
+    if (data.state === 200) {
       localStorage.setItem("token", data.data.accessToken);
     }
     return data;
-  } catch (error: any) {
-    console.log("로그인 api 에러", error);
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      console.log("로그인 api 에러", error);
+    }
   }
 };
 
 export const postLogout = async () => {
   try {
-    const { data }: AxiosResponse = await auth({
-      method: "POST",
-      url: "auth/logout",
-    });
-    if (data.message === "로그아웃 되었습니다.") {
+    const { data }: AxiosResponse = await client.post("/auth/logout", {});
+    if (data.state === 200) {
       localStorage.removeItem("token");
     }
     return data;
-  } catch (error: any) {
-    console.log("로그아웃 api 에러", error);
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      console.log("로그아웃 api 에러", error);
+    }
+  }
+};
+
+export const postSignUp = async (
+  useremail: string,
+  password: string,
+  phone: string,
+  companyName: string,
+  ceo: string,
+  registration: string,
+) => {
+  try {
+    const { data }: AxiosResponse = await client.post("/auth/signup", {
+      memberEmail: useremail,
+      password,
+      memberPhone: phone,
+      companyNum: registration,
+      companyName,
+      ceoName: ceo,
+    });
+    return data;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      console.error("회원가입 api 에러", error);
+    }
+  }
+};
+
+// 아이디 중복체크 get / post 확인 필요!
+export const postEmailCheck = async (useremail: string) => {
+  try {
+    const { data }: AxiosResponse = await client.post(
+      "/auth/email_validation",
+      {
+        memberEmail: useremail,
+      },
+    );
+    return data;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      console.log("이메일 중복확인 api 에러", error);
+    }
+  }
+};
+
+// 비밀번호 변경
+export const putResetPassword = async (
+  useremail: string,
+  password: string,
+  confirmPassword: string,
+) => {
+  try {
+    const { data }: AxiosResponse = await client.put("/auth/reset_password", {
+      memberEmail: useremail,
+      newPassword: password,
+      passwordCheck: confirmPassword,
+    });
+
+    return data;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      console.log("비밀번호 변경 api 에러", error);
+    }
   }
 };

@@ -8,7 +8,6 @@ import { postSignIn } from "@/api/auth";
 import { ReactComponent as Bluelogo } from "@/assets/svg/blue-logo.svg";
 import { ReactComponent as Eyeclose } from "@/assets/svg/eye-close.svg";
 import { ReactComponent as Eyeopen } from "@/assets/svg/eye-open.svg";
-import { ReactComponent as Banner } from "@/assets/svg/jobkok-banner.svg";
 import { ReactComponent as Xicon } from "@/assets/svg/x-icon.svg";
 import { PW_REGEX } from "@/constants/signup";
 
@@ -18,7 +17,7 @@ export interface IShowPw {
 }
 
 // schema 유효성 검사
-const userSchema = z.object({
+export const userSchema = z.object({
   useremail: z
     .string()
     .min(1, "이메일을 입력해 주세요.")
@@ -84,17 +83,16 @@ const SignIn = () => {
 
   const onSubmit = async (data: User) => {
     const res = await postSignIn(data.useremail, data.password);
-    if (res.message === "로그인에 성공했습니다.") {
+    if (res.state === 200) {
       navigate("/");
     } else {
       setIsFail(true);
     }
-    console.log(data);
   };
 
   return (
-    <div className="flex h-full bg-gray-0">
-      <div className="my-[68px] mx-[195px] flex w-4/5 justify-center">
+    <div className="flex h-screen justify-center p-16">
+      <div className="w-[430px]">
         <div>
           <Bluelogo className="mb-[52px]" />
           <p className="Head2Semibold mb-2 text-title-gray">로그인</p>
@@ -220,9 +218,6 @@ const SignIn = () => {
             </Link>
           </div>
         </div>
-      </div>
-      <div>
-        <Banner />
       </div>
     </div>
   );

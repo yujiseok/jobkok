@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
 import { handleCopyClipBoard } from "@/lib/utils/copyClipboard";
 
-const SaveModal = ({ setIsSaveModal }: any) => {
+interface IProps {
+  setIsSaveModal: React.Dispatch<React.SetStateAction<boolean>>;
+}
+const SaveModal = ({ setIsSaveModal }: IProps) => {
   const handleCopyBtn = () => {
     handleCopyClipBoard("https://jobkok.netlify.app/talent/management");
     setIsSaveModal(false);

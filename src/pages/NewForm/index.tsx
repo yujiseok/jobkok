@@ -29,7 +29,7 @@ type IRecuiteForm = z.infer<typeof schema>;
 const NewForm = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(0);
-  const [isSaveModal, setIsSaveModal] = useState(false);
+  const [isSaveModal, setIsSaveModal] = useState<boolean>(false);
   const {
     register,
     handleSubmit,

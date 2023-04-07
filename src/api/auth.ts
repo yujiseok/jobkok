@@ -1,23 +1,27 @@
 import type { AxiosResponse } from "axios";
 import { AxiosError } from "axios";
-import { auth } from "./axios";
+import { client } from "./axios";
+
+client.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
 export const postSignIn = async (useremail: string, password: string) => {
   try {
-    const { data }: AxiosResponse = await auth({
-      method: "POST",
-      url: "auth/login",
-      data: {
-        memberEmail: useremail,
-        password,
-      },
+    const { data }: AxiosResponse = await client.post("/auth/login", {
+      memberEmail: useremail,
+      password,
     });
     localStorage.clear();
-    if (data.message === "로그인에 성공했습니다.") {
+    if (data.state === 200) {
       localStorage.setItem("token", data.data.accessToken);
     }
     return data;
-  } catch (error: any) {
+  } catch (error) {
     if (error instanceof AxiosError) {
       console.log("로그인 api 에러", error);
     }
@@ -26,11 +30,8 @@ export const postSignIn = async (useremail: string, password: string) => {
 
 export const postLogout = async () => {
   try {
-    const { data }: AxiosResponse = await auth({
-      method: "POST",
-      url: "auth/logout",
-    });
-    if (data.message === "로그아웃 되었습니다.") {
+    const { data }: AxiosResponse = await client.post("/auth/logout", {});
+    if (data.state === 200) {
       localStorage.removeItem("token");
     }
     return data;
@@ -50,17 +51,13 @@ export const postSignUp = async (
   registration: string,
 ) => {
   try {
-    const { data }: AxiosResponse = await auth({
-      method: "POST",
-      url: "auth/signup",
-      data: {
-        memberEmail: useremail,
-        password,
-        memberPhone: phone,
-        companyNum: registration,
-        companyName,
-        ceoName: ceo,
-      },
+    const { data }: AxiosResponse = await client.post("/auth/signup", {
+      memberEmail: useremail,
+      password,
+      memberPhone: phone,
+      companyNum: registration,
+      companyName,
+      ceoName: ceo,
     });
     return data;
   } catch (error) {
@@ -73,14 +70,12 @@ export const postSignUp = async (
 // 아이디 중복체크 get / post 확인 필요!
 export const postEmailCheck = async (useremail: string) => {
   try {
-    const { data }: AxiosResponse = await auth({
-      method: "GET",
-      url: "auth/email_validation",
-      data: {
+    const { data }: AxiosResponse = await client.post(
+      "/auth/email_validation",
+      {
         memberEmail: useremail,
       },
-    });
-    // 성공 data.message : 중복된 이메일이 존재하지 않습니다.
+    );
     return data;
   } catch (error) {
     if (error instanceof AxiosError) {
@@ -96,18 +91,14 @@ export const putResetPassword = async (
   confirmPassword: string,
 ) => {
   try {
-    const { data }: AxiosResponse = await auth({
-      method: "PUT",
-      url: "auth/reset_password",
-      data: {
-        memberEmail: useremail,
-        newPassword: password,
-        passwordCheck: confirmPassword,
-      },
+    const { data }: AxiosResponse = await client.put("/auth/reset_password", {
+      memberEmail: useremail,
+      newPassword: password,
+      passwordCheck: confirmPassword,
     });
-    // 성공 data.message: 비밀번호를 변경하였습니다
+
     return data;
-  } catch (error: any) {
+  } catch (error) {
     if (error instanceof AxiosError) {
       console.log("비밀번호 변경 api 에러", error);
     }

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import * as z from "zod";
+import { newRecuitForm } from "@/api/form";
 import { ReactComponent as IconChevronLeft } from "@/assets/svg/chevron-left.svg";
 import { ReactComponent as IconEdit } from "@/assets/svg/edit-icon.svg";
 import { KEYWORDS_CHECK } from "@/constants/applicant";
@@ -15,12 +16,12 @@ import RequiredBadge from "@components/NewForm/RequiredBadge";
 import SaveModal from "@components/NewForm/SaveModal";
 
 const schema = z.object({
-  formTitle: z.string().nonempty(),
-  applicationTitle: z.string().nonempty(),
-  interviewStartPeriod: z.string().nonempty(),
-  interviewEndPeriod: z.string().nonempty(),
-  applicationPeriod: z.string().nonempty(),
-  question: z.string().nonempty(),
+  title: z.string().nonempty(),
+  contents: z.string().nonempty(),
+  meetStart: z.string().nonempty(),
+  meetEnd: z.string().nonempty(),
+  docsEnd: z.string().nonempty(),
+  resumeTitle: z.string().nonempty(),
   agree: z.boolean().refine((val) => val),
 });
 
@@ -49,6 +50,21 @@ const NewForm = () => {
     navigate("/form");
   };
 
+  // const { agree, docsEnd, meetEnd, meetStart, ...rest } = data;
+  // const convertData = {
+  //   ...rest,
+  //   type: true,
+  //   docsEnd: "2023-03-31T00:00:00",
+  //   docsStart: "2023-03-31T00:00:00",
+  //   meetEnd: "2023-03-31T00:00:00",
+  //   meetStart: "2023-03-31T00:00:00",
+  //   ongoing: true,
+  //   keywordStandard:
+  //     "센스있어요, 꼼꼼해요, 잘 웃어요, 원칙적이에요, 습득력이 좋아요",
+  //   confirmStart: "2024-11-21T00:00:00",
+  //   confirmEnd: "2024-12-01T00:00:00",
+  // };
+
   // 폼 제출 : 인증됐으면 페이지이동, 안됐으면 인증코드에 focus
   const onSubmit = async (data: IRecuiteForm) => {
     console.log(data);
@@ -71,9 +87,9 @@ const NewForm = () => {
               <input
                 className="Head3Semibold h-[46px] min-w-[420px] rounded-lg border border-gray-100 bg-gray-0 py-3.5 px-2 text-center text-gray-800"
                 type="text"
-                id="formTitle"
+                id="title"
                 placeholder="폼 이름을 입력해주세요."
-                {...register("formTitle")}
+                {...register("title")}
               />
             </h2>
             <IconEdit />
@@ -108,7 +124,7 @@ const NewForm = () => {
             <fieldset className="flex items-center gap-6">
               <label
                 className="SubHead1Semibold w-[116px] text-gray-800"
-                htmlFor="applicationTitle"
+                htmlFor="contents"
               >
                 지원서 이름
               </label>
@@ -117,8 +133,18 @@ const NewForm = () => {
                 type="text"
                 id="applicationTitle"
                 placeholder="인재에게 보일 지원서 이름을 작성해주세요."
-                {...register("applicationTitle")}
+                {...register("contents")}
               />
+            </fieldset>
+
+            <fieldset className="flex items-center gap-6">
+              <label
+                className="SubHead1Semibold w-[116px] text-gray-800"
+                htmlFor="docsEnd"
+              >
+                지원서 접수 마감일
+              </label>
+              <input type="date" id="docsEnd" {...register("docsEnd")} />
             </fieldset>
             <fieldset className="flex items-center gap-6">
               <label
@@ -127,30 +153,9 @@ const NewForm = () => {
               >
                 면접가능 기간
               </label>
-              <input
-                type="date"
-                id="interviewStartPeriod"
-                {...register("interviewStartPeriod")}
-              />
+              <input type="date" id="meetStart" {...register("meetStart")} />
               <span>~</span>
-              <input
-                type="date"
-                id="interviewEndPeriod"
-                {...register("interviewEndPeriod")}
-              />
-            </fieldset>
-            <fieldset className="flex items-center gap-6">
-              <label
-                className="SubHead1Semibold w-[116px] text-gray-800"
-                htmlFor="applicationPeriod"
-              >
-                지원서 접수 마감일
-              </label>
-              <input
-                type="date"
-                id="applicationPeriod"
-                {...register("applicationPeriod")}
-              />
+              <input type="date" id="meetEnd" {...register("meetEnd")} />
             </fieldset>
           </div>
         </ContentsBox>
@@ -201,15 +206,15 @@ const NewForm = () => {
               {ADD_INFO[activeTab].content}
               {ADD_INFO[activeTab].title === "자기소개" && (
                 <>
-                  <label htmlFor="question">
+                  <label htmlFor="resumeTitle">
                     기업이 원하는 자기소개 주제를 적어주세요.
                   </label>
                   <input
                     className="input border border-gray-900"
                     type="text"
-                    id="question"
+                    id="resumeTitle"
                     placeholder="ex) 지원동기를 포함하여 자기소개를 적어주세요."
-                    {...register("question")}
+                    {...register("resumeTitle")}
                   />
                 </>
               )}

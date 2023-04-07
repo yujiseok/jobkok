@@ -13,13 +13,15 @@ import {
   PW_REGEX,
   REGISTRATION_REGEX,
 } from "@/constants/signup";
+// import { useTimer } from "@/lib/hooks/useTimer";
+import { useTimer } from "@/lib/hooks/useTimer";
 import { userSchema } from "@pages/SignIn";
 
 type Props = {
   setStep: React.Dispatch<React.SetStateAction<number>>;
 };
 
-const nschema = userSchema.extend({});
+const newSchema = userSchema.extend({});
 // schema 유효성 검사
 export const schema = z
   .object({
@@ -27,6 +29,10 @@ export const schema = z
       .string()
       .min(1, "이메일을 입력해 주세요.")
       .email("올바른 이메일 형식을 입력해 주세요."),
+    code: z
+      .string()
+      .min(1, "인증코드를 입력해 주세요")
+      .regex(/^\d{6}$/, "인증코드를 확인해 주세요"),
     password: z
       .string()
       .min(8, "비밀번호는 8자 이상 20자 이하로 입력해 주세요.")
@@ -59,6 +65,10 @@ export type NewUser = z.infer<typeof schema>;
 
 const Email = ({ setStep }: Props) => {
   const [isConfirmed, setIsConfirmed] = useState(false);
+  const [isClicked, setIsClicked] = useState(false);
+  const [isCodeConfirmed, setIsCodeConfirmed] = useState(false);
+  const { formattedTime, isCountingDown, setIsCountingDown, resetTime } =
+    useTimer(180000, false);
   const dispatch = useDispatch();
   const {
     register,
@@ -78,7 +88,7 @@ const Email = ({ setStep }: Props) => {
   // 이메일 중복 확인
   const handleConfirmEmail = async (data: any) => {
     const res = await postEmailCheck(data.useremail);
-    if (!getValues("useremail")) {
+    if (errors.useremail) {
       return;
     } else if (res.message === "중복된 이메일이 존재하지 않습니다.") {
       console.log(res);
@@ -87,14 +97,25 @@ const Email = ({ setStep }: Props) => {
   };
 
   // 인증번호 발송
-  const handleGetCode = () => {};
+  const handleGetCode = () => {
+    setIsClicked(true);
+    setIsCountingDown(true);
+  };
 
   // 인증번호 확인
-  const handleConfirmCode = () => {};
+  const handleConfirmCode = () => {
+    setIsCodeConfirmed(true);
+    if (!isCodeConfirmed) {
+      setIsCountingDown(false);
+      return alert("인증코드를 확인해 주세요");
+    } else {
+      setStep(2);
+    }
+  };
 
   return (
     <>
-      <button className="mb-[52px]">
+      <button className="mb-[52px] mt-12">
         <Bluelogo />
       </button>
       <p className="Head2Semibold mb-2 text-title-gray">회원가입</p>
@@ -104,7 +125,7 @@ const Email = ({ setStep }: Props) => {
       <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
         <label className="Caption1Medium mb-1 text-gray-300">이메일</label>
         {/* 이메일 입력칸 */}
-        <div className="mb-44">
+        <div className="mb-40">
           <div className="flex">
             <div
               className={`mr-3 flex h-[51px] w-[315px] items-center rounded-lg border border-solid bg-gray-0 px-6 after:text-gray-300 ${
@@ -141,29 +162,99 @@ const Email = ({ setStep }: Props) => {
                   : "text-blue-200"
               }`}
             >
-              <button disabled={isConfirmed} onClick={handleConfirmEmail}>
-                중복확인
+              <button
+                disabled={isConfirmed || !getValues("useremail")}
+                onClick={handleConfirmEmail}
+              >
+                {isClicked ? "재발송" : "중복확인"}
               </button>
             </div>
           </div>
           {/* 오류 메세지 띄우기 */}
-          {!getValues("useremail") && (
-            <span className="Caption1Medium text-error-400">
+          {
+            <span
+              className={`Caption1Medium text-error-400 ${
+                isConfirmed && "hidden"
+              }`}
+            >
               {errors?.useremail?.message}
             </span>
-          )}
+          }
           {isConfirmed && (
-            <span className="Caption1Medium text-blue-500">
-              사용가능한 이메일입니다
+            <span
+              className={`Caption1Medium ${
+                isClicked ? "text-gray-400" : "text-blue-500"
+              }`}
+            >
+              {isClicked
+                ? "이메일로 회원님의 인증코드가 발송되었습니다"
+                : "사용가능한 이메일입니다"}
             </span>
+          )}
+          {/* 인증코드 입력 칸 */}
+          {isClicked && (
+            <div className="pt-6">
+              <label
+                htmlFor="confirm-code"
+                className="Caption1Medium mb-2 text-gray-300"
+              >
+                인증코드
+              </label>
+              <div className="flex">
+                <div
+                  className={`mr-3 flex h-[51px] w-[315px] items-center rounded-lg border border-solid bg-gray-0 px-6 after:text-gray-300 ${
+                    errors.code
+                      ? "border-error-400"
+                      : "border-gray-100 focus-within:border-blue-400"
+                  }`}
+                >
+                  <input
+                    id="confirm-code"
+                    placeholder="6자리 인증코드를 입력해주세요"
+                    className="SubHead1Medium w-[365px] outline-none"
+                    maxLength={6}
+                    {...register("code", {
+                      required: true,
+                    })}
+                  />
+                  {isCountingDown && (
+                    <span className="SubHead1Medium text-error-400">
+                      {formattedTime}
+                    </span>
+                  )}
+                </div>
+                <div
+                  className={`SubHead1Semibold flex h-[51px] w-24 items-center justify-center rounded-lg bg-blue-50 ${
+                    getValues("code") ? "text-blue-400" : "text-blue-200"
+                  }`}
+                >
+                  <button onClick={handleConfirmCode}>인증하기</button>
+                </div>
+              </div>
+              <span className={`Caption1Medium text-error-400`}>
+                {errors?.code?.message}
+              </span>
+            </div>
           )}
         </div>
         {isConfirmed && (
           <button
-            className="SubHead1Semibold my-5 mb-12 h-[48px] w-[430px] self-center rounded-lg bg-blue-50 text-blue-400"
+            className={`SubHead1Semibold my-5 mb-12 h-[48px] w-[430px] self-center rounded-lg bg-blue-50 text-blue-400 ${
+              isClicked && "hidden"
+            }`}
             onClick={handleGetCode}
           >
             해당 이메일로 인증코드 발송
+          </button>
+        )}
+        {isClicked && (
+          <button
+            className={`SubHead1Semibold my-5 mb-12 h-[48px] w-[430px] self-center rounded-lg text-gray-0 ${
+              isCodeConfirmed ? "bg-blue-500" : "bg-gray-200"
+            }`}
+            onClick={handleConfirmCode}
+          >
+            다음으로
           </button>
         )}
       </form>

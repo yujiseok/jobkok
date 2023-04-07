@@ -181,10 +181,10 @@ a {
   }
 
   .submit-btn-active {
-    @apply SubHead1Semibold h-[56px] rounded-lg bg-blue-500 py-2.5 px-6 text-center text-gray-0 shadow-blue;
+    @apply h-[56px] rounded-lg bg-blue-500 py-2.5 px-6 text-center text-gray-0 shadow-blue;
   }
 
   .action-btn-aactive {
-    @apply SubHead1Semibold rounded-md bg-blue-50 py-2.5 px-6 text-blue-500;
+    @apply rounded-md bg-blue-50 py-2.5 px-6 text-blue-500;
   }
 }

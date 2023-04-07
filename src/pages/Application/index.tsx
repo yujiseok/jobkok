@@ -130,7 +130,10 @@ const Application = () => {
               </div>
             </dl>
           </div>
-          <button className="submit-btn-active mb-4 w-[284px]" type="submit">
+          <button
+            className="submit-btn-active SubHead1Semibold mb-4 w-[284px]"
+            type="submit"
+          >
             지원서 제출
           </button>
           <div className="applicant-aside-box mb-1 pt-2.5 pr-[28px] pl-6 pb-4">
@@ -196,7 +199,7 @@ const Application = () => {
           </FormProvider>
           <div className="mt-8 flex justify-between">
             <button
-              className="action-btn-aactive"
+              className="action-btn-aactive SubHead1Semibold"
               type="button"
               onClick={() => {
                 confirm(

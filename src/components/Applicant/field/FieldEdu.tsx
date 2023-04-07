@@ -1,8 +1,9 @@
 import { useFormContext } from "react-hook-form";
 import { EDULEVEL_OPTION, EDUSTATUS_OPTION } from "@/constants/applicant";
+import type { IHandleKeyDown } from "@/types/application";
 import FieldInputBox from "@components/Applicant/FieldInputBox";
 
-const FieldEdu = ({ handleKeyDown }: any) => {
+const FieldEdu = ({ handleKeyDown }: IHandleKeyDown) => {
   const {
     register,
     formState: { errors },

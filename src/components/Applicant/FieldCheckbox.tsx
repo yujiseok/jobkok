@@ -12,7 +12,7 @@ const FieldCheckbox = ({
   children?: React.ReactNode;
   className?: string;
   htmlFor: string;
-  inputValue: boolean;
+  inputValue?: boolean;
   content: string;
 }) => {
   const { register } = useFormContext();

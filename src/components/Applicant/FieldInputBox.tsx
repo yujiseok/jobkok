@@ -5,7 +5,7 @@ const FieldInputBox = ({
 }: {
   children: React.ReactNode;
   className?: string;
-  errors: any;
+  errors?: any;
 }) => {
   return (
     <span

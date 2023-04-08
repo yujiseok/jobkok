@@ -7,9 +7,18 @@ import { newRecuitForm } from "@/api/form";
 import { ReactComponent as IconChevronLeft } from "@/assets/svg/chevron-left.svg";
 import { ReactComponent as IconEdit } from "@/assets/svg/edit-icon.svg";
 import { KEYWORDS_CHECK } from "@/constants/applicant";
-import { ADD_INFO } from "@/constants/formNew";
 import { convertIsoDate } from "@/lib/utils/convertIsoDate";
 import type { IFormResponseData } from "@/types/form";
+
+import FieldAwards from "@components/Applicant/field/FieldAwards";
+import FieldCareer from "@components/Applicant/field/FieldCareer";
+import FieldCertificate from "@components/Applicant/field/FieldCertificate";
+import FieldCoverLetter from "@components/Applicant/field/FieldCoverLetter";
+import FieldEdu from "@components/Applicant/field/FieldEdu";
+import FieldLanguage from "@components/Applicant/field/FieldLanguage";
+import FieldLink from "@components/Applicant/field/FieldLink";
+import FieldPreference from "@components/Applicant/field/FieldPreference";
+
 import ModalForLater from "@components/Common/ModalForLater";
 import ContentsBox from "@components/NewForm/ContentsBox";
 import EditTypeBadge from "@components/NewForm/EditTypeBadge";
@@ -208,23 +217,7 @@ const NewForm = () => {
                 );
               })}
             </ul>
-            <div>
-              {ADD_INFO[activeTab].content}
-              {ADD_INFO[activeTab].title === "자기소개" && (
-                <>
-                  <label htmlFor="resumeTitle">
-                    기업이 원하는 자기소개 주제를 적어주세요.
-                  </label>
-                  <input
-                    className="input border border-gray-900"
-                    type="text"
-                    id="resumeTitle"
-                    placeholder="ex) 지원동기를 포함하여 자기소개를 적어주세요."
-                    {...register("resumeTitle")}
-                  />
-                </>
-              )}
-            </div>
+            <div>{ADD_INFO[activeTab].content}</div>
           </div>
         </div>
       </div>
@@ -284,3 +277,14 @@ const NewForm = () => {
   );
 };
 export default NewForm;
+
+const ADD_INFO = [
+  { title: "자기소개", content: <FieldCoverLetter /> },
+  { title: "경력", content: <FieldCareer /> },
+  { title: "최종학력", content: <FieldEdu /> },
+  { title: "자격증", content: <FieldCertificate /> },
+  { title: "수상내역", content: <FieldAwards /> },
+  { title: "어학능력", content: <FieldLanguage /> },
+  { title: "기타이력서", content: <FieldLink /> },
+  { title: "취업우대사항", content: <FieldPreference /> },
+];

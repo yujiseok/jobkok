@@ -15,10 +15,10 @@ import { client } from "./axios";
 // jwt 인증 필요
 
 // 채용폼 목록조회
-export const getFormList = async (status: string) => {
+export const getFormList = async () => {
   const res = await client({
     method: "GET",
-    url: `recruit/?status=${status}`,
+    url: "recruit/?status=true",
   });
 
   const data: IResponse<IFormData[]> = res.data;

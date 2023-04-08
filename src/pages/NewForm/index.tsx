@@ -9,6 +9,7 @@ import { ReactComponent as IconEdit } from "@/assets/svg/edit-icon.svg";
 import { KEYWORDS_CHECK } from "@/constants/applicant";
 import { ADD_INFO } from "@/constants/formNew";
 import { convertIsoDate } from "@/lib/utils/convertIsoDate";
+import type { IFormResponseData } from "@/types/form";
 import ModalForLater from "@components/Common/ModalForLater";
 import ContentsBox from "@components/NewForm/ContentsBox";
 import EditTypeBadge from "@components/NewForm/EditTypeBadge";
@@ -31,6 +32,7 @@ type IRecuiteForm = z.infer<typeof schema>;
 const NewForm = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(0);
+  const [registerData, setRegisterData] = useState<IFormResponseData>();
   const [isSaveModal, setIsSaveModal] = useState<boolean>(false);
   const {
     register,
@@ -67,7 +69,8 @@ const NewForm = () => {
       confirmStart: "2023-06-05T00:00:00",
       confirmEnd: "2023-06-05T00:00:00",
     };
-    newRecuitForm(convertData);
+    const res = await newRecuitForm(convertData);
+    setRegisterData(res.data);
     setIsSaveModal(true);
   };
 
@@ -273,7 +276,9 @@ const NewForm = () => {
         </button>
       </div>
 
-      {isSaveModal && <SaveModal setIsSaveModal={setIsSaveModal} />}
+      {isSaveModal && (
+        <SaveModal setIsSaveModal={setIsSaveModal} apiData={registerData} />
+      )}
       <ModalForLater id={"tempsave-modal"} />
     </form>
   );

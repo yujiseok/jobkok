@@ -187,7 +187,11 @@ const router: RemixRouter = createBrowserRouter([
       },
       {
         path: "/notification",
-        element: <Notification />,
+        element: (
+          <Suspense fallback={<Spinner />}>
+            <Notification />,
+          </Suspense>
+        ),
       },
       {
         path: "/talent",

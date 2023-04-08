@@ -7,11 +7,11 @@ const config: AxiosRequestConfig = {
 
 export const client = axios.create(config);
 
-const { accessToken, refreshToken } = JSON.parse(
-  localStorage.getItem("token") || "{}",
-);
 client.interceptors.request.use((config) => {
+  const { accessToken } = JSON.parse(localStorage.getItem("token") || "{}");
   if (!config.headers) return config;
+
+  console.log(config);
 
   if (accessToken !== null) {
     config.headers.Authorization = `Bearer ${accessToken}`;
@@ -22,12 +22,14 @@ client.interceptors.request.use((config) => {
 client.interceptors.response.use(
   (response) => response,
   async (error) => {
+    const { refreshToken } = JSON.parse(localStorage.getItem("token") || "{}");
     const { config, response } = error;
 
     const status = response.status;
 
+    console.log(error);
     if (status === 400) {
-      const res = await axios({
+      const res = await client({
         method: "POST",
         url: "https://jobkok.shop/auth/reissue",
         headers: {

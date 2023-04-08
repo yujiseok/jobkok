@@ -11,13 +11,13 @@ import useGetTalentQuery from "@/lib/hooks/useGetTalentQuery";
 import useInputLength from "@/lib/hooks/useInputLength";
 import usePagination from "@/lib/hooks/usePagination";
 import useSearchTalent from "@/lib/hooks/useSearchTalent";
-import useSelectForm from "@/lib/hooks/useSelectForm";
 import formatDate from "@/lib/utils/formatDate";
 import makeString from "@/lib/utils/makeString";
 import Banner from "@components/Common/Banner";
 import BlueBadge from "@components/Notification/BlueBadge";
 import PurpleBadge from "@components/Notification/Purplebadge";
 import RedBadge from "@components/Notification/RedBadge";
+import useSelectForm from "@/lib/hooks/useSelectForm";
 
 type FormValues = {
   mailContent: string;

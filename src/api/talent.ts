@@ -1,5 +1,7 @@
 import type { QueryFunctionContext } from "@tanstack/react-query";
 import type { AxiosResponse } from "axios";
+import { AxiosError } from "axios";
+import ceilPage from "@/lib/utils/ceilPage";
 import type {
   IEditSuccess,
   IFailedTalent,
@@ -16,14 +18,21 @@ import { client } from "./axios";
 
 // 채용폼 목록조회
 export const getFormList = async () => {
-  const res = await client({
-    method: "GET",
-    url: "recruit/?status=true",
-  });
+  try {
+    const res = await client({
+      method: "GET",
+      url: "/recruit/?status=true",
+    });
 
-  const data: IResponse<IFormData[]> = res.data;
+    const data: IResponse<IFormData[]> = res.data;
+    return data;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      const data: IResponse<null> = error.response?.data;
 
-  return data;
+      return data;
+    }
+  }
 };
 
 // 인재현황
@@ -40,15 +49,22 @@ export const getStatus = async (recruitId: string) => {
 
 // 전체 지원자 조회
 export const getAllTalent = async (recruitId: string) => {
-  console.log(recruitId);
-  const res = await client({
-    method: "GET",
-    url: `manage/${recruitId}`,
-  });
+  try {
+    const res = await client({
+      method: "GET",
+      url: `manage/${recruitId}`,
+    });
 
-  const data: IResponse<ITalent[]> = res.data;
+    const data: IResponse<ITalent[]> = res.data;
 
-  return data;
+    return data;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      const data: IResponse<null> = error.response?.data;
+
+      return data;
+    }
+  }
 };
 
 // 단계별 인재 조회
@@ -56,12 +72,22 @@ export const getTalentByProcedure = async (
   recruitId: string,
   applyProcedure: string,
 ) => {
-  const { data }: AxiosResponse<ITalentWithCount[]> = await client({
-    method: "GET",
-    url: `manage/${recruitId}/${applyProcedure}`,
-  });
+  try {
+    const res = await client({
+      method: "GET",
+      url: `manage/${recruitId}/${applyProcedure}`,
+    });
 
-  return data;
+    const data: IResponse<ITalentWithCount[]> = res.data;
+
+    return data;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      const data: IResponse<null> = error.response?.data;
+
+      return data;
+    }
+  }
 };
 
 // 지원자 채용단계 변경
@@ -99,30 +125,37 @@ export const getRegisteredForm = async (page: string) => {
 
 // 탈락 인재 조회
 export const getFailedTalent = async ({ queryKey }: QueryFunctionContext) => {
-  const [_, recruitId, page, filter] = queryKey;
+  try {
+    const [_, recruitId, page, filter] = queryKey;
 
-  const res = await client({
-    method: "GET",
-    url: `/drop/view-applicant/${recruitId}?size=10&page=${page}`,
-  });
+    const res = await client({
+      method: "GET",
+      url: `/drop/view-applicant/${recruitId}?size=10&page=${page}`,
+    });
 
-  const totalPages: number = res.data.data.totalPages;
+    const totalPages: number = res.data.data.totalPages;
 
-  const data: IFailedTalent[] = res.data.data.content;
+    const data: IFailedTalent[] = res.data.data.content;
 
-  if (filter === "wish") {
-    const filteredData = data.filter((item) => item.wish === true);
+    if (filter === "wish") {
+      const filteredData = data.filter((item) => item.wish === true);
 
-    return { filteredData, totalPages: Math.floor(filteredData.length / 10) };
+      return { filteredData, totalPages: ceilPage(filteredData.length) };
+    }
+
+    if (filter === "applyDelete") {
+      const filteredData = data.filter((item) => item.applyDelete === true);
+
+      return { filteredData, totalPages: ceilPage(filteredData.length) };
+    }
+
+    return { data, totalPages };
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      const data: IResponse<null> = error.response?.data;
+      return { data, totalPages: 0 };
+    }
   }
-
-  if (filter === "applyDelete") {
-    const filteredData = data.filter((item) => item.applyDelete === true);
-
-    return { filteredData, totalPages: Math.floor(filteredData.length / 10) };
-  }
-
-  return { data, totalPages };
 };
 
 // 탈락 인재 검색

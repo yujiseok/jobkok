@@ -24,8 +24,8 @@ export interface IFormData {
 }
 
 export interface IStatus {
-  totalCount: string;
-  todayCount: string;
+  totalCount: number;
+  todayCount: number;
   process: string;
   processFinish: string;
 }
@@ -35,12 +35,14 @@ export interface ITalentBase {
   applyName: string;
   applyPhone: string;
   applyEmail: string;
-  applyProcedure: string | null;
+  applyProcedure: ProcedureType;
   applyDelete: boolean;
   createdTime: string;
   pass?: boolean;
   wish: boolean;
   keywords: string[];
+  keywordList: string[];
+  score: number;
 }
 
 export interface ITalent extends ITalentBase {
@@ -73,9 +75,14 @@ export interface IRegisteredForm {
   createdTime: string;
 }
 
-export interface IKanban {
-  [key: string]: any;
-  title: string;
-  id: string;
+export type ProcedureType = "서류제출" | "면접" | "최종조율";
+
+export type ProcedureStyle = Record<
+  ProcedureType,
+  { bgColor: string; textColor: string }
+>;
+
+export interface IKanbanBase {
+  title: ProcedureType;
   applicant: ITalent[];
 }

@@ -5,7 +5,7 @@ const useFormStatusQuery = (recruitId: string) => {
   const { data } = useQuery({
     queryKey: ["talentStatus", recruitId],
     queryFn: () => getStatus(recruitId),
-    suspense: true,
+    enabled: recruitId ? true : false,
   });
 
   return data;

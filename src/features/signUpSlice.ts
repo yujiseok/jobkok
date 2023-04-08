@@ -64,7 +64,7 @@ export const signUpSlice = createSlice({
           state.ceo,
           state.registration,
         );
-        console.log("res", res);
+        console.log("회원가입 res", res);
       } else {
         console.log("회원가입을 처음부터 진행해 주세요!");
       }

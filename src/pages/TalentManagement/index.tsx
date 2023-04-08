@@ -42,7 +42,7 @@ import { WhiteContainer } from "@components/Talent/WhiteContainer";
 const TalentManagement = () => {
   const { data: formData } = useQuery({
     queryKey: ["form"],
-    queryFn: () => getFormList("true"),
+    queryFn: () => getFormList(),
     suspense: true,
   });
 

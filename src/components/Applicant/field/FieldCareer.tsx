@@ -2,6 +2,8 @@ import { useFormContext } from "react-hook-form";
 import { useLocation } from "react-router-dom";
 import type { IHandleKeyDown } from "@/types/application";
 import FieldInputBox from "@components/Applicant/FieldInputBox";
+import FormBox from "@components/NewForm/FormBox";
+import FormInputBox from "@components/NewForm/FormInputBox";
 
 const FieldCareer = ({ handleKeyDown }: IHandleKeyDown) => {
   const location = useLocation();
@@ -84,56 +86,51 @@ const FieldCareer = ({ handleKeyDown }: IHandleKeyDown) => {
     );
   } else {
     return (
-      <div className="applicant-field-box">
+      <div className="form-field-box">
         <div className="applicant-filed-row">
-          <FieldInputBox>
+          <FormBox>
             <label className="applicant-field-label" htmlFor="careerName">
               일한곳
             </label>
-            <input
-              className="max-w-[210px] focus:outline-none"
+            <FormInputBox
+              className="max-w-[210px]"
               type="text"
               id="careerName"
-              maxLength={50}
-              placeholder="가장 관련있는 경력을 적어주세요."
             />
-          </FieldInputBox>
-          <FieldInputBox>
+          </FormBox>
+          <FormBox>
             <label
               className="applicant-field-label"
               htmlFor="careerPeriodStart"
             >
               시작일
             </label>
-            <input
-              className="max-w-[120px] focus:outline-none"
+            <FormInputBox
+              className="max-w-[120px]"
               type="date"
               id="careerPeriodStart"
-              onKeyDown={handleKeyDown}
             />
-          </FieldInputBox>
-          <FieldInputBox>
+          </FormBox>
+          <FormBox>
             <label className="applicant-field-label" htmlFor="careerPeriodEnd">
               마감일
             </label>
-            <input
-              className="max-w-[120px] focus:outline-none"
+            <FormInputBox
+              className="max-w-[120px]"
               type="date"
               id="careerPeriodEnd"
-              onKeyDown={handleKeyDown}
             />
-          </FieldInputBox>
+          </FormBox>
         </div>
-        <div className={`applicant-field-textarea-div border-gray-100`}>
+        <div className="applicant-field-textarea-div border-gray-100 bg-blue-25">
           <label className="applicant-field-label w-20" htmlFor="careerDetail">
             상세 내용
           </label>
-          <textarea
-            className="h-full w-full resize-none py-4 focus:outline-none"
+          <FormInputBox
+            className="h-full w-full resize-none bg-blue-25 py-4 focus:outline-none"
+            type="text"
             id="careerDetail"
-            placeholder="경력이 한개 이상일 경우, 일한 곳, 일한 기간, 상세 내용을 함께 적어주세요."
-            maxLength={1000}
-          ></textarea>
+          ></FormInputBox>
         </div>
         <div className="Caption1Medium mt-[-16px] text-gray-400">
           0/1000자(공백포함)

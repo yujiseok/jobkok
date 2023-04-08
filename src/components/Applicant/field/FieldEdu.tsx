@@ -2,6 +2,9 @@ import { useFormContext } from "react-hook-form";
 import { EDULEVEL_OPTION, EDUSTATUS_OPTION } from "@/constants/applicant";
 import type { IHandleKeyDown } from "@/types/application";
 import FieldInputBox from "@components/Applicant/FieldInputBox";
+import FormBox from "@components/NewForm/FormBox";
+import FormInputBox from "@components/NewForm/FormInputBox";
+import FormSelectBox from "@components/NewForm/FormSelectBox";
 
 const FieldEdu = ({ handleKeyDown }: IHandleKeyDown) => {
   if (location.pathname === "/applicant/application") {
@@ -105,37 +108,25 @@ const FieldEdu = ({ handleKeyDown }: IHandleKeyDown) => {
     );
   } else {
     return (
-      <div className="applicant-field-box">
+      <div className="form-field-box">
         <div className="applicant-filed-row">
-          <FieldInputBox>
+          <FormBox>
             <label className="applicant-field-label" htmlFor="eduName">
               학교명
             </label>
-            <input
-              className="max-w-[200px] bg-transparent focus:outline-none"
-              type="text"
-              id="eduName"
-              maxLength={20}
-              placeholder="학교명을 입력해주세요."
-            />
-          </FieldInputBox>
-          <FieldInputBox>
+            <FormInputBox className="max-w-[200px]" type="text" id="eduName" />
+          </FormBox>
+          <FormBox>
             <label className="applicant-field-label" htmlFor="eduMajor">
               전공
             </label>
-            <input
-              className="max-w-[190px] bg-transparent focus:outline-none"
-              type="text"
-              id="eduMajor"
-              maxLength={20}
-              placeholder="전공을 입력해주세요."
-            />
-          </FieldInputBox>
-          <FieldInputBox>
-            <label className="sr-only" htmlFor="eduLevel">
+            <FormInputBox className="max-w-[190px]" type="text" id="eduMajor" />
+          </FormBox>
+          <FormBox>
+            <label className="sr-only " htmlFor="eduLevel">
               년제
             </label>
-            <select className="max-w-[160px] focus:outline-none" id="eduLevel">
+            <FormSelectBox className="max-w-[160px]" id="eduLevel">
               {EDULEVEL_OPTION.map((level) => {
                 return (
                   <option key={level.value} value={level.value}>
@@ -143,13 +134,13 @@ const FieldEdu = ({ handleKeyDown }: IHandleKeyDown) => {
                   </option>
                 );
               })}
-            </select>
-          </FieldInputBox>
-          <FieldInputBox>
+            </FormSelectBox>
+          </FormBox>
+          <FormBox>
             <label className="sr-only" htmlFor="eduStatus">
               졸업상태
             </label>
-            <select className="max-w-[160px] focus:outline-none" id="eduStatus">
+            <FormSelectBox className="max-w-[160px]" id="eduStatus">
               {EDUSTATUS_OPTION.map((status) => {
                 return (
                   <option key={status.value} value={status.value}>
@@ -157,30 +148,28 @@ const FieldEdu = ({ handleKeyDown }: IHandleKeyDown) => {
                   </option>
                 );
               })}
-            </select>
-          </FieldInputBox>
-          <FieldInputBox>
+            </FormSelectBox>
+          </FormBox>
+          <FormBox>
             <label className="applicant-field-label" htmlFor="eduPeriodStart">
               입학날짜
             </label>
-            <input
-              className="max-w-[120px] focus:outline-none"
+            <FormInputBox
+              className="max-w-[120px]e"
               type="date"
               id="eduPeriodStart"
-              onKeyDown={handleKeyDown}
             />
-          </FieldInputBox>
-          <FieldInputBox>
+          </FormBox>
+          <FormBox>
             <label className="applicant-field-label" htmlFor="eduPeriodEnd">
               졸업날짜
             </label>
-            <input
-              className="max-w-[120px] focus:outline-none"
+            <FormInputBox
+              className="max-w-[120px]"
               type="date"
               id="eduPeriodEnd"
-              onKeyDown={handleKeyDown}
             />
-          </FieldInputBox>
+          </FormBox>
         </div>
       </div>
     );

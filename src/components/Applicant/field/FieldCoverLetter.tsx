@@ -43,10 +43,7 @@ const FieldCoverLetter = () => {
     );
   } else {
     return (
-      <div className="applicant-field-box">
-        <p className="Head4Medium text-gray-700">
-          본인 대해 자유롭게 서술해주세요.
-        </p>
+      <div className="form-field-box">
         <div className={`applicant-field-textarea-div border-gray-100`}>
           <label className="applicant-field-label w-20" htmlFor="resumeContent">
             지원자 작성란

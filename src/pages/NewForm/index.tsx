@@ -204,7 +204,7 @@ const NewForm = () => {
             </ul>
           </ContentsBox>
           <div className="w-full max-w-[930px] rounded-lg border-[1.5px] border-gray-50 bg-gray-0 p-0">
-            <ul className="tab h-[66px] p-0">
+            <ul className="tab flex h-[66px] w-full justify-between p-0">
               {ADD_INFO.map((field, index) => {
                 return (
                   <li

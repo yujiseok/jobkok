@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getFormList } from "@/api/talent";
 
-const useSelectForm = () => {
+const useFormListQuery = () => {
   const { data: formData } = useQuery({
     queryKey: ["form"],
     queryFn: getFormList,
@@ -10,4 +10,4 @@ const useSelectForm = () => {
   });
   return formData;
 };
-export default useSelectForm;
+export default useFormListQuery;

@@ -4,9 +4,9 @@ import { ReactComponent as Done } from "@/assets/svg/signup.svg";
 
 const Complete = () => {
   return (
-    <div className="mt-32 ml-20 flex flex-col items-center">
-      <div className="Head2Semibold mb-2 text-title-gray">회원가입 완료</div>
-      <p className="SubHead1Medium mb-14 text-gray-600">
+    <div className="flex flex-col items-center pt-24">
+      <div className="Head2Semibold pb-2 text-title-gray">회원가입 완료</div>
+      <p className="SubHead1Medium pb-14 text-gray-600">
         잡콕과 함께 더 효율적인 채용관리 시스템을 경험해 보세요
       </p>
       <Done />

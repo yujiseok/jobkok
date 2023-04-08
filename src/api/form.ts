@@ -7,7 +7,7 @@ import type {
 import { client } from "./axios";
 
 // 채용폼 전체목록 조회
-export const getRecuitFormAll = async (ongoing: boolean) => {
+export const getRecuitForms = async (ongoing: boolean) => {
   const { data }: AxiosResponse = await client.get(
     `/recruit/?status=${ongoing}`,
   );

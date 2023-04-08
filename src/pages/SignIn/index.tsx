@@ -109,7 +109,7 @@ const SignIn = () => {
             <div className="mb-6">
               <div
                 className={`flex h-[51px] w-[430px] items-center rounded-lg border border-solid bg-gray-0 px-6 after:text-gray-300 ${
-                  errors.useremail
+                  errors.useremail || IsFail
                     ? "border-error-400"
                     : "border-gray-100 focus-within:border-blue-400"
                 }`}
@@ -149,7 +149,7 @@ const SignIn = () => {
             </label>
             <div
               className={`flex h-[51px] w-[430px] items-center rounded-lg border border-solid bg-gray-0 px-6 after:text-gray-300 ${
-                errors.password
+                errors.password || IsFail
                   ? "border-error-400"
                   : "border-gray-100 focus-within:border-blue-400"
               }`}
@@ -173,12 +173,15 @@ const SignIn = () => {
               </button>
             </div>
             {/* 오류 메세지 띄우기 */}
-            <span className="Caption1Medium text-error-400">
-              {errors?.password?.message ||
-                (IsFail && (
-                  <span>이메일 또는 비밀번호가 일치하지 않습니다.</span>
-                ))}
-            </span>
+            {IsFail ? (
+              <span className="Caption1Medium text-error-400">
+                아이디 또는 비밀번호가 다릅니다.
+              </span>
+            ) : (
+              <span className="Caption1Medium text-error-400">
+                {errors?.password?.message}
+              </span>
+            )}
             <div className="mt-4 mb-20 flex justify-between">
               <div>
                 <input

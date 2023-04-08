@@ -12,7 +12,7 @@ const useSearchFailedQuery = (recruitId: string) => {
   const { data: searchData, refetch } = useQuery({
     queryKey: ["failSearch", applyName, recruitId],
     queryFn: () => searchFailedTalent(applyName, recruitId),
-    enabled: false,
+    enabled: recruitId && applyName ? true : false,
   });
 
   const handleSearchBar = (e: React.FormEvent<HTMLFormElement>) => {

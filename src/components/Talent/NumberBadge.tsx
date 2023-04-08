@@ -1,21 +1,20 @@
-// 서류제출 - 면접진행 - 최종조율
+import { procedureColors } from "@/constants/badgeStyle";
+import type { ProcedureType } from "@/types/talent";
 
 const NumberBadge = ({
   children,
-  id,
+  procedure,
 }: {
   children: React.ReactNode;
-  id: string;
+  procedure: ProcedureType;
 }) => {
+  if (!procedure) return null;
+
+  const { bgColor, textColor } = procedureColors[procedure];
+
   return (
     <div
-      className={`${
-        id === "서류제출"
-          ? "bg-badge-red text-text-on-badge-red"
-          : id === "면접진행"
-          ? "bg-badge-purple text-text-on-badge-purple"
-          : "bg-badge-blue text-text-on-badge-blue"
-      } Caption2Semibold ml-2 grid  min-w-[1.25rem]  place-items-center rounded-md px-[0.375rem] py-1`}
+      className={`${bgColor} ${textColor} Caption2Semibold ml-2 grid  min-w-[1.25rem]  place-items-center rounded-md px-[0.375rem] py-1`}
     >
       {children}
     </div>

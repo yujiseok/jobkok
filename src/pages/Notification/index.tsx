@@ -7,18 +7,19 @@ import { ReactComponent as Profile } from "@/assets/svg/heart-memoji.svg";
 import { ReactComponent as Search } from "@/assets/svg/search.svg";
 import { ReactComponent as SendingIcon } from "@/assets/svg/send.svg";
 import { LIMIT } from "@/constants/pagination";
+import useFormList from "@/lib/hooks/useFormList";
 import useFormListQuery from "@/lib/hooks/useFormListQuery";
 import useGetTalentQuery from "@/lib/hooks/useGetTalentQuery";
 import useInputLength from "@/lib/hooks/useInputLength";
 import usePagination from "@/lib/hooks/usePagination";
 import useSearchTalent from "@/lib/hooks/useSearchTalent";
+import ceilPage from "@/lib/utils/ceilPage";
 import formatDate from "@/lib/utils/formatDate";
 import makeString from "@/lib/utils/makeString";
 import Banner from "@components/Common/Banner";
 import BlueBadge from "@components/Notification/BlueBadge";
 import PurpleBadge from "@components/Notification/Purplebadge";
 import RedBadge from "@components/Notification/RedBadge";
-import useSelectForm from "@/lib/hooks/useSelectForm";
 
 type FormValues = {
   mailContent: string;
@@ -36,10 +37,9 @@ const Notification = () => {
   const [defaultMsg, setDefaultMsg] = useState("");
   const { register, watch, handleSubmit } = useForm<FormValues>();
 
-  const totalPage = formData && Math.ceil(formData?.data?.length / LIMIT);
-
   // recruitId 만 가져오기
-  const [recruitId, setRecruitId] = useState(`${formData?.data[0]?.id}`);
+  // const [recruitId, setRecruitId] = useState(`${formData?.data[0]?.id}`);
+  const [recruitId, handleChangeFormList] = useFormList(formData);
 
   const { searchInput, handleSearchBar, searchTalent, isSearch } =
     useSearchTalent(recruitId);
@@ -47,9 +47,8 @@ const Notification = () => {
   //폼과 절차에 따라 인재 목록 보여주기
   const allTalent = useGetTalentQuery(recruitId, applyProcedure, applyName);
 
-  const handleChangeStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setRecruitId(e.target.value);
-  };
+  const totalPage =
+    allTalent && allTalent !== null ? ceilPage(allTalent.length) : 0;
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSearchParams({
@@ -59,7 +58,6 @@ const Notification = () => {
     });
   };
 
-  console.log({ page, offset, handleClick });
   const handleNotiChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSearchParams({
       applyProcedure,
@@ -92,17 +90,18 @@ const Notification = () => {
             <div className="SubHead2Semibold">
               <select
                 className="bg-transparent pr-3 outline-none"
-                onChange={handleChangeStatus}
+                onChange={handleChangeFormList}
               >
-                {formData?.data.map((item) => (
-                  <option
-                    key={item.id}
-                    value={item.id}
-                    className="text-gray-900"
-                  >
-                    {item.title}
-                  </option>
-                ))}
+                {formData?.data !== null &&
+                  formData?.data.map((item) => (
+                    <option
+                      key={item.id}
+                      value={item.id}
+                      className="text-gray-900"
+                    >
+                      {item.title}
+                    </option>
+                  ))}
               </select>
             </div>
           </div>

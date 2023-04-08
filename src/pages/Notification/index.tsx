@@ -70,17 +70,17 @@ const Notification = () => {
   };
 
   const onSubmit = async (data: FormValues) => {
-    console.log(recruitId);
-    if (noticeStep === ("전체" || null)) return alert("단계를 선택해주세요");
-    if (data.mailContent === null) return alert("내용을 입력해주세요");
-    // const res = await sendEmail(
-    //   recruitId,
-    //   "34",
-    //   data.mailContent,
-    //   noticeStep,
-    //   "2023-02-20T15:59:46.803305",
-    // );
-    // console.log("res", res);
+    console.log(data.mailContent);
+    if (noticeStep === ("all" || null)) return alert("단계를 선택해주세요");
+    if (data.mailContent === "") return alert("내용을 입력해주세요");
+    const res = await sendEmail(
+      recruitId,
+      "34",
+      data.mailContent,
+      noticeStep,
+      "2023-02-20T15:59:46.803305",
+    );
+    console.log("res", res);
   };
 
   // 추후 수정 예정

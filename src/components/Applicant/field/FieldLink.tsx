@@ -15,30 +15,30 @@ const FieldLink = () => {
         <legend className="applicant-field-legend">기타 이력서</legend>
         <div className="applicant-filed-row">
           <div>
-            <FieldInputBox errors={errors.portfolio}>
-              <label className="applicant-field-label" htmlFor="portfolio">
+            <FieldInputBox errors={errors.applyPortfolio}>
+              <label className="applicant-field-label" htmlFor="applyPortfolio">
                 포트폴리오 링크
               </label>
               <input
                 className="focus:outline-none"
                 type="url"
-                id="portfolio"
+                id="applyPortfolio"
                 placeholder="링크를 첨부해주세요."
-                {...register("portfolio")}
+                {...register("applyPortfolio")}
               />
             </FieldInputBox>
           </div>
           <div>
-            <FieldInputBox errors={errors.link}>
-              <label className="applicant-field-label" htmlFor="link">
+            <FieldInputBox errors={errors.applyResume}>
+              <label className="applicant-field-label" htmlFor="applyResume">
                 기타 링크
               </label>
               <input
                 className="focus:outline-none"
                 type="url"
-                id="link"
+                id="applyResume"
                 placeholder="링크를 첨부해주세요."
-                {...register("link")}
+                {...register("applyResume")}
               />
             </FieldInputBox>
           </div>
@@ -51,18 +51,18 @@ const FieldLink = () => {
         <div className="applicant-filed-row">
           <div>
             <FormBox>
-              <label className="applicant-field-label" htmlFor="portfolio">
+              <label className="applicant-field-label" htmlFor="applyPortfolio">
                 포트폴리오 링크
               </label>
-              <FormInputBox type="url" id="portfolio" />
+              <FormInputBox type="url" id="applyPortfolio" />
             </FormBox>
           </div>
           <div>
             <FormBox>
-              <label className="applicant-field-label" htmlFor="link">
+              <label className="applicant-field-label" htmlFor="applyResume">
                 기타 링크
               </label>
-              <FormInputBox type="url" id="link" />
+              <FormInputBox type="url" id="applyResume" />
             </FormBox>
           </div>
         </div>

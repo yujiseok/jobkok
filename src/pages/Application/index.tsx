@@ -20,21 +20,21 @@ import FieldPreference from "@components/Applicant/field/FieldPreference";
 import FieldTermAgree from "@components/Applicant/field/FieldTermAgree";
 
 const schema = z.object({
+  // 자개소개
+  resumeContent: z.string().nonempty().min(20),
+
   // 경력
   careerName: z.string().nonempty(),
-  careerPeriodStart: z.string().nonempty(),
-  careerPeriodEnd: z.string().nonempty(),
+  careerStart: z.string().nonempty(),
+  careerEnd: z.string().nonempty(),
   careerDetail: z.string().nonempty(),
-
-  // // 자개소개
-  resumeContent: z.string().nonempty().min(20),
 
   // 최종학력
   eduName: z.string().nonempty(),
-  eduPeriodStart: z.string().nonempty(),
-  eduPeriodEnd: z.string().nonempty(),
+  eduStart: z.string().nonempty(),
+  eduEnd: z.string().nonempty(),
   eduMajor: z.string().nonempty(),
-  eduLevel: z.string().nonempty(),
+  eduYear: z.string().nonempty(),
   eduStatus: z.string().nonempty(),
 
   // 자격증
@@ -42,28 +42,28 @@ const schema = z.object({
   certificatePublisher: z.string().nonempty(),
   certificateDate: z.string().nonempty(),
 
-  // 취업우대사항
-  veterans: z.boolean().refine((val) => val),
-  disability: z.boolean().refine((val) => val),
-  subsidy: z.boolean().refine((val) => val),
-  military: z.string().nonempty(),
-  sensitiveAgree: z.boolean().refine((val) => val),
-
-  // 기타이력서
-  portfolio: z.string().url("올바른 URL 형식이 아닙니다."),
-  link: z.string().url("올바른 URL 형식이 아닙니다."),
-
-  // 어학능력
-  languageName: z.string().nonempty(),
-  languageLevel: z.string().nonempty(),
-
   // 수상내역
   awardsName: z.string().nonempty(),
   awardsCompany: z.string().nonempty(),
   awardsDate: z.string().nonempty(),
 
+  // 어학능력
+  languageName: z.string().nonempty(),
+  languageLevel: z.string().nonempty(),
+
+  // 취업우대사항
+  veteran: z.boolean().refine((val) => val),
+  disorder: z.boolean().refine((val) => val),
+  employment: z.boolean().refine((val) => val),
+  militaryEnum: z.string().nonempty(),
+  terms: z.boolean().refine((val) => val),
+
+  // 기타이력서
+  applyPortfolio: z.string().url("올바른 URL 형식이 아닙니다."),
+  applyResume: z.string().url("올바른 URL 형식이 아닙니다."),
+
   // 나의 성격 키워드
-  keywords: z.array(z.string()).default([]),
+  keywordsReq: z.array(z.string()).default([]),
 
   // 약관
   requiredAgree: z.boolean().refine((val) => val),

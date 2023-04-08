@@ -8,6 +8,7 @@ import { ReactComponent as IconChevronLeft } from "@/assets/svg/chevron-left.svg
 import { ReactComponent as IconEdit } from "@/assets/svg/edit-icon.svg";
 import { KEYWORDS_CHECK } from "@/constants/applicant";
 import { ADD_INFO } from "@/constants/formNew";
+import { convertIsoDate } from "@/lib/utils/convertIsoDate";
 import ModalForLater from "@components/Common/ModalForLater";
 import ContentsBox from "@components/NewForm/ContentsBox";
 import EditTypeBadge from "@components/NewForm/EditTypeBadge";
@@ -50,24 +51,23 @@ const NewForm = () => {
     navigate("/form");
   };
 
-  // const { agree, docsEnd, meetEnd, meetStart, ...rest } = data;
-  // const convertData = {
-  //   ...rest,
-  //   type: true,
-  //   docsEnd: "2023-03-31T00:00:00",
-  //   docsStart: "2023-03-31T00:00:00",
-  //   meetEnd: "2023-03-31T00:00:00",
-  //   meetStart: "2023-03-31T00:00:00",
-  //   ongoing: true,
-  //   keywordStandard:
-  //     "센스있어요, 꼼꼼해요, 잘 웃어요, 원칙적이에요, 습득력이 좋아요",
-  //   confirmStart: "2024-11-21T00:00:00",
-  //   confirmEnd: "2024-12-01T00:00:00",
-  // };
-
   // 폼 제출 : 인증됐으면 페이지이동, 안됐으면 인증코드에 focus
   const onSubmit = async (data: IRecuiteForm) => {
-    console.log(data);
+    const { agree, docsEnd, meetEnd, meetStart, ...rest } = data;
+    const convertData = {
+      ...rest,
+      type: true,
+      docsStart: convertIsoDate(Date()),
+      docsEnd: convertIsoDate(docsEnd),
+      meetEnd: convertIsoDate(meetEnd),
+      meetStart: convertIsoDate(meetStart),
+      ongoing: true,
+      keywordStandard:
+        "센스있어요, 꼼꼼해요, 잘 웃어요, 원칙적이에요, 습득력이 좋아요",
+      confirmStart: "2023-06-05T00:00:00",
+      confirmEnd: "2023-06-05T00:00:00",
+    };
+    newRecuitForm(convertData);
     setIsSaveModal(true);
   };
 
@@ -75,6 +75,9 @@ const NewForm = () => {
     <form
       className="px-[56px] pb-[164px] pt-0"
       onSubmit={handleSubmit(onSubmit)}
+      action="/recruit"
+      method="POST"
+      encType="multipart/form-date"
     >
       {/* 최상단 */}
       <div className="mb-[63px] flex justify-between">

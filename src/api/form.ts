@@ -37,7 +37,6 @@ export const searchRecuitForm = async (status: boolean, title: string) => {
 export const newRecuitForm = async (value: IFormRequestData) => {
   const { data }: AxiosResponse = await client.post(`/recruit`, value);
 
-  console.log(data);
   return data as IResponse<IFormResponseData>;
 };
 

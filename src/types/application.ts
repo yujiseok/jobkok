@@ -2,13 +2,13 @@ export interface IHandleKeyDown {
   handleKeyDown?: (event: React.KeyboardEvent<Element>) => void;
 }
 
-export interface IApplicantAuth {
+export interface IApplicantAuthReq {
   //기본정보(인증)
   recruitId: number;
   applyEmail: string;
 }
 
-export interface IApplicantApply extends IApplicantAuth {
+export interface IApplicantApplyReq extends IApplicantAuthReq {
   //기본정보(인증)
   applyName: string;
   applyPhone: string;
@@ -20,8 +20,8 @@ export interface IApplicantApply extends IApplicantAuth {
 
   // 경력
   careerName: string;
-  careerPeriodStart: string;
-  careerPeriodEnd: string;
+  careerStart: string;
+  careerEnd: string;
   careerDetail: string;
 
   // 최종학력
@@ -59,4 +59,10 @@ export interface IApplicantApply extends IApplicantAuth {
 
   // 나의 키워드
   keywordsReq: string;
+
+  // 대외활동
+  activitiesTitle: null;
+  activitiesContent: null;
+  activitiesStart: null;
+  activitiesEnd: null;
 }

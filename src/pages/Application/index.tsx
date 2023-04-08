@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import * as z from "zod";
+import { emailDuplicatecheck, submitApply } from "@/api/applicant";
 import { ReactComponent as IconComplete } from "@/assets/svg/check-round-full-blue.svg";
 import { ReactComponent as IconIncomplete } from "@/assets/svg/check-round-line-gray.svg";
 import { ReactComponent as IconArrowLeft } from "@/assets/svg/chevron-left-white.svg";
@@ -20,7 +21,7 @@ import FieldPreference from "@components/Applicant/field/FieldPreference";
 import FieldTermAgree from "@components/Applicant/field/FieldTermAgree";
 
 const schema = z.object({
-  // 자개소개
+  // 자기소개
   resumeContent: z.string().nonempty().min(20),
 
   // 경력
@@ -88,7 +89,15 @@ const Application = () => {
   // 폼 제출
   const onSubmit = async (data: IApplicationForm) => {
     if (confirm("제출 후에는 수정이 불가능합니다. 정말 제출하시겠습니까?")) {
-      console.log(data);
+      const { requiredAgree, optionalAgree, consignAgree, ...rest } = data;
+      const convertData = {
+        ...rest,
+        activitiesTitle: null,
+        activitiesContent: null,
+        activitiesStart: null,
+        activitiesEnd: null,
+      };
+      const res = await submitApply(convertData);
       navigate("/applicant/completion");
     }
   };

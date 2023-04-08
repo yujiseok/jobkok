@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import * as z from "zod";
-import { emailAuth, emailDuplicatecheck, submitApply } from "@/api/applicant";
+import { emailDuplicatecheck, submitApply } from "@/api/applicant";
 import { ReactComponent as IconLogo } from "@/assets/svg/blue-logo.svg";
 import AuthEnter from "@components/Applicant/AuthEnter";
 import AuthLabel from "@components/Applicant/AuthLabel";
@@ -61,7 +61,7 @@ const ApplicantAuth = () => {
   };
 
   const getEmailAuth = () => {
-    emailAuth(3, "ssakthree33@gmail.com");
+    // emailAuth(3, "ssakthree33@gmail.com");
   };
 
   // 인증받기 토글 열릴 때 : 이메일 유효성 통과, 중복없음, 인증미완료

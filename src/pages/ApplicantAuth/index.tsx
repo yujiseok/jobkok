@@ -59,7 +59,7 @@ const ApplicantAuth = () => {
 
   const asdf = async () => {
     const res = await emailDuplicatecheck(watch().email, 49);
-    return res.state === 200;
+    return res.data;
   };
 
   // 인증받기 토글 열릴 때 : 이메일 유효성 통과, 중복없음, 인증미완료

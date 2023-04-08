@@ -153,7 +153,7 @@ export const getFailedTalent = async ({ queryKey }: QueryFunctionContext) => {
   } catch (error) {
     if (error instanceof AxiosError) {
       const data: IResponse<null> = error.response?.data;
-      return data;
+      return { data, totalPages: 0 };
     }
   }
 };

@@ -175,7 +175,7 @@ const TalentFail = () => {
                 </tr>
               )} */}
               {/* 검색 결과 없을 시 어떻게 할지 처리하기, 검색 결과 있고 탈락인재 없을시 분기 처리 어떻게 할지? */}
-              {!searchData
+              {/* {!searchData && failedTalent !== null
                 ? failedTalent?.map((talent) => (
                     <tr
                       key={talent.applyId}
@@ -281,7 +281,7 @@ const TalentFail = () => {
                         </div>
                       </td>
                     </tr>
-                  ))}
+                  ))} */}
             </tbody>
           </table>
           <Pagination totalPages={totalPages!} />

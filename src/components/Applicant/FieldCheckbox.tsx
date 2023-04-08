@@ -1,6 +1,6 @@
 import { useFormContext } from "react-hook-form";
-import { ReactComponent as IconSelect } from "@/assets/applicant/select.svg";
-import { ReactComponent as IconSelected } from "@/assets/applicant/selected.svg";
+import { ReactComponent as IconSelected } from "@/assets/svg/check-round-full-blue.svg";
+import { ReactComponent as IconSelect } from "@/assets/svg/check-round-line-gray.svg";
 
 const FieldCheckbox = ({
   children,
@@ -12,7 +12,7 @@ const FieldCheckbox = ({
   children?: React.ReactNode;
   className?: string;
   htmlFor: string;
-  inputValue: boolean;
+  inputValue?: boolean;
   content: string;
 }) => {
   const { register } = useFormContext();

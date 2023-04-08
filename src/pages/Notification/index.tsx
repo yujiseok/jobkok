@@ -16,6 +16,8 @@ import useSearchTalent from "@/lib/hooks/useSearchTalent";
 import ceilPage from "@/lib/utils/ceilPage";
 import formatDate from "@/lib/utils/formatDate";
 import makeString from "@/lib/utils/makeString";
+import type { ISearchData, ISelectedTalent } from "@/types/notification";
+import type { ITalent } from "@/types/talent";
 import Banner from "@components/Common/Banner";
 import BlueBadge from "@components/Notification/BlueBadge";
 import PurpleBadge from "@components/Notification/Purplebadge";
@@ -24,6 +26,8 @@ import RedBadge from "@components/Notification/RedBadge";
 type FormValues = {
   mailContent: string;
 };
+
+// type Selected = ISearchData[] | ITalent[];
 
 const Notification = () => {
   const [isAgree, setIsAgree] = useState(false);
@@ -36,11 +40,7 @@ const Notification = () => {
   const applyName = searchParams.get("applyName") ?? "";
   const [defaultMsg, setDefaultMsg] = useState("");
   const { register, watch, handleSubmit } = useForm<FormValues>();
-
-  // recruitId 만 가져오기
-  // const [recruitId, setRecruitId] = useState(`${formData?.data[0]?.id}`);
   const [recruitId, handleChangeFormList] = useFormList(formData);
-
   const { searchInput, handleSearchBar, searchTalent, isSearch } =
     useSearchTalent(recruitId);
 
@@ -80,6 +80,24 @@ const Notification = () => {
     //   "2023-02-20T15:59:46.803305",
     // );
     // console.log("res", res);
+  };
+
+  // 추후 수정 예정
+  // 조건에 따라 렌더링 해주는 searchTalent 와 allTalent의 타입이 달라 우선 any로 처리
+  const [selectedTalent, setSelectedTalent] = useState<any[]>([]);
+  const handleSelectTalent = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    item: ISearchData | ITalent,
+  ) => {
+    if (e.target.checked && selectedTalent.length < 4) {
+      setSelectedTalent((prev) => [...prev, item]);
+    } else {
+      const selectedList = [...selectedTalent].filter(
+        (talent) => talent.applyId !== item.applyId,
+      );
+      e.target.checked = false;
+      setSelectedTalent(selectedList);
+    }
   };
 
   return (
@@ -165,7 +183,7 @@ const Notification = () => {
                       <input
                         type="checkbox"
                         className="h-5 w-5 border-gray-400 checked:bg-blue-500"
-                        // onChange={handleCheckboxChange}
+                        onChange={(e) => handleSelectTalent(e, item)}
                       />
                     </th>
                     <td className="SubHead1Semibold flex items-center gap-4 text-gray-600">
@@ -249,12 +267,23 @@ const Notification = () => {
           </div>
 
           <div className="mb-6 flex items-center rounded-md bg-blue-25 py-4 px-4">
-            <p className=" SubHead1Semibold mr-8 text-gray-800">받는 사람</p>
-
-            <div className="flex items-center gap-4 rounded-md bg-gray-0 py-1 px-2 ">
-              <Profile className="rounded-md bg-gray-50 " />
-              <p className="SubHead1Medium text-gray-900">김잡콕</p>
+            <p className=" SubHead1Semibold mr-8 py-[11px] text-gray-800">
+              받는 사람
+            </p>
+            <div className="flex items-center gap-4 rounded-md px-2">
+              {selectedTalent?.map((item) => (
+                <div
+                  key={item.applyId}
+                  className="flex items-center gap-4 rounded-lg border border-gray-50 bg-gray-0 py-[5px] px-2"
+                >
+                  <Profile className="rounded-md bg-gray-50 " />
+                  <p className="SubHead1Medium text-gray-900">
+                    {item.applyName}
+                  </p>
+                </div>
+              ))}
             </div>
+            <p className="Head4Semibold ml-6 text-gray-600">님</p>
           </div>
 
           <form

@@ -26,9 +26,7 @@ const FieldTermAgree = () => {
         </p>
       </FieldCheckbox>
       <FieldCheckbox
-        className={`SubHead2Semibold h-[86px] w-full gap-3 py-4 text-gray-600 ${
-          errors ? " border-error-400" : " border-gray-100"
-        }`}
+        className={`SubHead2Semibold h-[86px] w-full gap-3 py-4 text-gray-600 `}
         htmlFor="optionalAgree"
         inputValue={watch().optionalAgree}
         errors={errors.optionalAgree}
@@ -39,9 +37,7 @@ const FieldTermAgree = () => {
         </p>
       </FieldCheckbox>
       <FieldCheckbox
-        className={`SubHead2Semibold h-[86px] w-full gap-3 py-4 text-gray-600 ${
-          errors ? " border-error-400" : " border-gray-100"
-        }`}
+        className={`SubHead2Semibold h-[86px] w-full gap-3 py-4 text-gray-600 `}
         htmlFor="consignAgree"
         inputValue={watch().consignAgree}
         errors={errors.consignAgree}

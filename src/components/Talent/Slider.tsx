@@ -33,11 +33,11 @@ const Slider = ({ talent, i }: { talent: ITalent; i: number }) => {
             </button>
           </div>
         </div>
-        {/* <div className="flex max-w-[7.8125rem] flex-wrap gap-6px">
-        {talent?.keywords?.map((keyword) => (
-          <KeywordBadge key={keyword}>{keyword}</KeywordBadge>
-        ))}
-      </div> */}
+        <div className="flex max-w-[200px] flex-wrap gap-6px">
+          {talent?.keywordList?.map((keyword) => (
+            <KeywordBadge key={keyword}>{keyword}</KeywordBadge>
+          ))}
+        </div>
         <time
           dateTime={talent.createdTime}
           className="Caption1Medium absolute bottom-5 text-gray-300"
@@ -53,7 +53,6 @@ const Slider = ({ talent, i }: { talent: ITalent; i: number }) => {
     </>
   );
 };
-
-const randomNumber = shuffle(6);
+const randomNumber = shuffle(9);
 
 export default Slider;

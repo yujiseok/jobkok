@@ -1,6 +1,6 @@
 import type { AxiosResponse } from "axios";
 import { AxiosError } from "axios";
-import { client } from "./axios";
+import { client, common } from "./axios";
 
 // 로그인
 export const postSignIn = async (useremail: string, password: string) => {
@@ -72,19 +72,26 @@ export const postEmailCheck = async (useremail: string) => {
 
 // 인증코드 발송
 export const getSendCode = async (useremail: string) => {
-  const { data }: AxiosResponse = await client.post(
+  const { data }: AxiosResponse = await common.post(
     `/auth/send_number?memberEmail=${useremail}`,
   );
   return data;
 };
 
 // 인증코드 확인
-export const getConfirmCode = async (useremail: string, code: number) => {
-  const { data }: AxiosResponse = await client.post("/auth/check_number", {
-    memberEmail: useremail,
-    authNumber: code,
-  });
-  return data;
+export const getConfirmCode = async (
+  useremail: string,
+  code: string | undefined,
+) => {
+  try {
+    const { data }: AxiosResponse = await common.post("/auth/check_number", {
+      memberEmail: useremail,
+      authNumber: code,
+    });
+    return data;
+  } catch (err: any) {
+    console.log(err.message);
+  }
 };
 
 // 비밀번호 변경

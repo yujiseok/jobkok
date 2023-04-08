@@ -4,7 +4,7 @@ import type { IFormResponseData } from "@/types/form";
 
 interface IProps {
   setIsSaveModal: React.Dispatch<React.SetStateAction<boolean>>;
-  apiData: IFormResponseData;
+  apiData?: IFormResponseData;
 }
 const SaveModal = ({ setIsSaveModal, apiData }: IProps) => {
   const handleCopyBtn = () => {

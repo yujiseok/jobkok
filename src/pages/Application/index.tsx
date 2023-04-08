@@ -11,6 +11,7 @@ import { ReactComponent as IconArrowLeft } from "@/assets/svg/chevron-left-white
 
 import { OPTIONAL_FIELD, REQUIRED_FIELD } from "@/constants/applicant";
 
+import { convertIsoDate } from "@/lib/utils/convertIsoDate";
 import formatDateSlash from "@/lib/utils/formatDateSlash";
 import type { IApplicantFormReq } from "@/types/application";
 
@@ -81,7 +82,6 @@ type IApplicationForm = z.infer<typeof schema>;
 
 const Application = () => {
   const { state } = useLocation();
-  console.log(state);
   const navigate = useNavigate();
   const [recruitData, setRecruitData] = useState<IApplicantFormReq>();
 
@@ -112,15 +112,35 @@ const Application = () => {
   // 폼 제출
   const onSubmit = async (data: IApplicationForm) => {
     if (confirm("제출 후에는 수정이 불가능합니다. 정말 제출하시겠습니까?")) {
-      const { requiredAgree, optionalAgree, consignAgree, ...rest } = data;
+      const {
+        requiredAgree,
+        optionalAgree,
+        consignAgree,
+        careerStart,
+        careerEnd,
+        eduStart,
+        eduEnd,
+        certificateDate,
+        awardsDate,
+        keywordsReq,
+        ...rest
+      } = data;
       const convertData = {
         ...rest,
-        activitiesTitle: null,
-        activitiesContent: null,
-        activitiesStart: null,
-        activitiesEnd: null,
+        ...state,
+        careerStart: convertIsoDate(careerStart),
+        careerEnd: convertIsoDate(careerEnd),
+        eduStart: convertIsoDate(eduStart),
+        eduEnd: convertIsoDate(eduEnd),
+        certificateDate: convertIsoDate(certificateDate),
+        awardsDate: convertIsoDate(awardsDate),
+        activitiesTitle: "해당없음",
+        activitiesContent: "해당없음",
+        activitiesStart: "2000-03-26T17:07:23.668771300",
+        activitiesEnd: "2000-03-26T17:07:23.668771300",
+        keywordsReq: "센스 있어요",
       };
-      // const res = await submitApply();
+      submitApply(convertData);
       navigate("/applicant/completion");
     }
   };

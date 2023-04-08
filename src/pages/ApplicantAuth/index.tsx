@@ -11,20 +11,20 @@ import AuthLabel from "@components/Applicant/AuthLabel";
 import AuthRow from "@components/Applicant/AuthRow";
 
 const schema = z.object({
-  name: z
+  applyName: z
     .string()
     .nonempty("이름을 입력해주세요.")
     .min(2, "이름을 2자 이상 20자 이내로 입력해주세요.")
     .max(15, "이름을 2자 이상 20자 이내로 입력해주세요.")
     .regex(/^[ㄱ-ㅎ가-힣a-zA-Z]+$/, "특수문자, 숫자, 공백은 입력 불가합니다."),
-  tel: z
+  applyPhone: z
     .string()
     .nonempty("전화번호를 입력해주세요.")
     .regex(
       /^01([0|1|6|7|8|9])-([0-9]{4})-([0-9]{4})$/,
       "전화번호가 올바르지 않습니다.",
     ),
-  email: z
+  applyEmail: z
     .string()
     .nonempty("이메일을 입력해주세요.")
     .email("이메일 형식이 올바르지 않습니다.")
@@ -60,24 +60,27 @@ const ApplicantAuth = () => {
 
   // 이메일 중복확인
   const emailCheck = async () => {
-    const res = await emailDuplicatecheck(watch().email, 49);
+    const res = await emailDuplicatecheck(watch().applyEmail, 49);
     return res.data;
   };
 
   // 인증코드 확인
   const authcodeCheck = async () => {
-    const res = await getConfirmCode(watch().email, watch().authCode);
+    const res = await getConfirmCode(watch().applyEmail, watch().authCode);
     return res?.state === 200;
   };
 
   // 인증받기 토글 열릴 때 : 이메일 유효성 통과, 중복없음, 인증미완료
   const handleGetCodeBtn = async () => {
-    if (getValues().email === "" || errors.email?.message !== undefined) {
-      setFocus("email");
+    if (
+      getValues().applyEmail === "" ||
+      errors.applyEmail?.message !== undefined
+    ) {
+      setFocus("applyEmail");
     } else if (isCertified) {
       confirm("이미 이메일 인증이 완료됐습니다.");
     } else if (await emailCheck()) {
-      const res = await getSendCode(watch().email);
+      const res = await getSendCode(watch().applyEmail);
       if (res.state === 200) {
         confirm("이메일이 전송됐습니다. 메일함을 확인해주세요.");
         setIsSended(true);
@@ -138,41 +141,41 @@ const ApplicantAuth = () => {
           >
             <AuthRow>
               <AuthEnter>
-                <AuthLabel htmlFor="name">이름</AuthLabel>
+                <AuthLabel htmlFor="applyName">이름</AuthLabel>
                 <input
                   className={`SubHead1Medium h-[52px] w-full rounded-md border py-4 px-6 text-gray-800 focus:outline-none ${
-                    errors.name && "border-error-400"
+                    errors.applyName && "border-error-400"
                   }`}
                   type="text"
-                  id="name"
+                  id="applyName"
                   placeholder="홍길동"
-                  {...register("name")}
+                  {...register("applyName")}
                 />
               </AuthEnter>
               <AuthEnter>
-                <AuthLabel htmlFor="tel">전화번호</AuthLabel>
+                <AuthLabel htmlFor="applyPhone">전화번호</AuthLabel>
                 <input
                   className={`SubHead1Medium h-[52px] w-full rounded-md border py-4 px-6 text-gray-800 focus:outline-none ${
-                    errors.tel && "border-error-400"
+                    errors.applyPhone && "border-error-400"
                   }`}
                   type="tel"
-                  id="tel"
+                  id="applyPhone"
                   placeholder="010-1234-5678"
-                  {...register("tel")}
+                  {...register("applyPhone")}
                 />
               </AuthEnter>
             </AuthRow>
             <AuthRow>
               <AuthEnter>
-                <AuthLabel htmlFor="email">이메일</AuthLabel>
+                <AuthLabel htmlFor="applyEmail">이메일</AuthLabel>
                 <input
                   className={`SubHead1Medium h-[52px] w-[315px] rounded-md border py-4 px-6 text-gray-800 focus:outline-none ${
-                    errors.email && "border-error-400"
+                    errors.applyEmail && "border-error-400"
                   } ${isCertified && "bg-gray-100"}`}
                   type="email"
-                  id="email"
+                  id="applyEmail"
                   placeholder="jobkok@jobkok.com"
-                  {...register("email")}
+                  {...register("applyEmail")}
                   disabled={isCertified}
                 />
                 <p className="Caption1Medium mt-1 text-gray-400">
@@ -183,7 +186,7 @@ const ApplicantAuth = () => {
               </AuthEnter>
               <button
                 className={`SubHead1Semibold btn mt-[19px] h-[52px] rounded-lg border-transparent bg-blue-50 py-2.5 px-6 ${
-                  errors.email || watch().email === ""
+                  errors.applyEmail || watch().applyEmail === ""
                     ? "text-blue-200"
                     : "text-blue-400"
                 }`}

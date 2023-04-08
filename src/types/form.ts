@@ -21,6 +21,8 @@ export interface IFormRequestData {
   docsEnd: string;
   meetStart: string;
   meetEnd: string;
+  confirmStart: string;
+  confirmEnd: string;
 }
 
 // 채용폼 반환

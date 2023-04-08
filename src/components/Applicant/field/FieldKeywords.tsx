@@ -1,5 +1,5 @@
 import { useFormContext } from "react-hook-form";
-import { ReactComponent as IconSelect } from "@/assets/applicant/select.svg";
+import { ReactComponent as IconSelect } from "@/assets/svg/check-gray.svg";
 import { KEYWORDS_CHECK } from "@/constants/applicant";
 
 const FieldKeywords = () => {

@@ -26,7 +26,7 @@ client.interceptors.response.use(
     const status = response.status;
 
     if (status === 400) {
-      const res = await client({
+      const res = await axios({
         method: "POST",
         url: "https://jobkok.shop/auth/reissue",
         headers: {

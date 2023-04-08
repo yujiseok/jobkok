@@ -24,7 +24,7 @@ const TalentFail = () => {
   // formData 없을 시 어떻게 처리할지?
   const { data: formData } = useQuery({
     queryKey: ["form"],
-    queryFn: () => getFormList(),
+    queryFn: () => getFormList("true"),
     suspense: true,
   });
 

@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { searchApplicant } from "@/api/notification";
-import useSelectForm from "./useSelectForm";
+import { applyProcedure } from "@/constants/applyProcedure";
 
 const useSearchTalent = (recruitId: string) => {
   const [isSearch, setIsSearch] = useState(false);
@@ -12,13 +12,13 @@ const useSearchTalent = (recruitId: string) => {
 
   // 이름 검색으로 찾기
   const { data: searchTalent } = useQuery({
-    queryKey: ["searchTalent", applyName, recruitId],
+    queryKey: ["searchTalent", applyName, recruitId, applyProcedure],
     queryFn: () => searchApplicant(applyName, recruitId),
   });
 
   const handleSearchBar = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!searchInput?.current?.value) return;
+    if (!searchInput?.current?.value) return alert("입력해주세요");
     setSearchParams({ applyName: searchInput.current.value.trim() });
     setIsSearch(true);
   };

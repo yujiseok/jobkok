@@ -1,21 +1,17 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useRef, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
-import { searchApplicant, sendEmail, setProcedure } from "@/api/notification";
-import { getFormList } from "@/api/talent";
-import { assortLikeTalent } from "@/api/talentDetail";
+import { sendEmail, setProcedure } from "@/api/notification";
 import { ReactComponent as Profile } from "@/assets/svg/heart-memoji.svg";
 import { ReactComponent as Search } from "@/assets/svg/search.svg";
 import { ReactComponent as SendingIcon } from "@/assets/svg/send.svg";
-import { applicantProcedure } from "@/constants/applicantProcedure";
 import { LIMIT } from "@/constants/pagination";
-import useAllTalentQuery from "@/lib/hooks/useAllTalentQuery";
-import useAllTalentListQuery from "@/lib/hooks/useGetTalentQuery";
 import useGetTalentQuery from "@/lib/hooks/useGetTalentQuery";
 import useInputLength from "@/lib/hooks/useInputLength";
 import usePagination from "@/lib/hooks/usePagination";
 import useSearchTalent from "@/lib/hooks/useSearchTalent";
+
 import useSelectForm from "@/lib/hooks/useSelectForm";
 import formatDate from "@/lib/utils/formatDate";
 import makeString from "@/lib/utils/makeString";
@@ -35,11 +31,13 @@ const Notification = () => {
   const formData = useSelectForm();
   const queryClient = useQueryClient();
   const [searchParams, setSearchParams] = useSearchParams();
-  const applyProcedure = searchParams.get("applyProcedure") ?? "all";
+  const applyProcedure = searchParams.get("applyProcedure") ?? "전체";
   const noticeStep = searchParams.get("noticeStep") ?? "all";
+  const applyName = searchParams.get("applyName") ?? "";
   const [defaultMsg, setDefaultMsg] = useState("");
   const { register, watch, handleSubmit } = useForm<FormValues>();
 
+  console.log(applyName);
   // const onSubmit = async (data: FormValues) => {
   //   const res = await setProcedure(recruitId, applyId, mailContent, noticeStep);
   // };
@@ -52,8 +50,10 @@ const Notification = () => {
   const { searchInput, handleSearchBar, searchTalent, isSearch } =
     useSearchTalent(recruitId);
 
+  console.log("searchTalent", searchTalent);
+
   //폼과 절차에 따라 인재 목록 보여주기
-  const allTalent = useGetTalentQuery(recruitId, applyProcedure);
+  const allTalent = useGetTalentQuery(recruitId, applyProcedure, applyName);
 
   const handleChangeStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setRecruitId(e.target.value);
@@ -62,18 +62,27 @@ const Notification = () => {
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSearchParams({
       applyProcedure: e.target.value,
+      noticeStep,
+      applyName,
     });
   };
 
   const handleNotiChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSearchParams({
+      applyProcedure,
       noticeStep: e.target.value,
+      applyName,
     });
-    console.log(e.target.value);
     const stepMsg = await setProcedure(recruitId, e.target.value);
     setDefaultMsg(stepMsg);
   };
-  console.log(isSearch);
+
+  const handleEmail = async (e) => {
+    e.preventDefault();
+    const res = await sendEmail(recruitId, "22", "안녕하세요", noticeStep);
+    console.log(res);
+  };
+
   return (
     <>
       <Banner className="h-16">
@@ -114,14 +123,14 @@ const Notification = () => {
             value={applyProcedure}
           >
             <option disabled>인재를 선택하세요</option>
-            <option value="all">전체</option>
-            <option value="docs_pass">서류 합격</option>
-            <option value="meet_proposal">면접 조율</option>
-            <option value="final_pass">최종 합격</option>
+            <option value="전체">전체</option>
+            <option value="서류제출">서류제출</option>
+            <option value="면접">면접</option>
+            <option value="최종조율">최종조율</option>
           </select>
 
           <form
-            // onSubmit={handleSearchBar}
+            onSubmit={handleSearchBar}
             className="SubHead1Medium mx-6 mt-6 mb-6 flex justify-between rounded-md bg-blue-25  text-gray-400"
           >
             <label htmlFor="searchBar" className="w-full py-4 px-6 ">
@@ -156,6 +165,7 @@ const Notification = () => {
                       <input
                         type="checkbox"
                         className="h-5 w-5 border-gray-400 checked:bg-blue-500"
+                        // onChange={handleCheckboxChange}
                       />
                     </th>
                     <td className="SubHead1Semibold flex items-center gap-4 text-gray-600">
@@ -163,13 +173,13 @@ const Notification = () => {
                       {item.applyName}
                     </td>
                     <td>
-                      {item.applyProcedure === "서류 검토" ? (
-                        <BlueBadge>서류 검토</BlueBadge>
+                      {item.applyProcedure === "서류제출" ? (
+                        <BlueBadge>서류제출</BlueBadge>
                       ) : // eslint-disable-next-line no-constant-condition
-                      item.applyProcedure === "면접 진행" ? (
-                        <RedBadge>면접 진행</RedBadge>
+                      item.applyProcedure === "면접" ? (
+                        <RedBadge>면접</RedBadge>
                       ) : (
-                        <PurpleBadge>최종 조율</PurpleBadge>
+                        <PurpleBadge>최종조율</PurpleBadge>
                       )}
                     </td>
                     <td className="Caption1Medium text-gray-500">
@@ -278,9 +288,9 @@ const Notification = () => {
             </div>
             <div className="flex justify-center">
               <button
-                disabled={!isAgree || !inputCount}
+                disabled={!isAgree}
                 className="SubHead2Semibold flex items-center gap-2 rounded-md bg-blue-500 px-14 py-3 text-white disabled:bg-gray-200"
-                // onClick={handleEmail}
+                onClick={(e) => handleEmail(e)}
               >
                 알림 보내기
                 <SendingIcon />

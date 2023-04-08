@@ -1,37 +1,35 @@
-// import { useQuery } from "@tanstack/react-query";
-// import { getAllTalentList } from "@/api/notification";
-
-// const useGetTalentQuery = (recruitId: string, applyProcedure: string) => {
-//   const { data } = useQuery({
-//     queryKey: ["allTalentList", recruitId, applyProcedure],
-//     queryFn: () =>
-//       getAllTalentList(recruitId as string, applyProcedure as string),
-//     suspense: true,
-//   });
-//   return data;
-// };
-// export default useGetTalentQuery;
-
 import { useQuery } from "@tanstack/react-query";
 import { getAllTalent } from "@/api/talent";
 import type { ITalent } from "@/types/talent";
 
-const useGetTalentQuery = (recruitId: string, applyProcedure: string) => {
+const useGetTalentQuery = (
+  recruitId: string,
+  applyProcedure: string,
+  applyName: string,
+) => {
   const filteredData = (data: ITalent[], step: string) => {
-    console.log(data);
-    data.filter((item) => item.applyProcedure === step);
+    let test = data;
+    if (data) test = data.filter((item) => item.applyProcedure === step);
+    return test;
+  };
+
+  const selectTalent = async () => {
+    const test = await getAllTalent(recruitId);
+    console.log(test);
   };
 
   const { data } = useQuery({
-    queryKey: ["allTalent", recruitId, applyProcedure],
+    queryKey: ["allTalent", recruitId, applyProcedure, applyName],
     queryFn: () => getAllTalent(recruitId),
+    // queryFn: selectTalent,
     suspense: true,
     select:
-      !applyProcedure || applyProcedure === "all"
+      !applyProcedure || applyProcedure === "전체"
         ? undefined
-        : (data) => ({ data: filteredData(data.data, applyProcedure) }),
+        : (data) => ({
+            data: filteredData(data?.data as ITalent[], applyProcedure),
+          }),
   });
-
   return data?.data;
 };
 export default useGetTalentQuery;

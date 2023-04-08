@@ -22,6 +22,7 @@ import Banner from "@components/Common/Banner";
 import BlueBadge from "@components/Notification/BlueBadge";
 import PurpleBadge from "@components/Notification/Purplebadge";
 import RedBadge from "@components/Notification/RedBadge";
+import Pagination from "@components/Talent/Pagination";
 
 type FormValues = {
   mailContent: string;
@@ -177,76 +178,39 @@ const Notification = () => {
               </thead>
               <tbody>
                 {/* row */}
-                {(isSearch ? searchTalent : allTalent)?.map((item, i) => (
-                  <tr key={i}>
-                    <th>
-                      <input
-                        type="checkbox"
-                        className="h-5 w-5 border-gray-400 checked:bg-blue-500"
-                        onChange={(e) => handleSelectTalent(e, item)}
-                      />
-                    </th>
-                    <td className="SubHead1Semibold flex items-center gap-4 text-gray-600">
-                      <Profile className="rounded-md bg-gray-50" />
-                      {item.applyName}
-                    </td>
-                    <td>
-                      {item.applyProcedure === "서류제출" ? (
-                        <BlueBadge>서류제출</BlueBadge>
-                      ) : // eslint-disable-next-line no-constant-condition
-                      item.applyProcedure === "면접" ? (
-                        <RedBadge>면접</RedBadge>
-                      ) : (
-                        <PurpleBadge>최종조율</PurpleBadge>
-                      )}
-                    </td>
-                    <td className="Caption1Medium text-gray-500">
-                      {formatDate(item.createdTime)}
-                    </td>
-                  </tr>
-                ))}
+                {(isSearch ? searchTalent : allTalent)
+                  ?.slice(offset, offset + LIMIT)
+                  .map((item, i) => (
+                    <tr key={i}>
+                      <th>
+                        <input
+                          type="checkbox"
+                          className="h-5 w-5 border-gray-400 checked:bg-blue-500"
+                          onChange={(e) => handleSelectTalent(e, item)}
+                        />
+                      </th>
+                      <td className="SubHead1Semibold flex items-center gap-4 text-gray-600">
+                        <Profile className="rounded-md bg-gray-50" />
+                        {item.applyName}
+                      </td>
+                      <td>
+                        {item.applyProcedure === "서류제출" ? (
+                          <BlueBadge>서류제출</BlueBadge>
+                        ) : // eslint-disable-next-line no-constant-condition
+                        item.applyProcedure === "면접" ? (
+                          <RedBadge>면접</RedBadge>
+                        ) : (
+                          <PurpleBadge>최종조율</PurpleBadge>
+                        )}
+                      </td>
+                      <td className="Caption1Medium text-gray-500">
+                        {formatDate(item.createdTime)}
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
-
-            {/* 페이지네이션 */}
-            <ul className="mt-12 flex justify-center gap-14">
-              <li>
-                <button
-                  disabled={page === 1}
-                  onClick={() => {
-                    handleClick(makeString(page - 1));
-                  }}
-                >
-                  Prev
-                </button>
-              </li>
-              <ul className="flex gap-8">
-                {Array(totalPage)
-                  .fill(null)
-                  .map((_, i) => {
-                    return (
-                      <li key={i + 1}>
-                        <button
-                          onClick={() => handleClick(makeString(i + 1))}
-                          className={`${i + 1 === page ? "text-blue-500" : ""}`}
-                        >
-                          {i + 1}
-                        </button>
-                      </li>
-                    );
-                  })}
-              </ul>
-              <li>
-                <button
-                  disabled={page === totalPage}
-                  onClick={() => {
-                    handleClick(makeString(page + 1));
-                  }}
-                >
-                  Next
-                </button>
-              </li>
-            </ul>
+            <Pagination totalPages={totalPage} />
           </div>
         </div>
 

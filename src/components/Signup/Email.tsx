@@ -7,6 +7,7 @@ import { getConfirmCode, getSendCode, postEmailCheck } from "@/api/auth";
 import { ReactComponent as Bluelogo } from "@/assets/svg/blue-logo.svg";
 import { ReactComponent as Arrow } from "@/assets/svg/chevron-right.svg";
 import { ReactComponent as Xicon } from "@/assets/svg/x-icon.svg";
+import { CODE_REGEX } from "@/constants/signup";
 import { fillEmail } from "@/features/signUpSlice";
 import { useTimer } from "@/lib/hooks/useTimer";
 
@@ -23,7 +24,7 @@ export const schema = z.object({
   code: z
     .string()
     .min(1, "인증코드를 입력해 주세요")
-    .regex(/^\d{6}$/, "인증코드를 확인해 주세요"),
+    .regex(CODE_REGEX, "인증코드를 확인해 주세요"),
 });
 
 type NewUser = z.infer<typeof schema>;
@@ -52,12 +53,11 @@ const Email = ({ setStep }: Props) => {
     console.log(data);
   };
 
-  // 이메일 중복 확인
-  const handleConfirmEmail = async (data: any) => {
-    setIsConfirmed(true);
-    const res = await postEmailCheck(data.useremail);
+  ////// 이메일 중복 확인 필요
+  const handleConfirmEmail = async () => {
+    const res = await postEmailCheck(getValues("useremail"));
     if (errors.useremail) {
-      return;
+      return alert("이미 사용중인 이메일 입니다.");
     } else if (res.state === 200) {
       console.log(res);
       setIsConfirmed(true);

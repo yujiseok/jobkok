@@ -1,14 +1,19 @@
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { postLogout } from "@/api/auth";
+import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { ReactComponent as ChevronDown } from "@/assets/svg/chevron-down.svg";
 import { ReactComponent as NavProfile } from "@/assets/svg/nav-profile.svg";
 import { ReactComponent as Logo } from "@/assets/svg/newlogo.svg";
+import { signOut } from "@/features/authSlice";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { auth } = useAppSelector((state) => state);
   const handleLogout = async () => {
     const res = await postLogout();
     if (res.state === 200) {
+      dispatch(signOut());
       navigate("/sign-in");
     }
   };
@@ -18,7 +23,7 @@ const Navbar = () => {
     <nav className="min-h-16 fixed top-0 z-20 w-full bg-white">
       <div className="min-h-16 mx-auto flex max-w-7xl items-center justify-between px-4">
         <div className="flex items-center gap-16">
-          <Link to="/">
+          <Link to="/talent/management">
             <Logo />
           </Link>
           <ul className="SubHead1Medium flex cursor-pointer items-center gap-12">
@@ -69,7 +74,7 @@ const Navbar = () => {
         <div className="dropdown-hover SubHead1Medium dropdown relative flex items-center gap-4">
           <NavProfile />
           <div className="dropdown flex items-center">
-            <p>잡콕 미술학원</p>
+            <p>{auth.companyName}</p>
             <ChevronDown />
           </div>
           <ul className="dropdown-content menu rounded-box absolute top-9 flex w-52 bg-white p-2 shadow">

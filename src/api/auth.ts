@@ -2,14 +2,6 @@ import type { AxiosResponse } from "axios";
 import { AxiosError } from "axios";
 import { client } from "./axios";
 
-client.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
-
 // 로그인
 export const postSignIn = async (useremail: string, password: string) => {
   try {
@@ -19,7 +11,7 @@ export const postSignIn = async (useremail: string, password: string) => {
     });
     localStorage.clear();
     if (data.state === 200) {
-      localStorage.setItem("token", data.data.accessToken);
+      localStorage.setItem("token", JSON.stringify(data.data));
     }
     return data;
   } catch (error) {

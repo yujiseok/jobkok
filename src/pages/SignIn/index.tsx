@@ -5,11 +5,13 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import * as z from "zod";
 import { postSignIn } from "@/api/auth";
+import { useAppDispatch } from "@/app/hooks";
 import { ReactComponent as Bluelogo } from "@/assets/svg/blue-logo.svg";
 import { ReactComponent as Eyeclose } from "@/assets/svg/eye-close.svg";
 import { ReactComponent as Eyeopen } from "@/assets/svg/eye-open.svg";
 import { ReactComponent as Xicon } from "@/assets/svg/x-icon.svg";
 import { PW_REGEX } from "@/constants/signup";
+import { signIn } from "@/features/authSlice";
 
 export interface IShowPw {
   type: "password" | "text";
@@ -40,6 +42,9 @@ const SignIn = () => {
     type: "password",
     visible: false,
   });
+
+  const dispatch = useAppDispatch();
+
   // 새로고침 했을때 저장된 이메일 값 보여주기
   useEffect(() => {
     if (cookies.rememberEmail !== undefined) {
@@ -83,8 +88,11 @@ const SignIn = () => {
 
   const onSubmit = async (data: User) => {
     const res = await postSignIn(data.useremail, data.password);
+    console.log(res.data);
+
     if (res.state === 200) {
       navigate("/");
+      dispatch(signIn(res.data));
     } else {
       setIsFail(true);
     }

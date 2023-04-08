@@ -1,7 +1,18 @@
-import { Outlet, ScrollRestoration } from "react-router-dom";
+import { useEffect } from "react";
+import { Outlet, ScrollRestoration, useNavigate } from "react-router-dom";
+import { useAppSelector } from "@/app/hooks";
 import { ReactComponent as Logo } from "@/assets/svg/white-logo.svg";
 
 const OtherLayout = () => {
+  const navigate = useNavigate();
+  const { auth } = useAppSelector((state) => state);
+
+  useEffect(() => {
+    if (auth.accessToken) {
+      navigate("/talent/management");
+    }
+  }, [auth.accessToken]);
+
   return (
     <>
       <main className="flex bg-white">

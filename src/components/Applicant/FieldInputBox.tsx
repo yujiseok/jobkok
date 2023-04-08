@@ -9,7 +9,7 @@ const FieldInputBox = ({
 }) => {
   return (
     <span
-      className={`${className} flex h-[52px] items-center gap-4 rounded-lg border bg-gray-0 px-4 ${
+      className={`${className} flex h-[52px] items-center gap-4 rounded-lg border px-4 ${
         errors ? " border-error-400" : " border-gray-100"
       }`}
     >

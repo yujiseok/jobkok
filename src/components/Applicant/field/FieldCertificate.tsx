@@ -1,6 +1,8 @@
 import { useFormContext } from "react-hook-form";
 import type { IHandleKeyDown } from "@/types/application";
 import FieldInputBox from "@components/Applicant/FieldInputBox";
+import FormBox from "@components/NewForm/FormBox";
+import FormInputBox from "@components/NewForm/FormInputBox";
 
 const FieldCertificate = ({ handleKeyDown }: IHandleKeyDown) => {
   if (location.pathname === "/applicant/application") {
@@ -18,7 +20,7 @@ const FieldCertificate = ({ handleKeyDown }: IHandleKeyDown) => {
               자격증 이름
             </label>
             <input
-              className="max-w-[160px] bg-transparent focus:outline-none"
+              className="max-w-[160px]"
               type="text"
               id="certificateName"
               maxLength={20}
@@ -34,7 +36,7 @@ const FieldCertificate = ({ handleKeyDown }: IHandleKeyDown) => {
               발생처
             </label>
             <input
-              className="max-w-[140px] bg-transparent focus:outline-none "
+              className="max-w-[140px] "
               type="text"
               id="certificatePublisher"
               maxLength={20}
@@ -47,7 +49,7 @@ const FieldCertificate = ({ handleKeyDown }: IHandleKeyDown) => {
               취득일
             </label>
             <input
-              className="max-w-[120px] bg-transparent focus:outline-none "
+              className="max-w-[120px] "
               type="date"
               id="certificateDate"
               onKeyDown={handleKeyDown}
@@ -59,46 +61,41 @@ const FieldCertificate = ({ handleKeyDown }: IHandleKeyDown) => {
     );
   } else {
     return (
-      <div className="applicant-field-box">
+      <div className="form-field-box">
         <div className="applicant-filed-row">
-          <FieldInputBox>
+          <FormBox>
             <label className="applicant-field-label" htmlFor="certificateName">
               자격증 이름
             </label>
-            <input
-              className="max-w-[160px] bg-transparent focus:outline-none"
+            <FormInputBox
+              className="max-w-[160px]"
               type="text"
               id="certificateName"
-              maxLength={20}
-              placeholder="자격증 이름을 알려주세요."
             />
-          </FieldInputBox>
-          <FieldInputBox>
+          </FormBox>
+          <FormBox>
             <label
               className="applicant-field-label"
               htmlFor="certificatePublisher"
             >
               발생처
             </label>
-            <input
-              className="max-w-[140px] bg-transparent focus:outline-none "
+            <FormInputBox
+              className="max-w-[140px] "
               type="text"
               id="certificatePublisher"
-              maxLength={20}
-              placeholder="발행처를 알려주세요."
             />
-          </FieldInputBox>
-          <FieldInputBox>
+          </FormBox>
+          <FormBox>
             <label className="applicant-field-label" htmlFor="certificateDate">
               취득일
             </label>
-            <input
-              className="max-w-[120px] bg-transparent focus:outline-none "
+            <FormInputBox
+              className="max-w-[120px] "
               type="date"
               id="certificateDate"
-              onKeyDown={handleKeyDown}
             />
-          </FieldInputBox>
+          </FormBox>
         </div>
       </div>
     );

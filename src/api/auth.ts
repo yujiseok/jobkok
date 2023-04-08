@@ -79,22 +79,20 @@ export const postEmailCheck = async (useremail: string) => {
 
 // 인증코드 발송
 export const getSendCode = async (useremail: string) => {
-  try {
-    const { data }: AxiosResponse = await client.get(
-      `/auth/number?memberEmail=${useremail}`,
-    );
-    return data;
-  } catch (err) {
-    console.log(err);
-  }
+  const { data }: AxiosResponse = await client.post(
+    `/auth/number?memberEmail=${useremail}`,
+  );
+  return data;
 };
 
 // 인증코드 확인
-export const getConfirmCode = async (useremail: string, code: number) => {
-  const { data }: AxiosResponse = await client({
-    method: "GET",
-    url: "/auth/code",
-    data: { memberEmail: useremail, code },
+export const getConfirmCode = async (
+  useremail: string,
+  code: string | undefined,
+) => {
+  const { data }: AxiosResponse = await client.post("/auth/number", {
+    memberEmail: useremail,
+    authNumber: code,
   });
   return data;
 };

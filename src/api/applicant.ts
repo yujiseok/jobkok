@@ -6,9 +6,12 @@ import type {
 import { client } from "./axios";
 
 // 지원자 이메일 중복확인
-export const emailDuplicatecheck = async (value: IApplicantAuthReq) => {
+export const emailDuplicatecheck = async (
+  applyEmail: string,
+  recruitId: number,
+) => {
   const { data }: AxiosResponse = await client.get(
-    `/view/check?email=${value.applyEmail}&recruitId=${value.recruitId}`,
+    `/view/check?email=${applyEmail}&recruitId=${recruitId}`,
   );
   console.log(data);
   return data;

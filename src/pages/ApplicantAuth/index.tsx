@@ -1,9 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import * as z from "zod";
-import { emailDuplicatecheck, submitApply } from "@/api/applicant";
+import { emailDuplicatecheck } from "@/api/applicant";
+import { getConfirmCode, getSendCode, postEmailCheck } from "@/api/auth";
 import { ReactComponent as IconLogo } from "@/assets/svg/blue-logo.svg";
 import AuthEnter from "@components/Applicant/AuthEnter";
 import AuthLabel from "@components/Applicant/AuthLabel";
@@ -56,25 +57,27 @@ const ApplicantAuth = () => {
     resolver: zodResolver(schema),
   });
 
-  const getDuplicateTest = () => {
-    emailDuplicatecheck(3, "ssakthree33@gmail.com");
-  };
-
-  const getEmailAuth = () => {
-    // emailAuth(3, "ssakthree33@gmail.com");
+  const asdf = async () => {
+    const res = await emailDuplicatecheck(watch().email, 49);
+    return res.state === 200;
   };
 
   // 인증받기 토글 열릴 때 : 이메일 유효성 통과, 중복없음, 인증미완료
   const handleGetCodeBtn = async () => {
     if (getValues().email === "" || errors.email?.message !== undefined) {
       setFocus("email");
-      // 중복없음 분기 추가 필요 : 중복시 confirm("이미 지원됐습니다. 중복지원이 불가합니다.")
     } else if (isCertified) {
       confirm("이미 이메일 인증이 완료됐습니다.");
+    } else if (await asdf()) {
+      const res = await getSendCode(watch().email);
+      if (res.state === 200) {
+        confirm("이메일이 전송됐습니다. 메일함을 확인해주세요.");
+        setIsSended(true);
+      } else {
+        confirm(`이메일 전송에 실패했습니다.`);
+      }
     } else {
-      setIsSended(true);
-      // 이메일 인증 API
-      confirm("이메일이 전송됐습니다. 메일함을 확인해주세요.");
+      confirm("이미 지원됐습니다. 중복지원이 불가합니다.");
     }
   };
 
@@ -88,8 +91,11 @@ const ApplicantAuth = () => {
       setFocus("authCode");
       // 이메일 인증 API 성공값 추가 필요 : 실패시 confirm("올바른 인증코드를 입력해주세요")
     } else {
-      setIsSended(false);
-      setIsCertified(true);
+      const res = await getConfirmCode(watch().email, watch().authCode);
+      console.log(res);
+
+      // setIsSended(false);
+      // setIsCertified(true);
     }
   };
 
@@ -228,14 +234,6 @@ const ApplicantAuth = () => {
         >
           지원서 작성하기
         </button>
-        <div>
-          <button className="btn mt-4" type="button" onClick={getDuplicateTest}>
-            이메일 중복확인
-          </button>
-          <button className="btn mt-4" type="button" onClick={getEmailAuth}>
-            이메일 인증
-          </button>
-        </div>
       </section>
     </div>
   );

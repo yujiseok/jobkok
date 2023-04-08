@@ -3,9 +3,11 @@ import { AxiosError } from "axios";
 import { client } from "./axios";
 
 client.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+  const { accessToken, refreshToken } = JSON.parse(
+    JSON.parse(localStorage.getItem("persist:root")!).auth,
+  );
+  if (accessToken) {
+    config.headers.Authorization = `Bearer ${accessToken}`;
   }
   return config;
 });

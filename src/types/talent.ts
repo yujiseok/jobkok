@@ -35,7 +35,7 @@ export interface ITalentBase {
   applyName: string;
   applyPhone: string;
   applyEmail: string;
-  applyProcedure: string | null;
+  applyProcedure: ProcedureType;
   applyDelete: boolean;
   createdTime: string;
   pass?: boolean;

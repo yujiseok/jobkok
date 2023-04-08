@@ -13,7 +13,6 @@ import { ReactComponent as Trash } from "@/assets/svg/trash.svg";
 import { LIMIT } from "@/constants/pagination";
 import useAllTalentQuery from "@/lib/hooks/useAllTalentQuery";
 import useDnD from "@/lib/hooks/useDnD";
-import useFormDataQuery from "@/lib/hooks/useFormDataQuery";
 import useFormList from "@/lib/hooks/useFormList";
 import usePagination from "@/lib/hooks/usePagination";
 import useTalentByProcedureQuery from "@/lib/hooks/useTalentByProcedureQuery";
@@ -24,11 +23,12 @@ import type { IKanbanBase, ITalent } from "@/types/talent";
 import Banner from "@components/Common/Banner";
 import ModalForLater from "@components/Common/ModalForLater";
 import InterviewBadge from "@components/Talent/InterviewBadge";
-import KanbanHeader from "@components/Talent/KanbanHeader";
+// import KanbanHeader from "@components/Talent/KanbanHeader";
 import NumberBadge from "@components/Talent/NumberBadge";
 import Pagination from "@components/Talent/Pagination";
 import PreferentialBadge from "@components/Talent/PreferentialBadge";
 import TKeywordBadge from "@components/Talent/TKeywordBadge";
+import useFormDataQuery from "@/lib/hooks/useFormDataQuery";
 
 const TalentStatus = () => {
   const { page, offset, handleClick } = usePagination();

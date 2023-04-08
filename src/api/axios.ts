@@ -6,6 +6,7 @@ const config: AxiosRequestConfig = {
 };
 
 export const client = axios.create(config);
+export const common = axios.create(config);
 
 client.interceptors.request.use((config) => {
   const { accessToken } = JSON.parse(localStorage.getItem("token") || "{}");

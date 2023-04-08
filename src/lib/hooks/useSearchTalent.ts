@@ -14,9 +14,11 @@ const useSearchTalent = (recruitId: string) => {
   const { data: searchTalent } = useQuery({
     queryKey: ["searchTalent", applyName, recruitId, applyProcedure],
     queryFn: () => searchApplicant(applyName, recruitId),
+    enabled: false,
   });
 
   const handleSearchBar = (e: React.FormEvent<HTMLFormElement>) => {
+    console.log(e);
     e.preventDefault();
     if (!searchInput?.current?.value) return alert("입력해주세요");
     setSearchParams({ applyName: searchInput.current.value.trim() });

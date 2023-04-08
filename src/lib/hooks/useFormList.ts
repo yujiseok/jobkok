@@ -1,12 +1,18 @@
 import { useState } from "react";
+import type { IFormData, IResponse } from "@/types/talent";
 
 const useFormList = (
-  id: number,
+  formData: IResponse<IFormData[]> | IResponse<null> | undefined,
 ): [
   recruitId: string,
   handleChangeFormList: (e: React.ChangeEvent<HTMLSelectElement>) => void,
 ] => {
-  const [recruitId, setRecruitId] = useState(`${id}` ?? "");
+  const id =
+    formData?.data !== null && formData?.result === "SUCCESS"
+      ? formData?.data[0]?.id
+      : "";
+
+  const [recruitId, setRecruitId] = useState(`${id}`);
 
   const handleChangeFormList = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setRecruitId(e.target.value);

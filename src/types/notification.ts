@@ -37,35 +37,16 @@ export interface ISendEmail {
   interviewDate: string;
 }
 
-// export interface ITalentList extends INotiBase {
-//   message?: string;
-//   data: {
-//     recruitId: number;
-//     recruitTitle: string;
-//     applyId: number;
-//     applyName: string;
-//     applyPhone: string;
-//     applyEmail: string;
-//     applyProcedure: string;
-//     applyDelete: boolean;
-//     failApply: boolean;
-//     wish: boolean;
-//     createdTime: string;
-//     recentMessageTime: string;
-//     keywords: string[];
-//   };
-// }
-
-// export interface ISendingList extends INotiBase {
-//   message?: string;
-//   data: {
-//     mailId: number;
-//     mailContent: string;
-//     noticeStep: string;
-//     createdTime: string;
-//     applyName: string;
-//     applyPhone: string;
-//     applyEmail: string;
-//     applyProcedure: string;
-//   };
-// }
+export interface ISelectedTalent {
+  applyDelete: boolean;
+  applyEmail: string;
+  applyId: number;
+  applyName: string;
+  applyPhone: string;
+  applyProcedure: string;
+  keywordList: string[];
+  keywords: string;
+  pass: boolean;
+  score: number;
+  wish: boolean;
+}

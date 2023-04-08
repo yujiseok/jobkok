@@ -1,29 +1,16 @@
 import { useEffect } from "react";
-import {
-  Outlet,
-  ScrollRestoration,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { Outlet, ScrollRestoration, useNavigate } from "react-router-dom";
+import { useAppSelector } from "@/app/hooks";
 import Navbar from "./Navbar";
 const Layout = () => {
   const navigate = useNavigate();
-  const { pathname } = useLocation();
+  const { auth } = useAppSelector((state) => state);
 
   useEffect(() => {
-    if (
-      !localStorage.getItem("token") &&
-      pathname !== "/sign-in" &&
-      pathname !== "/sign-up"
-    ) {
+    if (!auth.accessToken) {
       navigate("/sign-in");
-    } else if (
-      localStorage.getItem("token") &&
-      (pathname === "/sign-in" || pathname === "/sign-up")
-    ) {
-      navigate("/");
     }
-  }, [localStorage.getItem("token")]);
+  }, [auth.accessToken]);
 
   return (
     <>
@@ -31,7 +18,7 @@ const Layout = () => {
       <main className="mx-auto mt-16 max-w-7xl px-4 pb-64 pt-16">
         <Outlet />
       </main>
-      {/* <ScrollRestoration /> */}
+      <ScrollRestoration />
     </>
   );
 };

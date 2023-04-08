@@ -11,6 +11,8 @@ client.interceptors.request.use((config) => {
   const { accessToken } = JSON.parse(localStorage.getItem("token") || "{}");
   if (!config.headers) return config;
 
+  console.log(config);
+
   if (accessToken !== null) {
     config.headers.Authorization = `Bearer ${accessToken}`;
   }
@@ -25,8 +27,9 @@ client.interceptors.response.use(
 
     const status = response.status;
 
+    console.log(error);
     if (status === 400) {
-      const res = await axios({
+      const res = await client({
         method: "POST",
         url: "https://jobkok.shop/auth/reissue",
         headers: {

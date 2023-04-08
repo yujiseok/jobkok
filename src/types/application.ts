@@ -1,11 +1,13 @@
+import type { IFormRes } from "@/types/form";
+
 export interface IHandleKeyDown {
   handleKeyDown?: (event: React.KeyboardEvent<Element>) => void;
 }
 
 export interface IApplicantAuthReq {
   //기본정보(인증)
-  recruitId: number;
   applyEmail: string;
+  recruitId: number;
 }
 
 export interface IApplicantApplyReq extends IApplicantAuthReq {
@@ -65,4 +67,18 @@ export interface IApplicantApplyReq extends IApplicantAuthReq {
   activitiesContent: null;
   activitiesStart: null;
   activitiesEnd: null;
+}
+
+export interface IApplicantFormReq {
+  recruitId: number;
+  recruitTitle: string;
+  recruitContent: string;
+  resumeTitle: string;
+  keywords: string;
+  docsStart: string;
+  docsEnd: string;
+  meetStart: string;
+  meetEnd: string;
+  confirmStart: string;
+  confirmEnd: string;
 }

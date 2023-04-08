@@ -23,3 +23,10 @@ export const submitApply = async (value: IApplicantApplyReq) => {
 
   return data;
 };
+
+// 지원서 채용폼 조회
+export const getRecuitData = async (recruitId: number) => {
+  const { data }: AxiosResponse = await client.get(`/view/${recruitId}`);
+
+  return data;
+};

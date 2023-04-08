@@ -1,15 +1,18 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import * as z from "zod";
-import { submitApply } from "@/api/applicant";
-import { getRecuitFormDetail } from "@/api/form";
+
+import { getRecuitData, submitApply } from "@/api/applicant";
 import { ReactComponent as IconComplete } from "@/assets/svg/check-round-full-blue.svg";
 import { ReactComponent as IconIncomplete } from "@/assets/svg/check-round-line-gray.svg";
 import { ReactComponent as IconArrowLeft } from "@/assets/svg/chevron-left-white.svg";
 
 import { OPTIONAL_FIELD, REQUIRED_FIELD } from "@/constants/applicant";
+
+import formatDateSlash from "@/lib/utils/formatDateSlash";
+import type { IApplicantFormReq } from "@/types/application";
 
 import FieldAwards from "@components/Applicant/field/FieldAwards";
 import FieldCareer from "@components/Applicant/field/FieldCareer";
@@ -78,14 +81,18 @@ type IApplicationForm = z.infer<typeof schema>;
 
 const Application = () => {
   const navigate = useNavigate();
+  const [recruitData, setRecruitData] = useState<IApplicantFormReq>();
 
   const { ...methods } = useForm<IApplicationForm>({
     resolver: zodResolver(schema),
   });
 
   useEffect(() => {
-    // const res = getRecuitFormDetail(48);
-    // console.log(res);
+    const serverGetRecuitData = async () => {
+      const json = await getRecuitData(48);
+      setRecruitData(json.data);
+    };
+    serverGetRecuitData();
   }, []);
 
   // input date 는 키보드로 입력불가
@@ -93,6 +100,7 @@ const Application = () => {
     event.preventDefault();
   };
 
+  // 상단 뒤로가기, 하단 이전 버튼
   const handleBackBtn = () => {
     confirm("작성했던 정보가 초기화됩니다. 이전 단계로 이동하시겠습니까?")
       ? navigate(-1)
@@ -124,7 +132,7 @@ const Application = () => {
             onClick={handleBackBtn}
           />
           <h1 className="Head2Semibold text-gray-0">
-            [기업에서 설정한 지원서 제목] 지원서
+            [{recruitData?.recruitTitle}] 지원서
           </h1>
         </div>
       </header>
@@ -141,7 +149,8 @@ const Application = () => {
                   지원서 접수 마감일
                 </dt>
                 <dd className="SubHead2Medium w-[130px] text-gray-600">
-                  23/03/30
+                  {recruitData !== undefined &&
+                    formatDateSlash(recruitData.docsEnd)}
                 </dd>
               </div>
               <div className="flex gap-3.5">
@@ -149,7 +158,11 @@ const Application = () => {
                   기업 면접 가능 기간
                 </dt>
                 <dd className="SubHead2Medium w-[130px] text-gray-600">
-                  23/03/31 ~ 23/04/01
+                  {recruitData !== undefined &&
+                    formatDateSlash(recruitData?.meetStart)}{" "}
+                  ~
+                  {recruitData !== undefined &&
+                    formatDateSlash(recruitData?.meetEnd)}
                 </dd>
               </div>
             </dl>
@@ -201,7 +214,11 @@ const Application = () => {
               </h2>
               <div className="flex flex-col gap-5">
                 {/* 자기소개 */}
-                <FieldCoverLetter />
+                <FieldCoverLetter
+                  resumeTitle={
+                    recruitData !== undefined && recruitData?.resumeTitle
+                  }
+                />
                 {/* 경력 */}
                 <FieldCareer handleKeyDown={handleKeyDown} />
                 {/* 최종학력 */}

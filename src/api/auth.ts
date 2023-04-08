@@ -80,7 +80,7 @@ export const postEmailCheck = async (useremail: string) => {
 // 인증코드 발송
 export const getSendCode = async (useremail: string) => {
   const { data }: AxiosResponse = await client.post(
-    `/auth/number?memberEmail=${useremail}`,
+    `/auth/send_number?memberEmail=${useremail}`,
   );
   return data;
 };
@@ -90,11 +90,15 @@ export const getConfirmCode = async (
   useremail: string,
   code: string | undefined,
 ) => {
-  const { data }: AxiosResponse = await client.post("/auth/number", {
-    memberEmail: useremail,
-    authNumber: code,
-  });
-  return data;
+  try {
+    const { data }: AxiosResponse = await client.post("/auth/check_number", {
+      memberEmail: useremail,
+      authNumber: code,
+    });
+    return data;
+  } catch (err: any) {
+    console.log(err.message);
+  }
 };
 
 // 비밀번호 변경

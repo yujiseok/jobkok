@@ -57,9 +57,16 @@ const ApplicantAuth = () => {
     resolver: zodResolver(schema),
   });
 
-  const asdf = async () => {
+  // 이메일 중복확인
+  const emailCheck = async () => {
     const res = await emailDuplicatecheck(watch().email, 49);
     return res.data;
+  };
+
+  // 인증코드 확인
+  const authcodeCheck = async () => {
+    const res = await getConfirmCode(watch().email, watch().authCode);
+    return res?.state === 200;
   };
 
   // 인증받기 토글 열릴 때 : 이메일 유효성 통과, 중복없음, 인증미완료
@@ -68,7 +75,7 @@ const ApplicantAuth = () => {
       setFocus("email");
     } else if (isCertified) {
       confirm("이미 이메일 인증이 완료됐습니다.");
-    } else if (await asdf()) {
+    } else if (await emailCheck()) {
       const res = await getSendCode(watch().email);
       if (res.state === 200) {
         confirm("이메일이 전송됐습니다. 메일함을 확인해주세요.");
@@ -89,13 +96,11 @@ const ApplicantAuth = () => {
       errors.authCode
     ) {
       setFocus("authCode");
-      // 이메일 인증 API 성공값 추가 필요 : 실패시 confirm("올바른 인증코드를 입력해주세요")
+    } else if (await authcodeCheck()) {
+      setIsSended(false);
+      setIsCertified(true);
     } else {
-      const res = await getConfirmCode(watch().email, watch().authCode);
-      console.log(res);
-
-      // setIsSended(false);
-      // setIsCertified(true);
+      confirm("올바른 인증코드를 입력해주세요");
     }
   };
 

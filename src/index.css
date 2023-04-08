@@ -187,4 +187,8 @@ a {
   .action-btn-aactive {
     @apply rounded-md bg-blue-50 py-2.5 px-6 text-blue-500;
   }
+
+  .form-field-box {
+    @apply flex min-w-[777px] flex-col gap-6 py-[50px] px-[28px];
+  }
 }

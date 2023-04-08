@@ -7,7 +7,7 @@ import FormInputBox from "@components/NewForm/FormInputBox";
 import FormSelectBox from "@components/NewForm/FormSelectBox";
 
 const FieldEdu = ({ handleKeyDown }: IHandleKeyDown) => {
-  if (location.pathname === "/applicant/application") {
+  if (location.pathname.slice(0, 10) === "/applicant") {
     const {
       register,
       formState: { errors },

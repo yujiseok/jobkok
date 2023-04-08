@@ -6,15 +6,11 @@ import FormBox from "@components/NewForm/FormBox";
 import FormInputBox from "@components/NewForm/FormInputBox";
 
 const FieldPreference = () => {
-  if (location.pathname === "/applicant/application") {
-    const {
-      register,
-      watch,
-      formState: { errors },
-    } = useFormContext();
+  if (location.pathname.slice(0, 10) === "/applicant") {
+    const { register, watch } = useFormContext();
 
     return (
-      <div className="form-field-box">
+      <div className="applicant-field-box">
         <legend className="applicant-field-legend">취업우대사항</legend>
         <p className="applicant-field-Paragraph">
           본인이 해당하는 항목을 선택해주세요.

@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 const FieldCoverLetter = ({ resumeTitle }: any) => {
   const location = useLocation();
 
-  if (location.pathname === "/applicant/application") {
+  if (location.pathname.slice(0, 10) === "/applicant") {
     const {
       register,
       watch,

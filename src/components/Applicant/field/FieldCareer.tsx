@@ -8,7 +8,7 @@ import FormInputBox from "@components/NewForm/FormInputBox";
 const FieldCareer = ({ handleKeyDown }: IHandleKeyDown) => {
   const location = useLocation();
 
-  if (location.pathname === "/applicant/application") {
+  if (location.pathname.slice(0, 10) === "/applicant") {
     const {
       register,
       watch,

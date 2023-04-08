@@ -5,7 +5,7 @@ import FormBox from "@components/NewForm/FormBox";
 import FormInputBox from "@components/NewForm/FormInputBox";
 
 const FieldAwards = ({ handleKeyDown }: IHandleKeyDown) => {
-  if (location.pathname === "/applicant/application") {
+  if (location.pathname.slice(0, 10) === "/applicant") {
     const {
       register,
       formState: { errors },

@@ -21,10 +21,10 @@ const SaveModal = ({ setIsSaveModal, apiData }: IProps) => {
       >
         <div>
           <p className="mb-8">
-            {apiData.contents}으로 지원서 링크생성이 완료되었습니다.
+            {apiData?.contents}으로 지원서 링크생성이 완료되었습니다.
           </p>
           <p className="mb-8 rounded-lg border border-gray-100 py-3 px-5">
-            {apiData.recruitUrl}
+            {apiData?.recruitUrl}
           </p>
         </div>
         <div className="flex gap-4">

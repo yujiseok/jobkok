@@ -1,22 +1,34 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { getConfirmCode } from "@/api/auth";
 import { ReactComponent as Dot } from "@/assets/svg/blue-middle-dot.svg";
-import { schema } from "@components/Signup/Email";
-import { userSchema } from "@pages/SignIn";
+import { CODE_REGEX } from "@/constants/signup";
+import { useTimer } from "@/lib/hooks/useTimer";
 
 type Props = {
   setStep: React.Dispatch<React.SetStateAction<number>>;
 };
 
-const authSchema = userSchema.extend({
-  code: z.number().min(1, "인증코드를 입력해 주세요").max(6),
+const schema = z.object({
+  useremail: z
+    .string()
+    .min(1, "이메일을 입력해 주세요.")
+    .email("올바른 이메일 형식을 입력해 주세요."),
+  code: z
+    .string()
+    .min(1, "인증코드를 입력해 주세요")
+    .regex(CODE_REGEX, "인증코드를 확인해 주세요"),
 });
 
-type User = z.infer<typeof authSchema>;
+type User = z.infer<typeof schema>;
 
 const AuthCode = ({ setStep }: Props) => {
+  const [InputValue, setInputValue] = useState("");
+  const [confirmCode, setConfirmCode] = useState(false);
+  const { formattedTime, isCountingDown, setIsCountingDown, resetTime } =
+    useTimer(180000, false);
   const {
     register,
     handleSubmit,
@@ -24,12 +36,28 @@ const AuthCode = ({ setStep }: Props) => {
     getValues,
     formState: { errors, isSubmitting, isDirty },
   } = useForm<User>({
+    mode: "onChange",
     resolver: zodResolver(schema),
   });
 
-  const handleConfirmCode = () => {
-    console.log("코드 확인, 실패");
+  const handleConfirmCode = async () => {
+    const useremail = getValues("useremail");
+    const code = getValues("code");
+    const res = await getConfirmCode(useremail, code);
+    if (res.state === 200) {
+      setConfirmCode(true);
+    } else {
+      console.log("코드확인실패");
+    }
   };
+
+  useEffect(() => {
+    setIsCountingDown(true);
+    const useremail = localStorage.getItem("useremail");
+    if (useremail !== null) {
+      setInputValue(useremail);
+    }
+  }, []);
 
   const onSubmit = (data: User) => {
     console.log(data);
@@ -51,7 +79,7 @@ const AuthCode = ({ setStep }: Props) => {
         <div className="mb-6">
           <div className="flex">
             <div
-              className={`mr-3 flex h-[51px] w-[430px] items-center rounded-lg border border-solid bg-gray-0 px-6 after:text-gray-300 ${
+              className={`mr-3 flex h-[51px] w-[430px] items-center rounded-lg border border-solid bg-blue-25 px-6 after:text-gray-300 ${
                 errors.useremail
                   ? "border-error-400"
                   : "border-gray-100 focus-within:border-blue-400"
@@ -59,8 +87,8 @@ const AuthCode = ({ setStep }: Props) => {
             >
               <input
                 id="email"
-                placeholder="jobkok@gmail.com"
-                className="SubHead1Medium w-[365px] outline-none"
+                className="SubHead1Medium w-[365px] bg-blue-25 outline-none"
+                value={InputValue}
                 type="text"
                 {...register("useremail", {
                   required: true,
@@ -68,12 +96,10 @@ const AuthCode = ({ setStep }: Props) => {
               />
             </div>
           </div>
-          {/* 오류 메세지 띄우기 */}
           <span className="Caption1Medium text-gray-400">
             이메일로 회원님의 인증코드가 발송되었습니다
           </span>
         </div>
-        {/* 인증코드 전송 버튼 누르면 나타나도록 */}
         <label htmlFor="code" className="Caption1Medium mb-1 text-gray-300">
           인증코드
         </label>
@@ -91,14 +117,28 @@ const AuthCode = ({ setStep }: Props) => {
                 placeholder="6자리 인증코드를 입력해주세요"
                 className="SubHead1Medium w-[365px] outline-none"
                 type="text"
+                maxLength={6}
                 {...register("code", {
                   required: true,
                 })}
               />
-              <span className="SubHead1Medium text-error-400">3:00</span>
+              {isCountingDown && (
+                <span className="SubHead1Medium text-error-400">
+                  {formattedTime}
+                </span>
+              )}
             </div>
-            <div className="SubHead1Semibold flex h-[51px] w-24 items-center justify-center rounded-lg bg-blue-50 text-blue-200">
-              <button onClick={handleConfirmCode}>인증하기</button>
+            <div
+              className={`SubHead1Semibold flex h-[51px] w-24 items-center justify-center rounded-lg bg-blue-50 ${
+                getValues("code") ? "text-blue-500" : "text-blue-200"
+              }`}
+            >
+              <button
+                disabled={!getValues("code") || !!errors.code}
+                onClick={handleConfirmCode}
+              >
+                인증하기
+              </button>
             </div>
           </div>
           {/* 오류 메세지 띄우기 */}
@@ -111,7 +151,10 @@ const AuthCode = ({ setStep }: Props) => {
           type="submit"
           disabled={isSubmitting && isDirty}
           onClick={() => {
-            setStep(3);
+            if (confirmCode) {
+              localStorage.removeItem("useremail");
+              setStep(3);
+            }
           }}
         >
           다음으로

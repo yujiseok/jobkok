@@ -55,6 +55,7 @@ const Email = ({ setStep }: Props) => {
 
   ////// 이메일 중복 확인 필요
   const handleConfirmEmail = async () => {
+    setIsConfirmed(true);
     const res = await postEmailCheck(getValues("useremail"));
     if (errors.useremail) {
       return alert("이미 사용중인 이메일 입니다.");

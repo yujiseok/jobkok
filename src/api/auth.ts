@@ -80,14 +80,14 @@ export const postEmailCheck = async (useremail: string) => {
 
 // 인증코드 발송
 export const getSendCode = async (useremail: string) => {
-  const { data }: AxiosResponse = await client.get(
+  const { data }: AxiosResponse = await client.post(
     `/auth/number?memberEmail=${useremail}`,
   );
   return data;
 };
 
 // 인증코드 확인
-export const getConfirmCode = async (useremail: string, code: number) => {
+export const getConfirmCode = async (useremail: string, code: string) => {
   const { data }: AxiosResponse = await client.post("/auth/number", {
     memberEmail: useremail,
     authNumber: code,

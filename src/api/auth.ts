@@ -10,6 +10,7 @@ client.interceptors.request.use((config) => {
   return config;
 });
 
+// 로그인
 export const postSignIn = async (useremail: string, password: string) => {
   try {
     const { data }: AxiosResponse = await client.post("/auth/login", {
@@ -19,6 +20,16 @@ export const postSignIn = async (useremail: string, password: string) => {
     localStorage.clear();
     if (data.state === 200) {
       localStorage.setItem("token", data.data.accessToken);
+      localStorage.setItem(
+        "userInfo",
+        JSON.stringify({
+          ceoName: data.data.ceoName,
+          companyName: data.data.companyName,
+          memberEmail: data.data.memberEmail,
+          companyNum: data.data.companyNum,
+          memberPhone: data.data.memberPhone,
+        }),
+      );
     }
     return data;
   } catch (error) {
@@ -28,11 +39,13 @@ export const postSignIn = async (useremail: string, password: string) => {
   }
 };
 
+// 로그아웃
 export const postLogout = async () => {
   try {
     const { data }: AxiosResponse = await client.post("/auth/logout", {});
     if (data.state === 200) {
       localStorage.removeItem("token");
+      localStorage.removeItem("userInfo");
     }
     return data;
   } catch (error) {
@@ -42,6 +55,7 @@ export const postLogout = async () => {
   }
 };
 
+//회원가입
 export const postSignUp = async (
   useremail: string,
   password: string,
@@ -67,32 +81,27 @@ export const postSignUp = async (
   }
 };
 
-// 아이디 중복체크 get / post 확인 필요!
+// 아이디 중복체크
 export const postEmailCheck = async (useremail: string) => {
-  const { data }: AxiosResponse = await client({
-    method: "GET",
-    url: "/auth/email_validation",
-    data: { memberEmail: useremail },
+  const { data }: AxiosResponse = await client.post("/auth/email_validation", {
+    memberEmail: useremail,
   });
   return data;
 };
 
 // 인증코드 발송
 export const getSendCode = async (useremail: string) => {
-  const { data }: AxiosResponse = await client({
-    method: "GET",
-    url: "/auth/user_validation",
-    data: { memberEmail: useremail },
-  });
+  const { data }: AxiosResponse = await client.get(
+    `/auth/number?memberEmail=${useremail}`,
+  );
   return data;
 };
 
 // 인증코드 확인
 export const getConfirmCode = async (useremail: string, code: number) => {
-  const { data }: AxiosResponse = await client({
-    method: "GET",
-    url: "/auth/code",
-    data: { memberEmail: useremail, code },
+  const { data }: AxiosResponse = await client.post("/auth/number", {
+    memberEmail: useremail,
+    authNumber: code,
   });
   return data;
 };

@@ -25,8 +25,8 @@ import { ReactComponent as Stats } from "@/assets/svg/stats.svg";
 import { ReactComponent as User } from "@/assets/svg/user.svg";
 import useAllTalentQuery from "@/lib/hooks/useAllTalentQuery";
 import useDnD from "@/lib/hooks/useDnD";
-import useFormDataQuery from "@/lib/hooks/useFormDataQuery";
 import useFormList from "@/lib/hooks/useFormList";
+import useFormListQuery from "@/lib/hooks/useFormListQuery";
 import useFormStatusQuery from "@/lib/hooks/useFormStatusQuery";
 import formatDate from "@/lib/utils/formatDate";
 import sortWithSlice from "@/lib/utils/sortWithSlice";
@@ -42,7 +42,7 @@ import SliderWrapper from "@components/Talent/SliderWrapper";
 import { WhiteContainer } from "@components/Talent/WhiteContainer";
 
 const TalentManagement = () => {
-  const { formData } = useFormDataQuery();
+  const formData = useFormListQuery();
 
   const [recruitId, handleChangeFormList] = useFormList(formData);
 

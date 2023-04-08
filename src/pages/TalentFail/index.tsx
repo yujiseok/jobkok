@@ -6,8 +6,8 @@ import { ReactComponent as HeartMemoji } from "@/assets/svg/heart-memoji.svg";
 import { ReactComponent as Search } from "@/assets/svg/search.svg";
 import { ReactComponent as Trash } from "@/assets/svg/trash.svg";
 import useFailedTalentQuery from "@/lib/hooks/useFailedTalentQuery";
-import useFormDataQuery from "@/lib/hooks/useFormDataQuery";
 import useFormList from "@/lib/hooks/useFormList";
+import useFormListQuery from "@/lib/hooks/useFormListQuery";
 import useLikeMutate from "@/lib/hooks/useLikeMutate";
 import usePagination from "@/lib/hooks/usePagination";
 import useSearchFailedQuery from "@/lib/hooks/useSearchFailedQuery";
@@ -18,7 +18,7 @@ import Pagination from "@components/Talent/Pagination";
 import TKeywordBadge from "@components/Talent/TKeywordBadge";
 
 const TalentFail = () => {
-  const { formData } = useFormDataQuery();
+  const formData = useFormListQuery();
   const [recruitId, handleChangeFormList] = useFormList(formData);
   const [searchParams, setSearchParams] = useSearchParams();
   const filter = searchParams.get("filter") ?? "all";

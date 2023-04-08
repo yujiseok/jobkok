@@ -14,6 +14,7 @@ import { LIMIT } from "@/constants/pagination";
 import useAllTalentQuery from "@/lib/hooks/useAllTalentQuery";
 import useDnD from "@/lib/hooks/useDnD";
 import useFormList from "@/lib/hooks/useFormList";
+import useFormListQuery from "@/lib/hooks/useFormListQuery";
 import usePagination from "@/lib/hooks/usePagination";
 import useTalentByProcedureQuery from "@/lib/hooks/useTalentByProcedureQuery";
 import ceilPage from "@/lib/utils/ceilPage";
@@ -28,13 +29,12 @@ import NumberBadge from "@components/Talent/NumberBadge";
 import Pagination from "@components/Talent/Pagination";
 import PreferentialBadge from "@components/Talent/PreferentialBadge";
 import TKeywordBadge from "@components/Talent/TKeywordBadge";
-import useFormDataQuery from "@/lib/hooks/useFormDataQuery";
 
 const TalentStatus = () => {
   const { page, offset, handleClick } = usePagination();
   const [searchParams, setSearchParams] = useSearchParams();
   const applyProcedure = searchParams.get("applyProcedure") ?? "전체인재";
-  const { formData, formDataError } = useFormDataQuery();
+  const formData = useFormListQuery();
 
   const [recruitId, handleChangeFormList] = useFormList(formData);
 

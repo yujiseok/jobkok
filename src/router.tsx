@@ -150,7 +150,7 @@ const router: RemixRouter = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Navigate to="/talent/management" />,
+        element: <Navigate to="/sign-in" />,
       },
       {
         path: "/confirm-password",

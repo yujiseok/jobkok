@@ -11,7 +11,6 @@ import useGetTalentQuery from "@/lib/hooks/useGetTalentQuery";
 import useInputLength from "@/lib/hooks/useInputLength";
 import usePagination from "@/lib/hooks/usePagination";
 import useSearchTalent from "@/lib/hooks/useSearchTalent";
-
 import useSelectForm from "@/lib/hooks/useSelectForm";
 import formatDate from "@/lib/utils/formatDate";
 import makeString from "@/lib/utils/makeString";
@@ -63,7 +62,7 @@ const Notification = () => {
     setSearchParams({
       applyProcedure: e.target.value,
       noticeStep,
-      applyName,
+      // applyName,
     });
   };
 
@@ -77,7 +76,7 @@ const Notification = () => {
     setDefaultMsg(stepMsg);
   };
 
-  const handleEmail = async (e) => {
+  const handleEmail = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const res = await sendEmail(recruitId, "22", "안녕하세요", noticeStep);
     console.log(res);

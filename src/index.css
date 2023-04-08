@@ -26,6 +26,17 @@ a {
   display: block;
 }
 
+#searchBar:autofill {
+  -webkit-box-shadow: 0 0 0px 1000px #f9f9fc inset;
+  box-shadow: 0 0 0px 1000px #f9f9fc inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+#searchBar:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px #f9f9fc inset;
+  box-shadow: 0 0 0px 1000px #f9f9fc inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
 .Head1Bold {
   font-size: 40px;
   font-weight: bold;
@@ -134,4 +145,46 @@ a {
   font-weight: 500;
   line-height: normal;
   letter-spacing: -0.2px;
+}
+
+@layer components {
+  .applicant-aside-heading {
+    @apply SubHead1Semibold text-gray-800;
+  }
+
+  .applicant-field-box {
+    @apply flex min-w-[777px] flex-col gap-6 rounded-lg border border-gray-50 bg-gray-0 px-[42px] py-8;
+  }
+
+  .applicant-field-textarea-div {
+    @apply flex h-[272px] items-center gap-4 rounded-lg border bg-gray-0 px-6;
+  }
+
+  .applicant-field-label {
+    @apply Caption1Medium whitespace-nowrap text-gray-600;
+  }
+
+  .applicant-field-legend {
+    @apply Head4Semibold text-gray-900;
+  }
+
+  .applicant-filed-row {
+    @apply flex flex-wrap gap-1.5;
+  }
+
+  .applicant-field-Paragraph {
+    @apply SubHead2Medium text-gray-600;
+  }
+
+  .applicant-aside-box {
+    @apply flex flex-col rounded-lg border-[1.5px] border-gray-50 bg-gray-0 px-[24px];
+  }
+
+  .submit-btn-active {
+    @apply h-[56px] rounded-lg bg-blue-500 py-2.5 px-6 text-center text-gray-0 shadow-blue;
+  }
+
+  .action-btn-aactive {
+    @apply rounded-md bg-blue-50 py-2.5 px-6 text-blue-500;
+  }
 }

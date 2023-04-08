@@ -1,9 +1,10 @@
 import type { Router as RemixRouter } from "@remix-run/router/dist/router";
 import { Suspense } from "react";
-import { createBrowserRouter, Navigate, RouteObject } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import Spinner from "@components/Common/Spinner";
 import Layout from "@components/Layout/Layout";
+import OtherLayout from "@components/Layout/OtherLayout";
 import ApplicantAuth from "@pages/ApplicantAuth";
 import Application from "@pages/Application";
 import ChangeUserInfo from "@pages/ChangeUserInfo";
@@ -186,7 +187,11 @@ const router: RemixRouter = createBrowserRouter([
       },
       {
         path: "/notification",
-        element: <Notification />,
+        element: (
+          <Suspense fallback={<Spinner />}>
+            <Notification />,
+          </Suspense>
+        ),
       },
       {
         path: "/talent",
@@ -224,33 +229,38 @@ const router: RemixRouter = createBrowserRouter([
     ],
   },
   {
-    path: "/sign-up",
-    element: <SignUp />,
-  },
-  {
-    path: "/sign-in",
-    element: <SignIn />,
-  },
-  {
-    path: "/find-user-info",
-    element: <FindUserInfo />,
-  },
-  {
-    path: "/applicant",
+    element: <OtherLayout />,
     children: [
       {
-        path: "auth",
-        element: <ApplicantAuth />,
+        path: "/sign-up",
+        element: <SignUp />,
       },
       {
-        path: "application",
-        element: <Application />,
+        path: "/sign-in",
+        element: <SignIn />,
       },
       {
-        path: "completion",
-        element: <Completion />,
+        path: "/find-user-info",
+        element: <FindUserInfo />,
+      },
+      {
+        path: "/applicant",
+        children: [
+          {
+            path: "auth",
+            element: <ApplicantAuth />,
+          },
+          {
+            path: "completion",
+            element: <Completion />,
+          },
+        ],
       },
     ],
+  },
+  {
+    path: "/applicant/application",
+    element: <Application />,
   },
   {
     path: "*",

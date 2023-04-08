@@ -1,18 +1,39 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import type * as z from "zod";
-import { ReactComponent as Arrow } from "@/assets/svg/arrow-right.svg";
+import { useDispatch } from "react-redux";
+import * as z from "zod";
 import { ReactComponent as Bluelogo } from "@/assets/svg/blue-logo.svg";
+import { ReactComponent as Arrow } from "@/assets/svg/chevron-right.svg";
 import { ReactComponent as Check } from "@/assets/svg/round-check.svg";
-import type { NewUser } from "./Email";
-import { schema } from "./Email";
+import { CEO_REGEX, REGISTRATION_REGEX } from "@/constants/signup";
+import {
+  fillCeo,
+  fillCompanyName,
+  fillRegistration,
+  resetForm,
+  submitForm,
+} from "@/features/signUpSlice";
 
 type Props = {
   setStep: React.Dispatch<React.SetStateAction<number>>;
 };
 
+const schema = z.object({
+  companyName: z.string().min(1, "회사명을 입력해 주세요."),
+  ceo: z
+    .string()
+    .min(1, "대표자명을 입력해 주세요.")
+    .regex(CEO_REGEX, "대표자명을 확인해 주세요."),
+  registration: z
+    .string()
+    .regex(REGISTRATION_REGEX, "올바른 사업자 등록 번호를 입력해 주세요."),
+});
+
+type NewUser = z.infer<typeof schema>;
+
 const UserInfo = ({ setStep }: Props) => {
+  const dispatch = useDispatch();
   const [companyNumber, setCompanyNumber] = useState("");
   const {
     register,
@@ -21,11 +42,16 @@ const UserInfo = ({ setStep }: Props) => {
     getValues,
     formState: { errors, isSubmitting },
   } = useForm<NewUser>({
+    mode: "onChange",
     resolver: zodResolver(schema),
   });
   const onSubmit = (data: NewUser) => {
-    // 회원가입 api 수정 예정
-    console.log(data);
+    dispatch(fillCeo(data.ceo));
+    dispatch(fillCompanyName(data.companyName));
+    dispatch(fillRegistration(data.registration));
+    dispatch(submitForm());
+    dispatch(resetForm());
+    setStep(5);
   };
 
   // 사업자 등록 번호 입력값 확인
@@ -33,6 +59,7 @@ const UserInfo = ({ setStep }: Props) => {
     const regex = /^[0-9\b -]{0,11}$/;
     if (regex.test(e.target.value)) {
       setCompanyNumber(e.target.value);
+      setValue("registration", companyNumber);
     }
   };
 
@@ -115,22 +142,26 @@ const UserInfo = ({ setStep }: Props) => {
                 className="SubHead1Medium w-[365px] outline-none"
                 type="text"
                 placeholder="(-)없이 입력해 주세요"
+                value={companyNumber}
                 {...register("registration", { required: true })}
                 onChange={handleCompanyNumberChange}
               />
             </div>
           </div>
-          <span className="Caption1Medium text-error-400">
+          <span className={`Caption1Medium text-error-400`}>
             {errors?.registration?.message}
           </span>
         </div>
         <button
-          className="SubHead1Semibold my-5 mb-12 h-[48px] w-[430px] self-center rounded-lg bg-blue-50 text-blue-400"
+          className={`SubHead1Semibold my-5 mb-12 h-[48px] w-[430px] self-center rounded-lg text-gray-0 ${
+            !getValues("ceo") ||
+            !getValues("companyName") ||
+            !getValues("registration")
+              ? "bg-gray-200"
+              : "bg-blue-500"
+          }`}
           type="submit"
           disabled={isSubmitting}
-          onClick={() => {
-            setStep(5);
-          }}
         >
           완료하기
         </button>
@@ -138,10 +169,10 @@ const UserInfo = ({ setStep }: Props) => {
       <div className="SubHead2Semibold flex justify-center">
         <Check className="mr-1" />
         <p className="text-gray-400">이메일 생성 및 인증</p>
-        <Arrow className="mx-2" />
+        <Arrow className="mx-2 mt-1" />
         <Check className="mr-1" />
         <p className="text-gray-400">비밀번호 설정</p>
-        <Arrow className="mx-2" />
+        <Arrow className="mx-2 mt-1" />
         <p className="text-gray-800">기업 및 개인정보 등록</p>
       </div>
     </>

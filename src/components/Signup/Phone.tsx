@@ -1,19 +1,30 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import type * as z from "zod";
-import { ReactComponent as Arrow } from "@/assets/svg/arrow-right.svg";
+import { useDispatch } from "react-redux";
+import * as z from "zod";
 import { ReactComponent as Bluelogo } from "@/assets/svg/blue-logo.svg";
+import { ReactComponent as Arrow } from "@/assets/svg/chevron-right.svg";
 import { ReactComponent as Check } from "@/assets/svg/round-check.svg";
-import type { NewUser } from "./Email";
-import { schema } from "./Email";
+import { PHONE_REGEX } from "@/constants/signup";
+import { fillPhone } from "@/features/signUpSlice";
 
 type Props = {
   setStep: React.Dispatch<React.SetStateAction<number>>;
 };
 
+const schema = z.object({
+  phone: z
+    .string()
+    .min(1, "전화번호를 입력해 주세요.")
+    .regex(PHONE_REGEX, "올바른 전화번호 형식을 입력해 주세요."),
+});
+
+type NewUser = z.infer<typeof schema>;
+
 const Phone = ({ setStep }: Props) => {
   const [phoneValue, setPhoneValue] = useState("");
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -21,11 +32,13 @@ const Phone = ({ setStep }: Props) => {
     getValues,
     formState: { errors, isSubmitting },
   } = useForm<NewUser>({
+    mode: "onChange",
     resolver: zodResolver(schema),
   });
   const onSubmit = (data: NewUser) => {
-    // 회원가입 api 수정 예정
+    dispatch(fillPhone(data.phone));
     console.log(data);
+    setStep(4);
   };
 
   // 핸드폰 번호 입력값 확인
@@ -85,12 +98,11 @@ const Phone = ({ setStep }: Props) => {
           </span>
         </div>
         <button
-          className="SubHead1Semibold my-5 mb-12 h-[48px] w-[430px] self-center rounded-lg bg-blue-50 text-blue-400"
+          className={`SubHead1Semibold my-5 mb-12 h-[48px] w-[430px] self-center rounded-lg bg-blue-50 ${
+            phoneValue ? "text-blue-400" : "text-blue-200"
+          }`}
           type="submit"
           disabled={isSubmitting}
-          onClick={() => {
-            setStep(4);
-          }}
         >
           다음으로
         </button>
@@ -98,10 +110,10 @@ const Phone = ({ setStep }: Props) => {
       <div className="SubHead2Semibold flex justify-center">
         <Check className="mr-1" />
         <p className="text-gray-400">이메일 생성 및 인증</p>
-        <Arrow className="mx-2" />
+        <Arrow className="mx-2 mt-1" />
         <Check className="mr-1" />
         <p className="text-gray-400">비밀번호 설정</p>
-        <Arrow className="mx-2" />
+        <Arrow className="mx-2 mt-1" />
         <p className="text-gray-800">기업 및 개인정보 등록</p>
       </div>
     </>

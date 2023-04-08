@@ -1,8 +1,26 @@
-export interface INotiBase {
+export interface INotibase<T> {
   state: number;
   result: string;
+  message: string;
+  data: T;
+  error: any[];
 }
 
+export interface ISearchData {
+  applyDelete: boolean;
+  applyEmail: string;
+  applyId: number;
+  applyName: string;
+  applyPhone: string;
+  applyProcedure: string;
+  createdTime: string;
+  failApply: boolean;
+  keywords: string[];
+  recentMessageTime: string;
+  recruitId: number;
+  recruitTitle: string;
+  wish: boolean;
+}
 export interface IRecruitForm {
   recruitId: number;
   recruitTitle: string;

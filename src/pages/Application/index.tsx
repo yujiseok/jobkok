@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import * as z from "zod";
 
 import { getRecuitData, submitApply } from "@/api/applicant";
@@ -80,6 +80,8 @@ const schema = z.object({
 type IApplicationForm = z.infer<typeof schema>;
 
 const Application = () => {
+  const { state } = useLocation();
+  console.log(state);
   const navigate = useNavigate();
   const [recruitData, setRecruitData] = useState<IApplicantFormReq>();
 

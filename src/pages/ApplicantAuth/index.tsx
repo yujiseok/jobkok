@@ -1,10 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import * as z from "zod";
 import { emailDuplicatecheck } from "@/api/applicant";
-import { getConfirmCode, getSendCode, postEmailCheck } from "@/api/auth";
+import { getConfirmCode, getSendCode } from "@/api/auth";
 import { ReactComponent as IconLogo } from "@/assets/svg/blue-logo.svg";
 import AuthEnter from "@components/Applicant/AuthEnter";
 import AuthLabel from "@components/Applicant/AuthLabel";
@@ -42,6 +42,7 @@ const schema = z.object({
 type IAuthForm = z.infer<typeof schema>;
 
 const ApplicantAuth = () => {
+  const params = useParams();
   const navigate = useNavigate();
   const [isSended, setIsSended] = useState(false);
   const [isCertified, setIsCertified] = useState(false);
@@ -107,10 +108,12 @@ const ApplicantAuth = () => {
   // 폼 제출 : 인증됐으면 페이지이동, 안됐으면 인증코드에 focus
   const onSubmit = async (data: IAuthForm) => {
     if (isCertified) {
-      //데이터 지원서로 가져와서, 한꺼번에 등록 api 호출해야함
-      //리덕스에 data 저장?
-      console.log(data);
-      navigate("/applicant/application");
+      const { authCode, ...rest } = data;
+      const convertData = {
+        ...rest,
+        recruitId: params.id,
+      };
+      navigate(`/applicant/application/${params.id}`, { state: convertData });
     } else {
       setFocus("authCode");
     }
@@ -179,7 +182,7 @@ const ApplicantAuth = () => {
                 </p>
               </AuthEnter>
               <button
-                className={`SubHead1Semibold mt-[19px] h-[52px] rounded-lg bg-blue-50 py-2.5 px-6 ${
+                className={`SubHead1Semibold btn mt-[19px] h-[52px] rounded-lg border-transparent bg-blue-50 py-2.5 px-6 ${
                   errors.email || watch().email === ""
                     ? "text-blue-200"
                     : "text-blue-400"
@@ -212,7 +215,7 @@ const ApplicantAuth = () => {
                   </span>
                 </AuthEnter>
                 <button
-                  className={`SubHead1Semibold mt-[19px] h-[52px] rounded-lg bg-blue-50 py-2.5 px-6 ${
+                  className={`SubHead1Semibold btn mt-[19px] h-[52px] rounded-lg border-transparent bg-blue-50 py-2.5 px-6 ${
                     errors.authCode || watch().authCode === ""
                       ? "text-blue-200"
                       : "text-blue-400"
@@ -230,7 +233,7 @@ const ApplicantAuth = () => {
           </form>
         </div>
         <button
-          className={`SubHead1Semibold absolute bottom-0 h-11 w-full rounded-lg  py-2.5 px-6 text-gray-0 ${
+          className={`SubHead1Semibold btn absolute bottom-0 h-11 w-full rounded-lg border-transparent py-2.5 px-6 text-gray-0 ${
             isCertified && isValid ? "bg-blue-500" : "bg-gray-200"
           }`}
           type="submit"

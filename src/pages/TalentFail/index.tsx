@@ -1,7 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
-import { getFormList } from "@/api/talent";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { ReactComponent as ArchiveTickBlue } from "@/assets/svg/archive-tick-blue.svg";
 import { ReactComponent as ArchiveTick } from "@/assets/svg/archive-tick.svg";
 import { ReactComponent as ArrowRight } from "@/assets/svg/arrow-right.svg";
@@ -9,8 +6,8 @@ import { ReactComponent as HeartMemoji } from "@/assets/svg/heart-memoji.svg";
 import { ReactComponent as Search } from "@/assets/svg/search.svg";
 import { ReactComponent as Trash } from "@/assets/svg/trash.svg";
 import useFailedTalentQuery from "@/lib/hooks/useFailedTalentQuery";
-// import useFormDataQuery from "@/lib/hooks/useFormDataQuery";
 import useFormList from "@/lib/hooks/useFormList";
+import useFormListQuery from "@/lib/hooks/useFormListQuery";
 import useLikeMutate from "@/lib/hooks/useLikeMutate";
 import usePagination from "@/lib/hooks/usePagination";
 import useSearchFailedQuery from "@/lib/hooks/useSearchFailedQuery";
@@ -21,17 +18,27 @@ import Pagination from "@components/Talent/Pagination";
 import TKeywordBadge from "@components/Talent/TKeywordBadge";
 
 const TalentFail = () => {
-  // formData 없을 시 어떻게 처리할지?
-  const { data: formData } = useQuery({
-    queryKey: ["form"],
-    queryFn: () => getFormList("true"),
-    suspense: true,
-  });
-
+  const formData = useFormListQuery();
+  const [recruitId, handleChangeFormList] = useFormList(formData);
   const [searchParams, setSearchParams] = useSearchParams();
   const filter = searchParams.get("filter") ?? "all";
   const { page } = usePagination();
   const { likeMutate } = useLikeMutate();
+  const { searchInput, handleSearchBar, searchData } =
+    useSearchFailedQuery(recruitId);
+  const { failedTalent, totalPages } = useFailedTalentQuery(
+    recruitId,
+    page,
+    filter,
+  );
+
+  const navigate = useNavigate();
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSearchParams({
+      filter: e.target.value,
+    });
+    searchInput.current!.value = "";
+  };
 
   if (formData?.result === "FAIL") {
     return (
@@ -54,23 +61,35 @@ const TalentFail = () => {
     );
   }
 
-  const [recruitId, handleChangeFormList] = useFormList(
-    formData?.data[0]?.id as number,
-  );
-  const { searchInput, handleSearchBar, searchData } =
-    useSearchFailedQuery(recruitId);
-  const { failedTalent, totalPages } = useFailedTalentQuery(
-    recruitId,
-    page,
-    filter,
-  );
-
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSearchParams({
-      filter: e.target.value,
-    });
-    searchInput.current!.value = "";
-  };
+  if (!failedTalent) {
+    return (
+      <>
+        <input
+          type="checkbox"
+          checked={true}
+          id="confirm"
+          className="modal-toggle"
+        />
+        <label htmlFor="confirm" className="modal">
+          <label className="relative grid w-[680px] place-items-center rounded-lg bg-gray-0 pt-10 pb-[3.75rem] shadow-job2">
+            <img src="/assets/images/folder.webp" alt="폴더" />
+            <p className="SubHead1Semibold pt-6 pb-8 text-gray-800">
+              탈락 인재가 존재하지 않습니다.
+            </p>
+            <div className="modal-action mt-0">
+              <label
+                htmlFor="confirm"
+                className="SubHead2Semibold cursor-pointer rounded-lg bg-blue-500 px-[3.75rem] py-[0.7188rem] text-gray-0 shadow-blue"
+                onClick={() => navigate("/")}
+              >
+                확인
+              </label>
+            </div>
+          </label>
+        </label>
+      </>
+    );
+  }
 
   return (
     <>
@@ -81,11 +100,16 @@ const TalentFail = () => {
               className="bg-transparent pr-3 outline-none"
               onChange={handleChangeFormList}
             >
-              {formData?.data.map((form) => (
-                <option key={form.id} value={form.id} className="text-gray-900">
-                  {form.title}
-                </option>
-              ))}
+              {formData?.data !== null &&
+                formData?.data.map((form) => (
+                  <option
+                    key={form.id}
+                    value={form.id}
+                    className="text-gray-900"
+                  >
+                    {form.title}
+                  </option>
+                ))}
             </select>
           </div>
         </div>

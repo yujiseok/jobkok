@@ -11,7 +11,7 @@ const OtherLayout = () => {
         <div className="relative w-[36%] min-w-[430px]">
           <img
             className="h-screen w-screen"
-            src="/src/assets/png/intro_banner_nologo_3x.png"
+            src="/assets/images/intro_banner_nologo_3x.png"
             alt="잡콕 로고 및 배너"
           />
           <div className="absolute top-1/2 left-[92px] translate-y-[-50%]">

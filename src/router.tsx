@@ -187,7 +187,11 @@ const router: RemixRouter = createBrowserRouter([
       },
       {
         path: "/notification",
-        element: <Notification />,
+        element: (
+          <Suspense fallback={<Spinner />}>
+            <Notification />,
+          </Suspense>
+        ),
       },
       {
         path: "/talent",
@@ -202,7 +206,11 @@ const router: RemixRouter = createBrowserRouter([
           },
           {
             path: "status",
-            element: <TalentStatus />,
+            element: (
+              <Suspense fallback={<Spinner />}>
+                <TalentStatus />
+              </Suspense>
+            ),
           },
           {
             path: "detail/:id",
@@ -225,20 +233,20 @@ const router: RemixRouter = createBrowserRouter([
     ],
   },
   {
-    path: "/sign-up",
-    element: <SignUp />,
-  },
-  {
-    path: "/sign-in",
-    element: <SignIn />,
-  },
-  {
-    path: "/find-user-info",
-    element: <FindUserInfo />,
-  },
-  {
     element: <OtherLayout />,
     children: [
+      {
+        path: "/sign-up",
+        element: <SignUp />,
+      },
+      {
+        path: "/sign-in",
+        element: <SignIn />,
+      },
+      {
+        path: "/find-user-info",
+        element: <FindUserInfo />,
+      },
       {
         path: "/applicant",
         children: [

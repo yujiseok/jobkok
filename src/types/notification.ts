@@ -1,8 +1,26 @@
-export interface INotiBase {
+export interface INotibase<T> {
   state: number;
   result: string;
+  message: string;
+  data: T;
+  error: any[];
 }
 
+export interface ISearchData {
+  applyDelete: boolean;
+  applyEmail: string;
+  applyId: number;
+  applyName: string;
+  applyPhone: string;
+  applyProcedure: string;
+  createdTime: string;
+  failApply: boolean;
+  keywords: string[];
+  recentMessageTime: string;
+  recruitId: number;
+  recruitTitle: string;
+  wish: boolean;
+}
 export interface IRecruitForm {
   recruitId: number;
   recruitTitle: string;
@@ -19,35 +37,35 @@ export interface ISendEmail {
   interviewDate: string;
 }
 
-export interface ITalentList extends INotiBase {
-  message?: string;
-  data: {
-    recruitId: number;
-    recruitTitle: string;
-    applyId: number;
-    applyName: string;
-    applyPhone: string;
-    applyEmail: string;
-    applyProcedure: string;
-    applyDelete: boolean;
-    failApply: boolean;
-    wish: boolean;
-    createdTime: string;
-    recentMessageTime: string;
-    keywords: string[];
-  };
-}
+// export interface ITalentList extends INotiBase {
+//   message?: string;
+//   data: {
+//     recruitId: number;
+//     recruitTitle: string;
+//     applyId: number;
+//     applyName: string;
+//     applyPhone: string;
+//     applyEmail: string;
+//     applyProcedure: string;
+//     applyDelete: boolean;
+//     failApply: boolean;
+//     wish: boolean;
+//     createdTime: string;
+//     recentMessageTime: string;
+//     keywords: string[];
+//   };
+// }
 
-export interface ISendingList extends INotiBase {
-  message?: string;
-  data: {
-    mailId: number;
-    mailContent: string;
-    noticeStep: string;
-    createdTime: string;
-    applyName: string;
-    applyPhone: string;
-    applyEmail: string;
-    applyProcedure: string;
-  };
-}
+// export interface ISendingList extends INotiBase {
+//   message?: string;
+//   data: {
+//     mailId: number;
+//     mailContent: string;
+//     noticeStep: string;
+//     createdTime: string;
+//     applyName: string;
+//     applyPhone: string;
+//     applyEmail: string;
+//     applyProcedure: string;
+//   };
+// }

@@ -20,16 +20,6 @@ export const postSignIn = async (useremail: string, password: string) => {
     localStorage.clear();
     if (data.state === 200) {
       localStorage.setItem("token", data.data.accessToken);
-      localStorage.setItem(
-        "userInfo",
-        JSON.stringify({
-          ceoName: data.data.ceoName,
-          companyName: data.data.companyName,
-          memberEmail: data.data.memberEmail,
-          companyNum: data.data.companyNum,
-          memberPhone: data.data.memberPhone,
-        }),
-      );
     }
     return data;
   } catch (error) {
@@ -45,7 +35,6 @@ export const postLogout = async () => {
     const { data }: AxiosResponse = await client.post("/auth/logout", {});
     if (data.state === 200) {
       localStorage.removeItem("token");
-      localStorage.removeItem("userInfo");
     }
     return data;
   } catch (error) {

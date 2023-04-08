@@ -1,8 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import * as z from "zod";
-import { emailDuplicatecheck, submitApply } from "@/api/applicant";
+import { submitApply } from "@/api/applicant";
+import { getRecuitFormDetail } from "@/api/form";
 import { ReactComponent as IconComplete } from "@/assets/svg/check-round-full-blue.svg";
 import { ReactComponent as IconIncomplete } from "@/assets/svg/check-round-line-gray.svg";
 import { ReactComponent as IconArrowLeft } from "@/assets/svg/chevron-left-white.svg";
@@ -81,9 +83,20 @@ const Application = () => {
     resolver: zodResolver(schema),
   });
 
+  useEffect(() => {
+    // const res = getRecuitFormDetail(48);
+    // console.log(res);
+  }, []);
+
   // input date 는 키보드로 입력불가
   const handleKeyDown = (event: React.KeyboardEvent) => {
     event.preventDefault();
+  };
+
+  const handleBackBtn = () => {
+    confirm("작성했던 정보가 초기화됩니다. 이전 단계로 이동하시겠습니까?")
+      ? navigate(-1)
+      : null;
   };
 
   // 폼 제출
@@ -97,7 +110,7 @@ const Application = () => {
         activitiesStart: null,
         activitiesEnd: null,
       };
-      const res = await submitApply(convertData);
+      // const res = await submitApply();
       navigate("/applicant/completion");
     }
   };
@@ -106,7 +119,10 @@ const Application = () => {
     <main className="mx-auto max-w-7xl">
       <header className="absolute left-0 right-0 h-[148px] bg-blue-400 py-[56px]">
         <div className="relative mx-auto flex max-w-7xl justify-center">
-          <IconArrowLeft className="absolute left-[62px]" />
+          <IconArrowLeft
+            className="absolute left-[62px] cursor-pointer"
+            onClick={handleBackBtn}
+          />
           <h1 className="Head2Semibold text-gray-0">
             [기업에서 설정한 지원서 제목] 지원서
           </h1>
@@ -139,8 +155,10 @@ const Application = () => {
             </dl>
           </div>
           <button
-            className="submit-btn-active SubHead1Semibold mb-4 w-[284px]"
-            type="submit"
+            className="submit-btn-active SubHead1Semibold btn mb-4 w-[284px]"
+            type="button"
+            onClick={methods.handleSubmit(onSubmit)}
+            disabled={methods.formState.isSubmitting}
           >
             지원서 제출
           </button>
@@ -207,20 +225,14 @@ const Application = () => {
           </FormProvider>
           <div className="mt-8 flex justify-between">
             <button
-              className="action-btn-aactive SubHead1Semibold"
+              className="action-btn-aactive SubHead1Semibold btn"
               type="button"
-              onClick={() => {
-                confirm(
-                  "작성했던 정보가 초기화됩니다. 이전 단계로 이동하시겠습니까?",
-                )
-                  ? navigate(-1)
-                  : null;
-              }}
+              onClick={handleBackBtn}
             >
               이전
             </button>
             <button
-              className="submit-btn-active w-[147px]"
+              className="submit-btn-active btn w-[147px]"
               type="button"
               onClick={methods.handleSubmit(onSubmit)}
               disabled={methods.formState.isSubmitting}

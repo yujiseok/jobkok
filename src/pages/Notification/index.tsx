@@ -7,11 +7,11 @@ import { ReactComponent as Profile } from "@/assets/svg/heart-memoji.svg";
 import { ReactComponent as Search } from "@/assets/svg/search.svg";
 import { ReactComponent as SendingIcon } from "@/assets/svg/send.svg";
 import { LIMIT } from "@/constants/pagination";
+import useFormListQuery from "@/lib/hooks/useFormListQuery";
 import useGetTalentQuery from "@/lib/hooks/useGetTalentQuery";
 import useInputLength from "@/lib/hooks/useInputLength";
 import usePagination from "@/lib/hooks/usePagination";
 import useSearchTalent from "@/lib/hooks/useSearchTalent";
-import useSelectForm from "@/lib/hooks/useSelectForm";
 import formatDate from "@/lib/utils/formatDate";
 import makeString from "@/lib/utils/makeString";
 import Banner from "@components/Common/Banner";
@@ -24,10 +24,9 @@ type FormValues = {
 };
 
 const Notification = () => {
-  const [inputCount, handleInput] = useInputLength(MAX_LENGTH);
   const [isAgree, setIsAgree] = useState(false);
   const { page, offset, handleClick } = usePagination();
-  const formData = useSelectForm();
+  const formData = useFormListQuery();
   const queryClient = useQueryClient();
   const [searchParams, setSearchParams] = useSearchParams();
   const applyProcedure = searchParams.get("applyProcedure") ?? "전체";
@@ -36,11 +35,6 @@ const Notification = () => {
   const [defaultMsg, setDefaultMsg] = useState("");
   const { register, watch, handleSubmit } = useForm<FormValues>();
 
-  console.log(applyName);
-  // const onSubmit = async (data: FormValues) => {
-  //   const res = await setProcedure(recruitId, applyId, mailContent, noticeStep);
-  // };
-
   const totalPage = formData && Math.ceil(formData?.data?.length / LIMIT);
 
   // recruitId 만 가져오기
@@ -48,8 +42,6 @@ const Notification = () => {
 
   const { searchInput, handleSearchBar, searchTalent, isSearch } =
     useSearchTalent(recruitId);
-
-  console.log("searchTalent", searchTalent);
 
   //폼과 절차에 따라 인재 목록 보여주기
   const allTalent = useGetTalentQuery(recruitId, applyProcedure, applyName);
@@ -62,10 +54,11 @@ const Notification = () => {
     setSearchParams({
       applyProcedure: e.target.value,
       noticeStep,
-      // applyName,
+      applyName,
     });
   };
 
+  console.log({ page, offset, handleClick });
   const handleNotiChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSearchParams({
       applyProcedure,
@@ -76,10 +69,18 @@ const Notification = () => {
     setDefaultMsg(stepMsg);
   };
 
-  const handleEmail = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    const res = await sendEmail(recruitId, "22", "안녕하세요", noticeStep);
-    console.log(res);
+  const onSubmit = async (data: FormValues) => {
+    console.log(recruitId);
+    if (noticeStep === ("전체" || null)) return alert("단계를 선택해주세요");
+    if (data.mailContent === null) return alert("내용을 입력해주세요");
+    // const res = await sendEmail(
+    //   recruitId,
+    //   "34",
+    //   data.mailContent,
+    //   noticeStep,
+    //   "2023-02-20T15:59:46.803305",
+    // );
+    // console.log("res", res);
   };
 
   return (
@@ -257,7 +258,7 @@ const Notification = () => {
           </div>
 
           <form
-            // onSubmit={handleSubmit(onSubmit)}
+            onSubmit={handleSubmit(onSubmit)}
             className="feedback-note flex-1 rounded-md border-2 border-gray-50 bg-white px-5 py-4"
           >
             <textarea
@@ -279,7 +280,6 @@ const Notification = () => {
                   className="h-5 w-5 border-gray-400 checked:bg-blue-500"
                   onClick={() => setIsAgree(!isAgree)}
                 />
-
                 <span className="label-text">
                   알림을 보내면 취소가 불가능함을 인지합니다
                 </span>
@@ -289,7 +289,6 @@ const Notification = () => {
               <button
                 disabled={!isAgree}
                 className="SubHead2Semibold flex items-center gap-2 rounded-md bg-blue-500 px-14 py-3 text-white disabled:bg-gray-200"
-                onClick={(e) => handleEmail(e)}
               >
                 알림 보내기
                 <SendingIcon />

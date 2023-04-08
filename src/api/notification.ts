@@ -1,19 +1,9 @@
-import type { AxiosResponse } from "axios";
-import type { IRecruitForm, ITalentList } from "@/types/notification";
+import type { ISearchData } from "@/types/notification";
 import { client } from "./axios";
 
-// 채용 폼 목록 조회
-export const getRecruitForm = async () => {
-  const { data }: AxiosResponse<IRecruitForm> = await client({
-    method: "GET",
-    url: "/notice",
-  });
-  return data;
-};
-
 // 인재 목록 조회
-export const getTalentList = async (recruitId: number) => {
-  const { data }: AxiosResponse<ITalentList> = await client({
+export const getTalentList = async (recruitId: string) => {
+  const { data } = await client({
     method: "GET",
     url: `notice/${recruitId}`,
   });
@@ -22,11 +12,11 @@ export const getTalentList = async (recruitId: number) => {
 
 // 이메일 전송
 export const sendEmail = async (
-  recruitId: number,
-  applyId: number,
+  recruitId: string,
+  applyId: string,
   mailContent: string,
   noticeStep: string,
-  interviewDate: string,
+  interviewDate?: string,
 ) => {
   const { data } = await client({
     method: "POST",
@@ -40,4 +30,30 @@ export const sendEmail = async (
     },
   });
   return data;
+};
+
+// 지원자 검색
+export const searchApplicant = async (applyName: string, recruitId: string) => {
+  const res = await client({
+    method: "GET",
+    url: `notice/search?applyName=${applyName}&recruitId=${recruitId}`,
+    data: { applyName, recruitId },
+  });
+  const data: ISearchData[] = res.data.data;
+
+  console.log("함수안", data);
+
+  return data;
+};
+
+//절차 선택
+export const setProcedure = async (recruitId: string, noticeStep: string) => {
+  // console.log(noticeStep);
+  const { data } = await client({
+    method: "POST",
+    url: "/notice/select",
+    data: { recruitId, noticeStep },
+  });
+  console.log(data.data);
+  return data.data;
 };

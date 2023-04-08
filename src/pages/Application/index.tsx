@@ -2,10 +2,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import * as z from "zod";
-
-import { ReactComponent as IconArrowLeft } from "@/assets/applicant/arrowLeft.svg";
-import { ReactComponent as IconComplete } from "@/assets/applicant/complete.svg";
-import { ReactComponent as IconIncomplete } from "@/assets/applicant/incomplete.svg";
+import { ReactComponent as IconComplete } from "@/assets/svg/check-round-full-blue.svg";
+import { ReactComponent as IconIncomplete } from "@/assets/svg/check-round-line-gray.svg";
+import { ReactComponent as IconArrowLeft } from "@/assets/svg/chevron-left-white.svg";
 
 import { OPTIONAL_FIELD, REQUIRED_FIELD } from "@/constants/applicant";
 

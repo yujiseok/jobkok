@@ -10,20 +10,20 @@ const Layout = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  // useEffect(() => {
-  //   if (
-  //     !localStorage.getItem("token") &&
-  //     pathname !== "/sign-in" &&
-  //     pathname !== "/sign-up"
-  //   ) {
-  //     navigate("/sign-in");
-  //   } else if (
-  //     localStorage.getItem("token") &&
-  //     (pathname === "/sign-in" || pathname === "/sign-up")
-  //   ) {
-  //     navigate("/");
-  //   }
-  // });
+  useEffect(() => {
+    if (
+      !localStorage.getItem("token") &&
+      pathname !== "/sign-in" &&
+      pathname !== "/sign-up"
+    ) {
+      navigate("/sign-in");
+    } else if (
+      localStorage.getItem("token") &&
+      (pathname === "/sign-in" || pathname === "/sign-up")
+    ) {
+      navigate("/");
+    }
+  }, [localStorage.getItem("token")]);
 
   return (
     <>
@@ -31,7 +31,7 @@ const Layout = () => {
       <main className="mx-auto mt-16 max-w-7xl px-4 pb-64 pt-16">
         <Outlet />
       </main>
-      <ScrollRestoration />
+      {/* <ScrollRestoration /> */}
     </>
   );
 };

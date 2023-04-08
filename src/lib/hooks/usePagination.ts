@@ -20,7 +20,7 @@ const usePagination = (): UsePagination => {
       filter,
       page,
     });
-  const offset = (page - 1) * LIMIT;
+  const offset = (page - 1 + 1) * LIMIT;
 
   return { page, offset, handleClick };
 };

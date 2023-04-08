@@ -1,25 +1,23 @@
-import type { IKanban, IResponse, ITalent } from "@/types/talent";
+import type { IKanbanBase, IResponse, ITalent } from "@/types/talent";
 
-const talentByProcedure = (talentData: IResponse<ITalent[]>): IKanban[] => {
-  return Object.entries(
-    talentData.data.reduce((acc, apply) => {
-      if (!acc[apply.applyProcedure!]) {
-        acc[apply.applyProcedure!] = [];
-      }
-      acc[apply.applyProcedure!].push(apply);
+const talentToProcedure = (
+  talentData: IResponse<null> | IResponse<ITalent[]> | undefined,
+) => {
+  const base: IKanbanBase[] = [
+    { title: "서류제출", applicant: [] },
+    { title: "면접", applicant: [] },
+    { title: "최종조율", applicant: [] },
+  ];
 
-      return acc;
-    }, {} as IKanban),
-  )
-    .map(([title, applicant]) => ({
-      title,
-      id: title,
-      applicant,
-    }))
-    .sort((a, b) => {
-      const order = ["서류제출", "면접진행", "최종조율"];
+  talentData?.data?.forEach((applicant) => {
+    const { applyProcedure } = applicant;
+    const match = base.find((item) => item.title === applyProcedure);
+    if (match) {
+      match.applicant.push(applicant);
+    }
+  });
 
-      return order.indexOf(a.title) - order.indexOf(b.title);
-    });
+  return base;
 };
-export default talentByProcedure;
+
+export default talentToProcedure;

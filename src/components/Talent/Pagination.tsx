@@ -5,17 +5,16 @@ const Pagination = ({ totalPages }: { totalPages: number }) => {
   const { page, handleClick } = usePagination();
 
   return (
-    <ul className="mt-12 flex justify-center gap-14">
-      <li>
-        <button
-          disabled={page === 0}
-          onClick={() => {
-            handleClick(makeString(page - 1));
-          }}
-        >
-          Prev
-        </button>
-      </li>
+    <nav className="mt-12 flex justify-center gap-14">
+      <button
+        disabled={page === 0}
+        onClick={() => {
+          handleClick(makeString(page - 1));
+        }}
+      >
+        Prev
+      </button>
+
       <ul className="flex gap-8">
         {Array(totalPages)
           .fill(null)
@@ -32,17 +31,16 @@ const Pagination = ({ totalPages }: { totalPages: number }) => {
             );
           })}
       </ul>
-      <li>
-        <button
-          disabled={page === totalPages - 1}
-          onClick={() => {
-            handleClick(makeString(page + 1));
-          }}
-        >
-          Next
-        </button>
-      </li>
-    </ul>
+
+      <button
+        disabled={page === totalPages - 1}
+        onClick={() => {
+          handleClick(makeString(page + 1));
+        }}
+      >
+        Next
+      </button>
+    </nav>
   );
 };
 export default Pagination;

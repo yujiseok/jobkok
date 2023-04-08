@@ -79,12 +79,14 @@ export const postEmailCheck = async (useremail: string) => {
 
 // 인증코드 발송
 export const getSendCode = async (useremail: string) => {
-  const { data }: AxiosResponse = await client({
-    method: "GET",
-    url: "/auth/user_validation",
-    data: { memberEmail: useremail },
-  });
-  return data;
+  try {
+    const { data }: AxiosResponse = await client.get(
+      `/auth/number?memberEmail=${useremail}`,
+    );
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 // 인증코드 확인

@@ -35,7 +35,7 @@ const FieldPreference = () => {
             inputValue={watch().employment}
             content="고용지원금"
           />
-          <FieldInputBox errors={errors.militaryEnum}>
+          <FieldInputBox>
             <label className="sr-only" htmlFor="militaryEnum">
               병역사항
             </label>

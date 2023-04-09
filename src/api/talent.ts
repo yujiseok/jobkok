@@ -78,7 +78,7 @@ export const getTalentByProcedure = async (
       url: `manage/${recruitId}/${applyProcedure}`,
     });
 
-    const data: IResponse<ITalentWithCount[]> = res.data;
+    const data: IResponse<ITalent[]> = res.data;
 
     return data;
   } catch (error) {
@@ -135,16 +135,18 @@ export const getFailedTalent = async ({ queryKey }: QueryFunctionContext) => {
 
     const totalPages: number = res.data.data.totalPages;
 
-    const data: IFailedTalent[] = res.data.data.content;
+    const data: IResponse<IFailedTalent[]> = res.data;
 
     if (filter === "wish") {
-      const filteredData = data.filter((item) => item.wish === true);
+      const filteredData = data.data.filter((item) => item.wish === true);
 
       return { filteredData, totalPages: ceilPage(filteredData.length) };
     }
 
     if (filter === "applyDelete") {
-      const filteredData = data.filter((item) => item.applyDelete === true);
+      const filteredData = data.data.filter(
+        (item) => item.applyDelete === true,
+      );
 
       return { filteredData, totalPages: ceilPage(filteredData.length) };
     }

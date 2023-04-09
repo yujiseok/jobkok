@@ -88,8 +88,6 @@ const SignIn = () => {
 
   const onSubmit = async (data: User) => {
     const res = await postSignIn(data.useremail, data.password);
-    console.log(res.data);
-
     if (res.state === 200) {
       navigate("/");
       dispatch(signIn(res.data));
@@ -181,13 +179,12 @@ const SignIn = () => {
               </button>
             </div>
             {/* 오류 메세지 띄우기 */}
-            {IsFail ? (
+            <span className="Caption1Medium text-error-400">
+              {errors?.password?.message}
+            </span>
+            {IsFail && (
               <span className="Caption1Medium text-error-400">
                 아이디 또는 비밀번호가 다릅니다.
-              </span>
-            ) : (
-              <span className="Caption1Medium text-error-400">
-                {errors?.password?.message}
               </span>
             )}
             <div className="mt-4 mb-20 flex justify-between">

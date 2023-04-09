@@ -1,8 +1,8 @@
-export interface INotibase<T> {
+export interface INotibase {
   state: number;
   result: string;
   message: string;
-  data: T;
+  data: any[];
   error: any[];
 }
 

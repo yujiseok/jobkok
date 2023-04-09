@@ -1,9 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { getDetailInfo } from "@/api/talentDetail";
+import { getDetailInfo, setMeeting } from "@/api/talentDetail";
 import { ReactComponent as Edit } from "@/assets/svg/edit-icon.svg";
+import type { ITalentDetail } from "@/types/talentDetail";
 
-const InterviewInfo = ({ id }: { id: string }) => {
+const InterviewInfo = ({
+  id,
+  talentInfo,
+}: {
+  id: string;
+  talentInfo: ITalentDetail;
+}) => {
   const [isEditing, setisEditing] = useState(false);
   const [interviewDate, setInterviewDate] = useState("");
   const [interviewTime, setInterviewTime] = useState("");
@@ -17,16 +24,13 @@ const InterviewInfo = ({ id }: { id: string }) => {
   };
 
   const setMeetingDate = async (e: React.MouseEvent<SVGSVGElement>) => {
-    const newTime = interviewTime + ":00";
-    // const res = await setMeeting(id, interviewDate, interviewTime);
-    // console.log(res);
+    const newTime = interviewDate + "T" + interviewTime;
+    console.log(newTime);
+    const res = await setMeeting(id, newTime);
     setisEditing(false);
   };
-  const { data: talentInfo } = useQuery({
-    queryKey: ["talentInfo"],
-    queryFn: () => getDetailInfo(id),
-    suspense: true,
-  });
+  console.log(talentInfo);
+
   return (
     <div className="interview-container flex justify-between gap-4 rounded-md border-2 border-gray-50 bg-white px-5 py-4">
       <div className="interview-time-container flex justify-between">
@@ -71,7 +75,7 @@ const InterviewInfo = ({ id }: { id: string }) => {
                     면접 날짜
                   </span>
                   <span className="BodyBody2">
-                    {talentInfo?.meeting.slice(0, 10)}
+                    {/* {talentInfo?.meeting.slice(0, 10)} */}
                   </span>
                 </div>
                 <div className="flex items-center gap-3">
@@ -79,7 +83,7 @@ const InterviewInfo = ({ id }: { id: string }) => {
                     면접 시간
                   </span>
                   <span className="BodyBody2">
-                    {talentInfo?.meeting.slice(11, 16)}
+                    {/* {talentInfo?.meeting.slice(11, 16)} */}
                   </span>
                 </div>
               </>

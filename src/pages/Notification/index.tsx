@@ -2,36 +2,32 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
-import { sendEmail, setProcedure } from "@/api/notification";
+import { searchApplicant } from "@/api/notification";
 import { ReactComponent as Profile } from "@/assets/svg/heart-memoji.svg";
 import { ReactComponent as Search } from "@/assets/svg/search.svg";
-import { ReactComponent as SendingIcon } from "@/assets/svg/send.svg";
 import { LIMIT } from "@/constants/pagination";
 import useFormList from "@/lib/hooks/useFormList";
 import useFormListQuery from "@/lib/hooks/useFormListQuery";
 import useGetTalentQuery from "@/lib/hooks/useGetTalentQuery";
-import useInputLength from "@/lib/hooks/useInputLength";
 import usePagination from "@/lib/hooks/usePagination";
 import useSearchTalent from "@/lib/hooks/useSearchTalent";
 import ceilPage from "@/lib/utils/ceilPage";
 import formatDate from "@/lib/utils/formatDate";
-import makeString from "@/lib/utils/makeString";
-import type { ISearchData, ISelectedTalent } from "@/types/notification";
+import type { ISearchData } from "@/types/notification";
 import type { ITalent } from "@/types/talent";
 import Banner from "@components/Common/Banner";
 import BlueBadge from "@components/Notification/BlueBadge";
 import PurpleBadge from "@components/Notification/Purplebadge";
 import RedBadge from "@components/Notification/RedBadge";
+import SendingBox from "@components/Notification/SendingBox";
+import TalentSearchBar from "@components/Notification/TalentSearchBar";
 import Pagination from "@components/Talent/Pagination";
 
 type FormValues = {
   mailContent: string;
 };
 
-// type Selected = ISearchData[] | ITalent[];
-
 const Notification = () => {
-  const [isAgree, setIsAgree] = useState(false);
   const { page, offset, handleClick } = usePagination();
   const formData = useFormListQuery();
   const queryClient = useQueryClient();
@@ -39,17 +35,26 @@ const Notification = () => {
   const applyProcedure = searchParams.get("applyProcedure") ?? "전체";
   const noticeStep = searchParams.get("noticeStep") ?? "all";
   const applyName = searchParams.get("applyName") ?? "";
-  const [defaultMsg, setDefaultMsg] = useState("");
-  const { register, watch, handleSubmit } = useForm<FormValues>();
   const [recruitId, handleChangeFormList] = useFormList(formData);
-  const { searchInput, handleSearchBar, searchTalent, isSearch } =
-    useSearchTalent(recruitId);
+  const { searchInput } = useSearchTalent(recruitId);
+  const [isSearch, setIsSearch] = useState(false);
+  const [searchTalent, setSearchTalent] = useState<ISearchData[]>([]);
+
+  const handleSearchBar = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!searchInput?.current?.value) return alert("입력해주세요");
+    setSearchParams({ applyName: searchInput.current.value.trim() });
+    setIsSearch(true);
+    const search = async () => {
+      const res = await searchApplicant(applyName, recruitId);
+      console.log(res);
+      setSearchTalent(res.data);
+    };
+    search();
+  };
 
   //폼과 절차에 따라 인재 목록 보여주기
   const allTalent = useGetTalentQuery(recruitId, applyProcedure, applyName);
-
-  const totalPage =
-    allTalent && allTalent !== null ? ceilPage(allTalent.length) : 0;
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSearchParams({
@@ -57,30 +62,6 @@ const Notification = () => {
       noticeStep,
       applyName,
     });
-  };
-
-  const handleNotiChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSearchParams({
-      applyProcedure,
-      noticeStep: e.target.value,
-      applyName,
-    });
-    const stepMsg = await setProcedure(recruitId, e.target.value);
-    setDefaultMsg(stepMsg);
-  };
-
-  const onSubmit = async (data: FormValues) => {
-    console.log(data.mailContent);
-    if (noticeStep === ("all" || null)) return alert("단계를 선택해주세요");
-    if (data.mailContent === "") return alert("내용을 입력해주세요");
-    const res = await sendEmail(
-      recruitId,
-      "34",
-      data.mailContent,
-      noticeStep,
-      "2023-02-20T15:59:46.803305",
-    );
-    console.log("res", res);
   };
 
   // 추후 수정 예정
@@ -171,7 +152,7 @@ const Notification = () => {
                     ref={searchInput}
                   />
                 </label>
-                <button className="mr-6">
+                <button type="submit" className="mr-6">
                   <Search />
                 </button>
               </form>
@@ -221,84 +202,17 @@ const Notification = () => {
                       ))}
                   </tbody>
                 </table>
-                <Pagination totalPages={totalPage} />
+                <Pagination length={allTalent.length} />
               </div>
             </div>
 
             <div className="flex-[0.6]">
-              <div className="mb-12 mt-12 flex  items-center justify-between">
-                <h2 className="Head3Semibold">알림 보내기</h2>
-
-                <select
-                  className="rounded-md bg-blue-50 py-[10px] pr-5 pl-6 text-blue-500 focus:outline-transparent"
-                  onChange={handleNotiChange}
-                  value={noticeStep}
-                >
-                  <option>전체</option>
-                  <option value="DOCS_PASS">서류 합격</option>
-                  <option value="MEET_PROPOSAL">면접 조율</option>
-                  <option value="FINAL_PASS">최종 합격</option>
-                </select>
-              </div>
-
-              <div className="mb-6 flex items-center rounded-md bg-blue-25 py-4 px-4">
-                <p className=" SubHead1Semibold mr-8 py-[11px] text-gray-800">
-                  받는 사람
-                </p>
-                <div className="flex items-center gap-4 rounded-md px-2">
-                  {selectedTalent?.map((item) => (
-                    <div
-                      key={item.applyId}
-                      className="flex items-center gap-4 rounded-lg border border-gray-50 bg-gray-0 py-[5px] px-2"
-                    >
-                      <Profile className="rounded-md bg-gray-50 " />
-                      <p className="SubHead1Medium text-gray-900">
-                        {item.applyName}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-                <p className="Head4Semibold ml-6 text-gray-600">님</p>
-              </div>
-
-              <form
-                onSubmit={handleSubmit(onSubmit)}
-                className="feedback-note flex-1 rounded-md border-2 border-gray-50 bg-white px-5 py-4"
-              >
-                <textarea
-                  placeholder="절차를 선택하시면 기본 메세지가 제공됩니다."
-                  className="SubHead1Medium textarea-bordered textarea textarea-lg min-h-[300px] w-full resize-none"
-                  maxLength={MAX_LENGTH}
-                  // onChange={handleInput}
-                  defaultValue={defaultMsg}
-                  {...register("mailContent")}
-                ></textarea>
-                <div className="BodyBody3 mt-2 text-gray-300">
-                  <span>{watch().mailContent?.length.toLocaleString()}</span>
-                  <span>/{MAX_LENGTH.toLocaleString()}자</span>
-                </div>
-                <div className="form-control mt-16 mb-6">
-                  <div className="flex justify-center gap-4">
-                    <input
-                      type="checkbox"
-                      className="h-5 w-5 border-gray-400 checked:bg-blue-500"
-                      onClick={() => setIsAgree(!isAgree)}
-                    />
-                    <span className="label-text">
-                      알림을 보내면 취소가 불가능함을 인지합니다
-                    </span>
-                  </div>
-                </div>
-                <div className="flex justify-center">
-                  <button
-                    disabled={!isAgree}
-                    className="SubHead2Semibold flex items-center gap-2 rounded-md bg-blue-500 px-14 py-3 text-white disabled:bg-gray-200"
-                  >
-                    알림 보내기
-                    <SendingIcon />
-                  </button>
-                </div>
-              </form>
+              <SendingBox
+                selectedTalent={selectedTalent}
+                applyName={applyName}
+                noticeStep={noticeStep}
+                recruitId={recruitId}
+              />
             </div>
           </>
         )}
@@ -307,5 +221,3 @@ const Notification = () => {
   );
 };
 export default Notification;
-
-const MAX_LENGTH = 1000;

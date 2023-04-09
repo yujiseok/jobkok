@@ -49,13 +49,12 @@ const Email = ({ setStep }: Props) => {
   const onSubmit = (data: NewUser) => {
     if (isCodeConfirmed) {
       dispatch(fillEmail(data.useremail));
+      setStep(2);
     }
-    console.log(data);
   };
 
-  ////// 이메일 중복 확인 필요
+  // 이메일 중복확인
   const handleConfirmEmail = async () => {
-    setIsConfirmed(true);
     const res = await postEmailCheck(getValues("useremail"));
     if (errors.useremail) {
       return alert("이미 사용중인 이메일 입니다.");
@@ -65,21 +64,19 @@ const Email = ({ setStep }: Props) => {
     }
   };
 
-  /////// 인증번호 발송 수정필요
-  const handleGetCode = async (data: any) => {
+  //인증코드 발송
+  const handleGetCode = async () => {
     setIsClicked(true);
     setIsCountingDown(true);
-    const res = await getSendCode(data.useremail);
+    const res = await getSendCode(getValues("useremail"));
     if (res.state !== 200) {
       return alert("이메일을 확인해 주세요");
     }
   };
 
-  /////// 인증번호 확인 수정필요
-  const handleConfirmCode = async (data: any) => {
-    setIsCodeConfirmed(true);
-    setIsCountingDown(false);
-    const res = await getConfirmCode(data.useremail, data.code);
+  // 인증코드 확인
+  const handleConfirmCode = async () => {
+    const res = await getConfirmCode(getValues("useremail"), getValues("code"));
     if (res.state !== 200) {
       return alert("인증코드를 확인해 주세요");
     } else {
@@ -227,9 +224,7 @@ const Email = ({ setStep }: Props) => {
             className={`SubHead1Semibold my-5 h-[48px] w-[430px] self-center rounded-lg text-gray-0 ${
               isCodeConfirmed ? "bg-blue-500" : "bg-gray-200"
             }`}
-            onClick={() => {
-              if (isCodeConfirmed) setStep(2);
-            }}
+            type="submit"
           >
             다음으로
           </button>

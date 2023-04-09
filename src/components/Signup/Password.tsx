@@ -55,7 +55,6 @@ const Password = ({ setStep }: Props) => {
   });
   const onSubmit = (data: NewUser) => {
     dispatch(fillPassword(data.password));
-    console.log(data);
     setStep(3);
   };
 

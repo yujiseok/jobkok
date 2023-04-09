@@ -27,13 +27,15 @@ type User = z.infer<typeof schema>;
 const AuthCode = ({ setStep }: Props) => {
   const [InputValue, setInputValue] = useState("");
   const [confirmCode, setConfirmCode] = useState(false);
-  const { formattedTime, isCountingDown, setIsCountingDown, resetTime } =
-    useTimer(180000, false);
+  const { formattedTime, isCountingDown, setIsCountingDown } = useTimer(
+    180000,
+    false,
+  );
   const {
     register,
     handleSubmit,
-    setValue,
     getValues,
+    setValue,
     formState: { errors, isSubmitting, isDirty },
   } = useForm<User>({
     mode: "onChange",
@@ -41,9 +43,10 @@ const AuthCode = ({ setStep }: Props) => {
   });
 
   const handleConfirmCode = async () => {
-    const useremail = getValues("useremail");
+    const email = InputValue;
     const code = getValues("code");
-    const res = await getConfirmCode(useremail, code);
+    setValue("useremail", InputValue);
+    const res = await getConfirmCode(email, code);
     if (res.state === 200) {
       setConfirmCode(true);
     } else {
@@ -123,7 +126,11 @@ const AuthCode = ({ setStep }: Props) => {
                 })}
               />
               {isCountingDown && (
-                <span className="SubHead1Medium text-error-400">
+                <span
+                  className={`SubHead1Medium text-error-400 ${
+                    confirmCode ? "hidden" : "block"
+                  }`}
+                >
                   {formattedTime}
                 </span>
               )}
@@ -134,7 +141,7 @@ const AuthCode = ({ setStep }: Props) => {
               }`}
             >
               <button
-                disabled={!getValues("code") || !!errors.code}
+                disabled={!getValues("code") || !!errors.code || confirmCode}
                 onClick={handleConfirmCode}
               >
                 인증하기
@@ -147,12 +154,13 @@ const AuthCode = ({ setStep }: Props) => {
           </span>
         </div>
         <button
-          className="SubHead1Semibold my-5 mb-12 h-[48px] w-[430px] self-center rounded-lg bg-blue-50 text-blue-400"
+          className={`SubHead1Semibold my-5 mb-12 h-[48px] w-[430px] self-center rounded-lg text-gray-0 ${
+            confirmCode ? "bg-blue-500" : "bg-gray-200"
+          }`}
           type="submit"
           disabled={isSubmitting && isDirty}
           onClick={() => {
             if (confirmCode) {
-              localStorage.removeItem("useremail");
               setStep(3);
             }
           }}

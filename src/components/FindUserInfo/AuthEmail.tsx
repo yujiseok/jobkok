@@ -33,9 +33,13 @@ const AuthEmail = ({ setStep }: Props) => {
 
   // 인증번호 발송
   const onSubmit = async (data: User) => {
-    await getSendCode(data.useremail);
-    localStorage.setItem("useremail", data.useremail);
-    setStep(2);
+    const res = await getSendCode(data.useremail);
+    if (res.state === 200) {
+      localStorage.setItem("useremail", data.useremail);
+      setStep(2);
+    } else {
+      return alert("인증코드 발송에 실패했습니다.");
+    }
   };
 
   return (
@@ -91,7 +95,7 @@ const AuthEmail = ({ setStep }: Props) => {
             getValues("useremail") ? "bg-blue-100" : "bg-blue-50"
           }`}
           type="submit"
-          disabled={isSubmitting && isDirty}
+          disabled={isSubmitting && !errors.useremail}
         >
           인증코드 발송
         </button>

@@ -34,7 +34,6 @@ const schema = z.object({
   meetStart: z.string().nonempty(),
   meetEnd: z.string().nonempty(),
   docsEnd: z.string().nonempty(),
-  resumeTitle: z.string().nonempty(),
   agree: z.boolean().refine((val) => val),
 });
 
@@ -49,7 +48,6 @@ const NewForm = () => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { isValid },
   } = useForm<IRecuiteForm>({
     mode: "onChange",
@@ -76,8 +74,10 @@ const NewForm = () => {
         "센스있어요, 꼼꼼해요, 잘 웃어요, 원칙적이에요, 습득력이 좋아요",
       confirmStart: "2023-06-05T00:00:00",
       confirmEnd: "2023-06-05T00:00:00",
+      resumeTitle: "지원동기를 입력해주세요.",
     };
     const res = await newRecuitForm(convertData);
+    console.log(res);
     setRegisterData(res.data);
     setIsSaveModal(true);
   };

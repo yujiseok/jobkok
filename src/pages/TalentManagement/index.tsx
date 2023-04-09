@@ -1,22 +1,14 @@
-import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { Link } from "react-router-dom";
-import { Pagination } from "swiper";
-import { Swiper, SwiperSlide } from "swiper/react";
+import { SwiperSlide } from "swiper/react";
 import "./swiper.css";
-import {
-  getAllTalent,
-  getFormList,
-  getStatus,
-  getTalentByProcedure,
-} from "@/api/talent";
+
+import { useAppSelector } from "@/app/hooks";
 import { ReactComponent as Add } from "@/assets/svg/add.svg";
 import { ReactComponent as ArchiveTickBlue } from "@/assets/svg/archive-tick-blue.svg";
 import { ReactComponent as ArchiveTick } from "@/assets/svg/archive-tick.svg";
 import { ReactComponent as ArrowRight } from "@/assets/svg/arrow-right.svg";
 import { ReactComponent as Calendar } from "@/assets/svg/calendar.svg";
-import { ReactComponent as ChevronDown } from "@/assets/svg/chevron-down-white.svg";
 import { ReactComponent as ChevronRight } from "@/assets/svg/chevron-right.svg";
 import { ReactComponent as HeartMemoji } from "@/assets/svg/heart-memoji.svg";
 import { ReactComponent as Pin } from "@/assets/svg/pin.svg";
@@ -28,13 +20,13 @@ import useDnD from "@/lib/hooks/useDnD";
 import useFormList from "@/lib/hooks/useFormList";
 import useFormListQuery from "@/lib/hooks/useFormListQuery";
 import useFormStatusQuery from "@/lib/hooks/useFormStatusQuery";
+import useLikeMutate from "@/lib/hooks/useLikeMutate";
 import formatDate from "@/lib/utils/formatDate";
 import sortWithSlice from "@/lib/utils/sortWithSlice";
 import talentToProcedure from "@/lib/utils/talentByProcedure";
 import type { IKanbanBase, ITalent } from "@/types/talent";
 import Banner from "@components/Common/Banner";
 import ModalForLater from "@components/Common/ModalForLater";
-import InterviewBadge from "@components/Talent/InterviewBadge";
 import NumberBadge from "@components/Talent/NumberBadge";
 import PreferentialBadge from "@components/Talent/PreferentialBadge";
 import Slider from "@components/Talent/Slider";
@@ -42,7 +34,9 @@ import SliderWrapper from "@components/Talent/SliderWrapper";
 import { WhiteContainer } from "@components/Talent/WhiteContainer";
 
 const TalentManagement = () => {
+  const { auth } = useAppSelector((state) => state);
   const formData = useFormListQuery();
+  const { likeMutate } = useLikeMutate();
 
   const [recruitId, handleChangeFormList] = useFormList(formData);
 
@@ -58,7 +52,7 @@ const TalentManagement = () => {
         <Banner className="h-[25rem]">
           <div className="mx-auto flex h-full max-w-7xl flex-col items-center justify-center">
             <h1 className="Head2Semibold">
-              안녕하세요, <span>잡콕미술학원</span>님!
+              안녕하세요, <span>{auth.companyName}</span>님!
             </h1>
             <p className="Head4/Semibold Head4Semibold mt-[6px] mb-9">
               첫 지원서 폼 만들고 편한 채용관리하세요!
@@ -150,9 +144,9 @@ const TalentManagement = () => {
                     <span className="SubHead1Semibold">면접</span>
                     <NumberBadge procedure="면접">0</NumberBadge>
                   </div>
-                  <button>
+                  <label htmlFor="modal-calendar" className="cursor-pointer">
                     <Calendar />
-                  </button>
+                  </label>
                 </div>
               </div>
               <div
@@ -210,7 +204,7 @@ const TalentManagement = () => {
 
           <div className="text-center">
             <h1 className="Head2Semibold mb-1">
-              안녕하세요 <span>잡콕미술학원</span>님!
+              안녕하세요 <span>{auth.companyName}</span>님!
             </h1>
             <div className="Head3Semibold">
               현재까지 지원현황을 간략히 한 눈에 보여드립니다.
@@ -248,7 +242,7 @@ const TalentManagement = () => {
         </div>
 
         <div className="flex flex-col gap-8">
-          <div className="relative flex items-center gap-4">
+          <div className="manage-slider relative flex items-center gap-4">
             <div className="relative h-48 flex-[0.3] rounded-xl bg-blue-400 px-4 py-6 text-gray-0 shadow-job">
               <p className="SubHead1Semibold mb-3">잡콕인재추천</p>
               <p className="SubHead2Medium">
@@ -273,7 +267,7 @@ const TalentManagement = () => {
               </SliderWrapper>
             )}
           </div>
-          <div className="relative flex items-center gap-4">
+          <div className="manage-slider relative flex items-center gap-4">
             <div className="relative h-48 flex-[0.3] rounded-xl bg-banner-teal-500 px-4 py-6 text-gray-0 shadow-job">
               <p className="SubHead1Semibold mb-3">잡콕인재추천</p>
               <p className="SubHead2Medium">
@@ -338,9 +332,12 @@ const TalentManagement = () => {
                         </NumberBadge>
                       </div>
                       {kanban.title === "면접" ? (
-                        <button>
+                        <label
+                          htmlFor="modal-calendar"
+                          className="cursor-pointer"
+                        >
                           <Calendar />
-                        </button>
+                        </label>
                       ) : kanban.title === "최종조율" ? (
                         <label
                           htmlFor="modal"
@@ -390,8 +387,14 @@ const TalentManagement = () => {
                                   <ChevronRight />
                                 </Link>
 
-                                <button>
-                                  <ArchiveTick className="text-gray-300" />
+                                <button
+                                  onClick={() => likeMutate(item.applyId!)}
+                                >
+                                  {item.wish ? (
+                                    <ArchiveTickBlue />
+                                  ) : (
+                                    <ArchiveTick className="text-gray-300" />
+                                  )}
                                 </button>
                               </div>
                               <div className="Caption1Semibold flex gap-6px pt-4 pb-8">
@@ -429,6 +432,7 @@ const TalentManagement = () => {
         </DragDropContext>
       </section>
       <ModalForLater id="modal" />
+      <ModalForLater id="modal-calendar" />
     </>
   );
 };

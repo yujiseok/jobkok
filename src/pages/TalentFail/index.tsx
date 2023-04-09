@@ -61,7 +61,7 @@ const TalentFail = () => {
     );
   }
 
-  if (!failedTalent) {
+  if (failedTalent?.data === null) {
     return (
       <>
         <input
@@ -284,7 +284,7 @@ const TalentFail = () => {
                   ))} */}
             </tbody>
           </table>
-          <Pagination totalPages={totalPages!} />
+          {/* <Pagination totalPages={totalPages!} /> */}
         </div>
       </section>
     </>

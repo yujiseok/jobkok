@@ -13,8 +13,8 @@ const FindUserInfo = () => {
   }
 
   return (
-    <div className="m-16 flex h-screen justify-center">
-      <div className="flex w-[430px]">
+    <div className="flex h-screen justify-center p-16">
+      <div className="flex">
         {step !== 4 ? (
           <Back
             className="mr-28 cursor-pointer"

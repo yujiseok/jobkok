@@ -13,7 +13,7 @@ export const getTalentList = async (recruitId: string) => {
 // 이메일 전송
 export const sendEmail = async (
   recruitId: string,
-  applyId: string,
+  applyIds: number[],
   mailContent: string,
   noticeStep: string,
   interviewDate?: string,
@@ -23,7 +23,7 @@ export const sendEmail = async (
     url: "/notice/send",
     data: {
       recruitId,
-      applyId,
+      applyIds,
       mailContent,
       noticeStep,
       interviewDate,
@@ -39,10 +39,7 @@ export const searchApplicant = async (applyName: string, recruitId: string) => {
     url: `notice/search?applyName=${applyName}&recruitId=${recruitId}`,
     data: { applyName, recruitId },
   });
-  const data: ISearchData[] = res.data.data;
-
-  console.log("함수안", data);
-
+  const data: ISearchData[] = res.data;
   return data;
 };
 

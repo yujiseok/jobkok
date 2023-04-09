@@ -2,10 +2,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { useAppSelector } from "@/app/hooks";
 import { ReactComponent as IconArrow } from "@/assets/svg/chevron-down-lightgray.svg";
 import { ReactComponent as IconCompany } from "@/assets/svg/company.svg";
 import { ReactComponent as IconOwner } from "@/assets/svg/owner.svg";
 import { ReactComponent as IconPersonalCard } from "@/assets/svg/personalcard.svg";
+import { ReactComponent as IconProfileHeart } from "@/assets/svg/profile-heart.svg";
 import { ReactComponent as IconSms } from "@/assets/svg/sms.svg";
 import { PHONE_REGEX, PW_REGEX } from "@/constants/signup";
 import Box from "@components/ChangeUser/Box";
@@ -14,6 +16,7 @@ import DescriptionList from "@components/ChangeUser/DescriptionList";
 import Icon from "@components/ChangeUser/Icon";
 import InfoList from "@components/ChangeUser/InfoList";
 import Term from "@components/ChangeUser/Term";
+import Banner from "@components/Common/Banner";
 
 const schema = z
   .object({
@@ -44,6 +47,7 @@ type ChangeUser = z.infer<typeof schema>;
 const ChangeUserInfo = () => {
   const [isChangeTel, setIsChangeTel] = useState(true);
   const [isChangePassword, setIsChangePassword] = useState(true);
+  const { auth } = useAppSelector((state) => state);
 
   const {
     register,
@@ -87,18 +91,23 @@ const ChangeUserInfo = () => {
     }
   };
 
+  //  className="mx-0 mt-[80px] mb-[108px] flex h-[257px] flex-col   bg-blue-400
+
   return (
     <div>
-      <div className="mx-0 mt-[80px] mb-[108px] flex h-[257px] flex-col items-center justify-center bg-blue-400 text-center ">
-        <h2 className="Head2Semibold mb-[6px] text-gray-0">기업정보변경</h2>
+      <Banner className="flex h-[25rem] flex-col  text-center">
+        <h2 className="Head2Semibold mt-[60px] mb-[6px] text-gray-0">
+          기업정보변경
+        </h2>
         <p className="Head4Semibold text-gray-0">
           계정 재설정 및 계정 삭제를 진행할 수 있습니다.
         </p>
-      </div>
-      <section className="relative flex gap-6 bg-blue-25 px-16">
+      </Banner>
+      <section className="absolute flex gap-6 px-16 pt-[220px]">
         <Box className="w-[346px]">
-          <strong className="mb-8 h-[282px] w-[282px] rounded-2xl bg-blue-100">
+          <strong className="mb-8 h-[282px] w-[282px] rounded-2xl bg-blue-50">
             <span className="sr-only">잡콕미술학원 이미지</span>
+            <IconProfileHeart />
           </strong>
           <h3 className="Head4Semibold mb-6">기업정보</h3>
           <ul className="flex flex-col gap-6">
@@ -108,7 +117,7 @@ const ChangeUserInfo = () => {
               </Icon>
               <DescriptionList>
                 <Term>기업명</Term>
-                <Description>잡콕미술학원</Description>
+                <Description>{auth.companyName}</Description>
               </DescriptionList>
             </InfoList>
             <InfoList>
@@ -117,7 +126,7 @@ const ChangeUserInfo = () => {
               </Icon>
               <DescriptionList>
                 <Term>대표명</Term>
-                <Description>이현서</Description>
+                <Description>{auth.ceoName}</Description>
               </DescriptionList>
             </InfoList>
             <InfoList>
@@ -126,7 +135,7 @@ const ChangeUserInfo = () => {
               </Icon>
               <DescriptionList>
                 <Term>이메일</Term>
-                <Description>jobkokart@art.net</Description>
+                <Description>{auth.memberEmail}</Description>
               </DescriptionList>
             </InfoList>
             <InfoList>
@@ -135,7 +144,7 @@ const ChangeUserInfo = () => {
               </Icon>
               <DescriptionList>
                 <Term>사업자 등록번호</Term>
-                <Description>333-24-56839</Description>
+                <Description>{auth.companyNum}</Description>
               </DescriptionList>
             </InfoList>
           </ul>
@@ -147,7 +156,7 @@ const ChangeUserInfo = () => {
               <span>전화번호</span>
               {isChangeTel ? (
                 <div className="flex items-center gap-3">
-                  <p>010-1234-5678</p>
+                  <p>{auth.memberPhone}</p>
                   <button
                     className="SubHead1Semibold flex h-11 w-[133px] items-center justify-center rounded-lg bg-blue-50 py-2.5 px-6 text-blue-400"
                     type="button"

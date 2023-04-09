@@ -10,6 +10,11 @@ const useSetInterviewMutate = () => {
         variables.interviewDate,
         variables.interviewTime,
       ),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries();
+      },
+    },
   );
   return { setInterviewMutate };
 };

@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { ReactComponent as Edit } from "@/assets/svg/edit-icon.svg";
+import formatDate from "@/lib/utils/formatDate";
+import { formatTime } from "@/lib/utils/formatTime";
 import type { ITalentDetail } from "@/types/talentDetail";
 import ConfirmInterviewModal from "./ConfirmInterviewModal";
 
@@ -16,14 +18,6 @@ const InterviewInfo = ({ talentInfo }: { talentInfo: ITalentDetail }) => {
     const time = e.target.value + ":00";
     setInterviewTime(time);
   };
-
-  console.log(talentInfo);
-
-  if (talentInfo.meeting) {
-    return (
-      <div className="interview-container flex justify-between gap-4 rounded-md border-2 border-gray-50 bg-white px-5 py-4"></div>
-    );
-  }
 
   return (
     <div className="interview-container flex justify-between gap-4 rounded-md border-2 border-gray-50 bg-white px-5 py-4">
@@ -69,7 +63,7 @@ const InterviewInfo = ({ talentInfo }: { talentInfo: ITalentDetail }) => {
                     면접 날짜
                   </span>
                   <span className="BodyBody2">
-                    {/* {talentInfo?.meeting.slice(0, 10)} */}
+                    {talentInfo.meeting ? formatDate(talentInfo?.meeting) : "-"}
                   </span>
                 </div>
                 <div className="flex items-center gap-3">
@@ -77,7 +71,7 @@ const InterviewInfo = ({ talentInfo }: { talentInfo: ITalentDetail }) => {
                     면접 시간
                   </span>
                   <span className="BodyBody2">
-                    {/* {talentInfo?.meeting.slice(11, 16)} */}
+                    {talentInfo.meeting ? formatTime(talentInfo?.meeting) : "-"}
                   </span>
                 </div>
               </>

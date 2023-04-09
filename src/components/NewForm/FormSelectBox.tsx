@@ -9,7 +9,7 @@ const FormSelectBox = ({
 }) => {
   return (
     <select
-      className={`${className} bg-blue-25 text-gray-400 focus:outline-none`}
+      className={`${className} bg-blue-25 text-gray-100 focus:outline-none`}
       id={id}
       disabled
       onFocus={(event) => event.target.blur()}

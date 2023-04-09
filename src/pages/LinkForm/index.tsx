@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./swiper.css";
 import { SwiperSlide } from "swiper/react";
+import { getFormLinkList } from "@/api/form";
 import { ReactComponent as Arrow } from "@/assets/svg/chevron-down-large.svg";
 import { ReactComponent as Search } from "@/assets/svg/search.svg";
 import { ReactComponent as User } from "@/assets/svg/user.svg";
@@ -12,12 +13,22 @@ import SliderWrapper from "@components/Talent/SliderWrapper";
 import data from "../../pages/LinkForm/otherFormList.json";
 
 const LinkForm = () => {
-  // const [setOtherForm, setSetOtherForm] = useState([1, 2, 3, 4, 5, 6]);
   const [isClicked, setIsClicked] = useState(false);
+  const [formLists, setFormLists] = useState([]);
 
   const handleClick = () => {
     setIsClicked(!isClicked);
   };
+
+  const getFormLists = async () => {
+    const data = await getFormLinkList();
+    console.log(data);
+    setFormLists(data);
+  };
+
+  useEffect(() => {
+    getFormLists();
+  }, []);
 
   return (
     <>
@@ -106,7 +117,13 @@ const LinkForm = () => {
             ></div>
           </div>
         </div>
-        <FormList />
+        {formLists.length > 0 ? (
+          formLists.map((data, index) => {
+            return <FormList key={index} data={data} />;
+          })
+        ) : (
+          <span>아직 등록된 폼이 없습니다.</span>
+        )}
         {/* {isClicked ? <div>완료</div> : <div>임시 저장</div>} */}
       </section>
     </>

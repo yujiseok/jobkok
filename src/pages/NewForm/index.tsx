@@ -22,6 +22,7 @@ import FieldPreference from "@components/Applicant/field/FieldPreference";
 import ModalForLater from "@components/Common/ModalForLater";
 import ContentsBox from "@components/NewForm/ContentsBox";
 import EditTypeBadge from "@components/NewForm/EditTypeBadge";
+import FormModal from "@components/NewForm/FormModal";
 import ProcessBadge from "@components/NewForm/ProcessBadge";
 import RequiredBadge from "@components/NewForm/RequiredBadge";
 import SaveModal from "@components/NewForm/SaveModal";
@@ -43,24 +44,21 @@ const NewForm = () => {
   const [activeTab, setActiveTab] = useState(0);
   const [registerData, setRegisterData] = useState<IFormRes>();
   const [isSaveModal, setIsSaveModal] = useState<boolean>(false);
+  const [modalId, setModalID] = useState("");
   const {
     register,
     handleSubmit,
+    watch,
     formState: { isValid },
   } = useForm<IRecuiteForm>({
     mode: "onChange",
     resolver: zodResolver(schema),
   });
 
-  // 뒤로가기 : 폼링크 관리 페이지로 이동
-  const handleBackBtn = () => {
-    navigate("/form");
-  };
-
   // 삭제
-  const handleDelBtn = () => {
-    navigate("/form");
-  };
+  // const handleDelBtn = () => {
+  //   navigate("/form");
+  // };
 
   // 폼 제출 : 인증됐으면 페이지이동, 안됐으면 인증코드에 focus
   const onSubmit = async (data: IRecuiteForm) => {
@@ -93,14 +91,19 @@ const NewForm = () => {
     >
       {/* 최상단 */}
       <div className="mb-[63px] flex justify-between">
-        <IconChevronLeft className="cursor-pointer" onClick={handleBackBtn} />
-        <div className="flex justify-center gap-3">
-          <ProcessBadge>채용진행중</ProcessBadge>
+        <label htmlFor="back-modal">
+          <IconChevronLeft
+            className="cursor-pointer"
+            onClick={() => setModalID("back-modal")}
+          />
+        </label>
+        <div className="flex items-center gap-3">
+          {/* <ProcessBadge>채용진행중</ProcessBadge> */}
           <EditTypeBadge>SELF</EditTypeBadge>
           <div className="flex items-center gap-3">
             <h2>
               <input
-                className="Head3Semibold h-[46px] min-w-[420px] rounded-lg border border-gray-100 bg-gray-0 py-3.5 px-2 text-center text-gray-800"
+                className="Head3Semibold h-[29px] min-w-[420px] rounded-lg border border-gray-100 bg-gray-0 py-3.5 px-4 text-gray-800 focus:outline-none"
                 type="text"
                 id="title"
                 placeholder="폼 이름을 입력해주세요."
@@ -110,26 +113,25 @@ const NewForm = () => {
             <IconEdit />
           </div>
         </div>
-        <div>
+        <div className="felx gap-4">
           <label
             htmlFor="tempsave-modal"
-            className="SubHead1Semibold mr-4 cursor-pointer rounded-lg bg-blue-50 py-2.5 px-6 text-blue-400"
+            className="SubHead1Semibold btn cursor-pointer rounded-lg border-transparent bg-blue-50 py-2.5 px-6 text-blue-400"
           >
             임시저장
           </label>
-          <button
-            className="SubHead1Semibold rounded-lg bg-error-50 py-2.5 px-6 text-error-400"
-            type="button"
-            onClick={handleDelBtn}
+          {/* <label
+            htmlFor="delete-modal"
+            className="SubHead1Semibold cursor-pointer rounded-lg bg-error-50 py-2.5 px-6 text-error-400"
           >
             삭제
-          </button>
+          </label> */}
         </div>
       </div>
       {/* 메인 내용 */}
       <div className="mb-10 flex flex-col gap-6">
         {/* 생성된 지원서 링크 */}
-        <ContentsBox className="h-[71px] gap-6">
+        <ContentsBox className="h-[71px] items-center gap-6">
           <h3 className="SubHead1Semibold text-gray-800">생성된 지원서 링크</h3>
           <p className="SubHead2Medium text-gray-300">
             폼 작성 완료 후 생성됩니다.
@@ -146,7 +148,7 @@ const NewForm = () => {
                 지원서 이름
               </label>
               <input
-                className="h-[46px] w-[700px] rounded-lg border border-gray-100 bg-gray-0 px-6 py-3.5"
+                className="h-[46px] w-[700px] rounded-lg border border-gray-100 bg-gray-0 px-6 py-3.5 focus:outline-none"
                 type="text"
                 id="applicationTitle"
                 placeholder="인재에게 보일 지원서 이름을 작성해주세요."
@@ -161,7 +163,12 @@ const NewForm = () => {
               >
                 지원서 접수 마감일
               </label>
-              <input type="date" id="docsEnd" {...register("docsEnd")} />
+              <input
+                className="focus:outline-none"
+                type="date"
+                id="docsEnd"
+                {...register("docsEnd")}
+              />
             </fieldset>
             <fieldset className="flex items-center gap-6">
               <label
@@ -170,9 +177,19 @@ const NewForm = () => {
               >
                 면접가능 기간
               </label>
-              <input type="date" id="meetStart" {...register("meetStart")} />
+              <input
+                className="focus:outline-none"
+                type="date"
+                id="meetStart"
+                {...register("meetStart")}
+              />
               <span>~</span>
-              <input type="date" id="meetEnd" {...register("meetEnd")} />
+              <input
+                className="focus:outline-none"
+                type="date"
+                id="meetEnd"
+                {...register("meetEnd")}
+              />
             </fieldset>
           </div>
         </ContentsBox>
@@ -281,6 +298,7 @@ const NewForm = () => {
         <SaveModal setIsSaveModal={setIsSaveModal} apiData={registerData} />
       )}
       <ModalForLater id={"tempsave-modal"} />
+      <FormModal id={modalId} />
     </form>
   );
 };

@@ -42,8 +42,8 @@ const schema = z
 type ChangeUser = z.infer<typeof schema>;
 
 const ChangeUserInfo = () => {
-  const [changeTel, setChangeTel] = useState(true);
-  const [changePassword, setChangePassword] = useState(true);
+  const [isChangeTel, setIsChangeTel] = useState(true);
+  const [isChangePassword, setIsChangePassword] = useState(true);
 
   const {
     register,
@@ -56,7 +56,7 @@ const ChangeUserInfo = () => {
   // 전화번호 변경
   const handleChangeTelBtn = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    setChangeTel(false);
+    setIsChangeTel(false);
   };
 
   // 비밀번호 변경 및 취소 버튼
@@ -64,7 +64,7 @@ const ChangeUserInfo = () => {
     event: React.MouseEvent<HTMLButtonElement>,
   ) => {
     event.preventDefault();
-    setChangePassword((prev) => !prev);
+    setIsChangePassword((prev) => !prev);
   };
 
   // 계정삭제 버튼
@@ -81,9 +81,9 @@ const ChangeUserInfo = () => {
   const onSubmit = (data: ChangeUser) => {
     console.log(data.confirmPassword);
     if (data.phone) {
-      setChangeTel(true);
+      setIsChangeTel(true);
     } else if (data.confirmPassword) {
-      setChangePassword(true);
+      setIsChangePassword(true);
     }
   };
 
@@ -145,7 +145,7 @@ const ChangeUserInfo = () => {
           <ul className="flex flex-col gap-9">
             <li className="flex items-center gap-3">
               <span>전화번호</span>
-              {changeTel ? (
+              {isChangeTel ? (
                 <div className="flex items-center gap-3">
                   <p>010-1234-5678</p>
                   <button
@@ -184,7 +184,7 @@ const ChangeUserInfo = () => {
               )}
             </li>
             <li>
-              {changePassword ? (
+              {isChangePassword ? (
                 <>
                   <span>비밀번호</span>
                   <div className="flex items-center gap-3">

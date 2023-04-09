@@ -4,7 +4,6 @@ import { KEYWORDS_CHECK } from "@/constants/applicant";
 
 const FieldKeywords = () => {
   const { register, watch } = useFormContext();
-  console.log(watch());
 
   return (
     <div className="applicant-field-box">

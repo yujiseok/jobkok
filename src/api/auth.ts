@@ -79,12 +79,19 @@ export const getSendCode = async (useremail: string) => {
 };
 
 // 인증코드 확인
-export const getConfirmCode = async (useremail: string, code: string) => {
-  const { data }: AxiosResponse = await client.post("/auth/check_number", {
-    memberEmail: useremail,
-    authNumber: code,
-  });
-  return data;
+export const getConfirmCode = async (
+  useremail: string,
+  code: string | undefined,
+) => {
+  try {
+    const { data }: AxiosResponse = await client.post("/auth/check_number", {
+      memberEmail: useremail,
+      authNumber: code,
+    });
+    return data.state;
+  } catch (error: any) {
+    return error.request.status;
+  }
 };
 
 // 비밀번호 변경

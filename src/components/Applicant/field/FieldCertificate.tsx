@@ -5,7 +5,7 @@ import FormBox from "@components/NewForm/FormBox";
 import FormInputBox from "@components/NewForm/FormInputBox";
 
 const FieldCertificate = ({ handleKeyDown }: IHandleKeyDown) => {
-  if (location.pathname === "/applicant/application") {
+  if (location.pathname.slice(0, 10) === "/applicant") {
     const {
       register,
       formState: { errors },
@@ -20,7 +20,7 @@ const FieldCertificate = ({ handleKeyDown }: IHandleKeyDown) => {
               자격증 이름
             </label>
             <input
-              className="max-w-[160px]"
+              className="max-w-[160px] focus:outline-none"
               type="text"
               id="certificateName"
               maxLength={20}
@@ -36,7 +36,7 @@ const FieldCertificate = ({ handleKeyDown }: IHandleKeyDown) => {
               발생처
             </label>
             <input
-              className="max-w-[140px] "
+              className="max-w-[140px] focus:outline-none"
               type="text"
               id="certificatePublisher"
               maxLength={20}
@@ -45,11 +45,11 @@ const FieldCertificate = ({ handleKeyDown }: IHandleKeyDown) => {
             />
           </FieldInputBox>
           <FieldInputBox errors={errors.certificateDate}>
-            <label className="applicant-field-label" htmlFor="certificateDate">
+            <label className="applicant-field-label " htmlFor="certificateDate">
               취득일
             </label>
             <input
-              className="max-w-[120px] "
+              className="max-w-[120px] focus:outline-none"
               type="date"
               id="certificateDate"
               onKeyDown={handleKeyDown}

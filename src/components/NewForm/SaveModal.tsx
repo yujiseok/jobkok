@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 import { handleCopyClipBoard } from "@/lib/utils/copyClipboard";
-import type { IFormResponseData } from "@/types/form";
+import type { IFormRes } from "@/types/form";
 
 interface IProps {
   setIsSaveModal: React.Dispatch<React.SetStateAction<boolean>>;
-  apiData?: IFormResponseData;
+  apiData?: IFormRes;
 }
 const SaveModal = ({ setIsSaveModal, apiData }: IProps) => {
   const handleCopyBtn = () => {

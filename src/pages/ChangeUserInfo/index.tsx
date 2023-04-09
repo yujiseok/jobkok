@@ -57,10 +57,10 @@ const ChangeUserInfo = () => {
     resolver: zodResolver(schema),
   });
 
-  // 전화번호 변경
+  // 전화번호 변경 버튼
   const handleChangeTelBtn = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    setIsChangeTel(false);
+    setIsChangeTel((prev) => !prev);
   };
 
   // 비밀번호 변경 및 취소 버튼
@@ -75,7 +75,7 @@ const ChangeUserInfo = () => {
   const handleDelUserBtn = () => {
     if (
       confirm(
-        "계정을 삭제하시겠습니까? 신중히 고민해주세요! 되돌릴 수 없습니다. (기획중...)",
+        "계정을 삭제하시겠습니까? 신중히 고민해주세요!\n저장된 기업과 지원자 정보가 모두 사라집니다.",
       )
     )
       console.log("계정삭제 api 호출 + 로그아웃");
@@ -83,7 +83,6 @@ const ChangeUserInfo = () => {
 
   // 폼 제출
   const onSubmit = (data: ChangeUser) => {
-    console.log(data.confirmPassword);
     if (data.phone) {
       setIsChangeTel(true);
     } else if (data.confirmPassword) {
@@ -95,7 +94,7 @@ const ChangeUserInfo = () => {
 
   return (
     <div>
-      <Banner className="flex h-[25rem] flex-col  text-center">
+      <Banner className="flex h-[25rem] flex-col text-center">
         <h2 className="Head2Semibold mt-[60px] mb-[6px] text-gray-0">
           기업정보변경
         </h2>
@@ -103,7 +102,8 @@ const ChangeUserInfo = () => {
           계정 재설정 및 계정 삭제를 진행할 수 있습니다.
         </p>
       </Banner>
-      <section className="absolute flex gap-6 px-16 pt-[220px]">
+      <div className="bg-glue-25 h-[710px] w-full pt-[400px]"></div>
+      <section className="absolute top-[320px] flex gap-6 px-16">
         <Box className="w-[346px]">
           <strong className="mb-8 h-[282px] w-[282px] rounded-2xl bg-blue-50">
             <span className="sr-only">잡콕미술학원 이미지</span>
@@ -149,57 +149,52 @@ const ChangeUserInfo = () => {
             </InfoList>
           </ul>
         </Box>
-        <Box className="w-[782px]">
-          <h3 className="Head4Semibold mb-14">잡콕 계정 정보</h3>
-          <ul className="flex flex-col gap-9">
-            <li className="flex items-center gap-3">
-              <span>전화번호</span>
+        <Box className="relative w-[782px]">
+          <h3 className="Head4Semibold mb-[55px]">잡콕 계정 정보</h3>
+          <ul className="flex flex-col gap-10">
+            <li className="flex flex-col gap-1">
+              <span className="Caption1Medium text-gray-300">전화번호</span>
               {isChangeTel ? (
-                <div className="flex items-center gap-3">
-                  <p>{auth.memberPhone}</p>
+                <div className="SubHead1Medium flex items-center justify-between gap-6 text-gray-800">
+                  <p className="pl-6">{auth.memberPhone}</p>
                   <button
-                    className="SubHead1Semibold flex h-11 w-[133px] items-center justify-center rounded-lg bg-blue-50 py-2.5 px-6 text-blue-400"
+                    className="SubHead1Semibold flex h-[52px] w-[160px] items-center justify-center rounded-lg bg-blue-50 py-2.5 px-6 text-blue-400"
                     type="button"
-                    onClick={handleChangeTelBtn}
+                    onClick={() => setIsChangeTel((prev) => !prev)}
                   >
                     전화번호 변경
                   </button>
                 </div>
               ) : (
-                <div>
-                  <form
-                    className="flex items-center gap-3"
-                    onClick={handleSubmit(onSubmit)}
+                <form
+                  className="SubHead1Medium flex items-center justify-between gap-6  text-gray-800"
+                  onClick={handleSubmit(onSubmit)}
+                >
+                  <input
+                    className="w-[534px] rounded-lg border border-gray-100 bg-gray-0 px-6 py-4 focus:outline-none"
+                    type="tel"
+                    placeholder="010-1234-5678"
+                    {...register("phone")}
+                  />
+                  <button
+                    className="SubHead1Semibold flex h-[52px] w-[160px] items-center justify-center rounded-lg bg-blue-50 py-2.5 px-6 text-blue-400"
+                    type="submit"
+                    onSubmit={handleSubmit(onSubmit)}
+                    disabled={isSubmitting}
                   >
-                    <input
-                      className="relative"
-                      type="tel"
-                      placeholder="010-1234-5678"
-                      {...register("phone")}
-                    />
-                    <button
-                      className="SubHead1Semibold flex h-11 w-[133px] items-center justify-center rounded-lg bg-blue-50 py-2.5 px-6 text-blue-400"
-                      type="submit"
-                      onSubmit={handleSubmit(onSubmit)}
-                      disabled={isSubmitting}
-                    >
-                      변경완료
-                    </button>
-                  </form>
-                  <p className="absolute mt-2 text-sm text-rose-500">
-                    {errors.phone?.message}
-                  </p>
-                </div>
+                    변경완료
+                  </button>
+                </form>
               )}
             </li>
             <li>
               {isChangePassword ? (
                 <>
-                  <span>비밀번호</span>
-                  <div className="flex items-center gap-3">
-                    <p>********</p>
+                  <span className="Caption1Medium text-gray-300">비밀번호</span>
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="pl-6">*****************</p>
                     <button
-                      className="SubHead1Semibold flex h-11 w-[133px] items-center justify-center rounded-lg bg-blue-50 py-2.5 px-6 text-blue-400"
+                      className="SubHead1Semibold flex h-[52px] w-[160px]  items-center justify-center rounded-lg bg-blue-50 py-2.5 px-6 text-blue-400"
                       type="button"
                       onClick={handleChangePasswordBtn}
                     >
@@ -209,63 +204,78 @@ const ChangeUserInfo = () => {
                 </>
               ) : (
                 <form onClick={handleSubmit(onSubmit)}>
-                  <span>비밀번호</span>
-                  <div>
-                    <label htmlFor="newPassword">새 비밀번호</label>
-                    <input
-                      type="password"
-                      id="newPassword"
-                      placeholder="8~20자의 영문 대/소문자, 숫자, 특수문자 중 2가지 조합"
-                      {...register("password")}
-                    />
-                    <p className="mt-2 text-sm text-rose-500">
-                      {errors.password?.message}
-                    </p>
-                    {/* 눈뜨기 */}
+                  <div className="mb-[17px] flex flex-col gap-1">
+                    <label
+                      className="Caption1Medium text-gray-300"
+                      htmlFor="newPassword"
+                    >
+                      새 비밀번호
+                    </label>
+                    <div className="flex gap-6">
+                      <div>
+                        <input
+                          className="mb-2 w-[534px] rounded-lg border border-gray-100 bg-gray-0 px-6 py-4 focus:outline-none"
+                          type="password"
+                          id="newPassword"
+                          placeholder="새 비밀번호를 입력해주세요"
+                          {...register("password")}
+                        />
+                        <p className="Caption1Medium text-gray-300">
+                          8~20자의 영문 대/소문자, 숫자, 특수문자 중 2가지 조합
+                        </p>
+                      </div>
+                      <div className="flex gap-3">
+                        <button
+                          className="SubHead1Semibold flex h-[52px] w-[74px] items-center justify-center rounded-lg bg-blue-50 py-2.5 text-blue-400"
+                          type="submit"
+                          onClick={handleSubmit(onSubmit)}
+                          disabled={isSubmitting}
+                        >
+                          완료
+                        </button>
+                        <button
+                          className="SubHead1Semibold flex h-[52px] w-[74px] items-center justify-center rounded-lg bg-error-50 py-2.5 text-error-400"
+                          type="button"
+                          onClick={handleChangePasswordBtn}
+                        >
+                          취소
+                        </button>
+                      </div>
+                      {/* 눈뜨기 */}
+                    </div>
                   </div>
-                  <div>
-                    <label htmlFor="confirmPassword">새 비밀번호 확인</label>
+                  <div className="flex flex-col gap-1">
+                    <label
+                      className="Caption1Medium text-gray-300"
+                      htmlFor="confirmPassword"
+                    >
+                      새 비밀번호 확인
+                    </label>
                     <input
+                      className="mb-2 w-[534px] rounded-lg border border-gray-100 bg-gray-0 px-6 py-4 focus:outline-none"
                       type="password"
                       id="confirmPassword"
-                      placeholder="8~20자의 영문 대/소문자, 숫자, 특수문자 중 2가지 조합"
+                      placeholder="새 비밀번호를 확인해주세요"
                       {...register("confirmPassword")}
                     />
-                    <p className="mt-2 text-sm text-rose-500">
-                      {errors.confirmPassword?.message}
+                    <p className="Caption1Medium text-gray-300">
+                      8~20자의 영문 대/소문자, 숫자, 특수문자 중 2가지 조합
                     </p>
                     {/* 눈뜨기 */}
-                  </div>
-                  <div>
-                    <button
-                      className="SubHead1Semibold flex h-11 w-[133px] items-center justify-center rounded-lg bg-blue-50 py-2.5 px-6 text-blue-400"
-                      type="submit"
-                      onClick={handleSubmit(onSubmit)}
-                      disabled={isSubmitting}
-                    >
-                      완료
-                    </button>
-                    <button
-                      className="SubHead1Semibold flex h-11 w-[133px] items-center justify-center rounded-lg bg-blue-50 py-2.5 px-6 text-blue-400"
-                      type="button"
-                      onClick={handleChangePasswordBtn}
-                    >
-                      취소
-                    </button>
                   </div>
                 </form>
               )}
             </li>
           </ul>
+          <button
+            className="SubHead1Medium absolute right-0 bottom-[-50px] flex items-center text-gray-400"
+            type="button"
+            onClick={handleDelUserBtn}
+          >
+            계정삭제하기
+            <IconArrow className="ml-1 rotate-[270deg]" />
+          </button>
         </Box>
-        <button
-          className="SubHead1Medium absolute right-0 bottom-[-60px] flex items-center px-16 text-gray-400"
-          type="button"
-          onClick={handleDelUserBtn}
-        >
-          계정삭제하기
-          <IconArrow className="ml-1 rotate-[270deg]" />
-        </button>
       </section>
     </div>
   );

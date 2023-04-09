@@ -8,15 +8,12 @@ const useFailedTalentQuery = (
   filter: string,
 ) => {
   const { data } = useQuery({
-    queryKey: ["fail", recruitId, page, filter],
+    queryKey: ["drop", recruitId, page, filter],
     queryFn: getFailedTalent,
     // keepPreviousData: true,
     enabled: recruitId ? true : false,
   });
 
-  const failedTalent = data?.data;
-  const totalPages = data?.totalPages;
-
-  return { failedTalent, totalPages };
+  return data;
 };
 export default useFailedTalentQuery;

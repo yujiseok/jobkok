@@ -1,9 +1,11 @@
 import { useFormContext } from "react-hook-form";
+import { ReactComponent as IconSelected } from "@/assets/svg/check-blue.svg";
 import { ReactComponent as IconSelect } from "@/assets/svg/check-gray.svg";
 import { KEYWORDS_CHECK } from "@/constants/applicant";
 
 const FieldKeywords = () => {
   const { register, watch } = useFormContext();
+  const keywordsReq = watch().keywords || {};
 
   return (
     <div className="applicant-field-box">
@@ -15,17 +17,19 @@ const FieldKeywords = () => {
         {KEYWORDS_CHECK.map((keyword, index) => (
           <span key={index}>
             <label
-              className={`SubHead2Semibold flex min-w-[137px] items-center justify-center gap-1 rounded-lg border border-gray-100 py-2.5 text-gray-500`}
-              htmlFor={`keyword-${keyword}`}
+              className={`SubHead2Semibold flex min-w-[137px] items-center justify-center gap-1 rounded-lg border py-2.5 text-gray-500 ${
+                keywordsReq[keyword] ? "border-blue-500" : "border-gray-100"
+              }`}
+              htmlFor={`keywords-${keyword}`}
             >
-              <IconSelect />
+              {keywordsReq[keyword] ? <IconSelected /> : <IconSelect />}
               {keyword}
             </label>
             <input
               className="sr-only"
               type="checkbox"
-              id={`keyword-${keyword}`}
-              {...register(`keywords.${keyword}`)}
+              id={`keywords-${keyword}`}
+              {...register(`keywords[${keyword}]`)}
             />
           </span>
         ))}

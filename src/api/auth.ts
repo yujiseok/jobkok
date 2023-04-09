@@ -101,12 +101,11 @@ export const putResetPassword = async (
   confirmPassword: string,
 ) => {
   try {
-    const { data }: AxiosResponse = await client.put("/auth/reset_password", {
+    const { data }: AxiosResponse = await client.put("/auth/resetPassword", {
       memberEmail: useremail,
       newPassword: password,
       passwordCheck: confirmPassword,
     });
-
     return data;
   } catch (error) {
     if (error instanceof AxiosError) {

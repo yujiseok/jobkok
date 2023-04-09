@@ -77,7 +77,7 @@ const Navbar = () => {
             <p>{auth.companyName}</p>
             <ChevronDown />
           </div>
-          <ul className="dropdown-content menu rounded-box absolute top-9 flex w-52 bg-white p-2 shadow">
+          <ul className="dropdown-content menu rounded-box absolute top-8 flex w-52 bg-white p-2 shadow">
             <li>
               <Link
                 to="/change-user-info"

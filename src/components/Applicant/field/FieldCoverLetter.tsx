@@ -11,6 +11,7 @@ const FieldCoverLetter = ({ resumeTitle }: any) => {
       formState: { errors },
     } = useFormContext();
 
+    // 지원서 작성
     return (
       <div className="applicant-field-box">
         <legend className="applicant-field-legend">자기소개(필수)</legend>
@@ -40,6 +41,7 @@ const FieldCoverLetter = ({ resumeTitle }: any) => {
       </div>
     );
   } else {
+    // 채용폼 작성
     return (
       <div className="form-field-box">
         <div className={`applicant-field-textarea-div border-gray-100`}>

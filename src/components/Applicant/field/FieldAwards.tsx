@@ -11,6 +11,7 @@ const FieldAwards = ({ handleKeyDown }: IHandleKeyDown) => {
       formState: { errors },
     } = useFormContext();
 
+    // 지원서 작성
     return (
       <div className="applicant-field-box">
         <legend className="applicant-field-legend">수상내역</legend>
@@ -57,6 +58,7 @@ const FieldAwards = ({ handleKeyDown }: IHandleKeyDown) => {
       </div>
     );
   } else {
+    // 채용폼 작성
     return (
       <div className="form-field-box">
         <div className="applicant-filed-row">

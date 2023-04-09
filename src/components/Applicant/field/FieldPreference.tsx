@@ -9,6 +9,7 @@ const FieldPreference = () => {
   if (location.pathname.slice(0, 10) === "/applicant") {
     const { register, watch } = useFormContext();
 
+    // 지원서 작성
     return (
       <div className="applicant-field-box">
         <legend className="applicant-field-legend">취업우대사항</legend>
@@ -63,6 +64,7 @@ const FieldPreference = () => {
       </div>
     );
   } else {
+    // 채용폼 작성
     return (
       <div className="form-field-box">
         <p className="applicant-field-Paragraph">

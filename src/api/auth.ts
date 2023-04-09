@@ -1,6 +1,6 @@
 import type { AxiosResponse } from "axios";
 import { AxiosError } from "axios";
-import { client, common } from "./axios";
+import { client } from "./axios";
 
 // 로그인
 export const postSignIn = async (useremail: string, password: string) => {
@@ -72,7 +72,7 @@ export const postEmailCheck = async (useremail: string) => {
 
 // 인증코드 발송
 export const getSendCode = async (useremail: string) => {
-  const { data }: AxiosResponse = await common.post(
+  const { data }: AxiosResponse = await client.post(
     `/auth/send_number?memberEmail=${useremail}`,
   );
   return data;
@@ -84,13 +84,13 @@ export const getConfirmCode = async (
   code: string | undefined,
 ) => {
   try {
-    const { data }: AxiosResponse = await common.post("/auth/check_number", {
+    const { data }: AxiosResponse = await client.post("/auth/check_number", {
       memberEmail: useremail,
       authNumber: code,
     });
-    return data;
-  } catch (err: any) {
-    console.log(err.message);
+    return data.state;
+  } catch (error: any) {
+    return error.request.status;
   }
 };
 

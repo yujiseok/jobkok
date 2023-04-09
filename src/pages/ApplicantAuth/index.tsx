@@ -67,7 +67,7 @@ const ApplicantAuth = () => {
   // 인증코드 확인
   const authcodeCheck = async () => {
     const res = await getConfirmCode(watch().applyEmail, watch().authCode);
-    return res?.state === 200;
+    return res === 200;
   };
 
   // 인증받기 토글 열릴 때 : 이메일 유효성 통과, 중복없음, 인증미완료

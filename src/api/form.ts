@@ -26,6 +26,14 @@ export const searchRecuitForm = async (status: boolean, title: string) => {
   return data as IResponse<IFormRes>;
 };
 
+//채용폼 검색
+export const searchRecruitForm = async (title: string) => {
+  const { data }: AxiosResponse = await client.get(
+    `/recruit/search?status=true&title=${title}`,
+  );
+  return data;
+};
+
 // 채용폼 등록
 export const newRecuitForm = async (value: IFormReq) => {
   const { data }: AxiosResponse = await client.post(`/recruit`, value);

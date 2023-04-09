@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { Link, useSearchParams } from "react-router-dom";
+import { editTalentByProcedure } from "@/api/talent";
 import { ReactComponent as Add } from "@/assets/svg/add-icon.svg";
 import { ReactComponent as ArchiveTickBlue } from "@/assets/svg/archive-tick-blue.svg";
 import { ReactComponent as ArchiveTick } from "@/assets/svg/archive-tick.svg";
@@ -15,30 +16,36 @@ import useAllTalentQuery from "@/lib/hooks/useAllTalentQuery";
 import useDnD from "@/lib/hooks/useDnD";
 import useFormList from "@/lib/hooks/useFormList";
 import useFormListQuery from "@/lib/hooks/useFormListQuery";
+import useLikeMutate from "@/lib/hooks/useLikeMutate";
 import usePagination from "@/lib/hooks/usePagination";
 import useTalentByProcedureQuery from "@/lib/hooks/useTalentByProcedureQuery";
-import ceilPage from "@/lib/utils/ceilPage";
 import formatDate from "@/lib/utils/formatDate";
 import talentToProcedure from "@/lib/utils/talentByProcedure";
 import type { IKanbanBase, ITalent } from "@/types/talent";
 import Banner from "@components/Common/Banner";
 import ModalForLater from "@components/Common/ModalForLater";
-import InterviewBadge from "@components/Talent/InterviewBadge";
-// import KanbanHeader from "@components/Talent/KanbanHeader";
+// import InterviewBadge from "@components/Talent/InterviewBadge";
 import NumberBadge from "@components/Talent/NumberBadge";
 import Pagination from "@components/Talent/Pagination";
 import PreferentialBadge from "@components/Talent/PreferentialBadge";
 import TKeywordBadge from "@components/Talent/TKeywordBadge";
 
 const TalentStatus = () => {
-  const { page, offset, handleClick } = usePagination();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const applyProcedure = searchParams.get("applyProcedure") ?? "전체인재";
-  const formData = useFormListQuery();
-
-  const [recruitId, handleChangeFormList] = useFormList(formData);
-
   const [talent, setTalent] = useState<ITalent[]>([]);
+  const [applyStep, setApplyStep] = useState("서류제출");
+  const { offset } = usePagination();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const applyProcedure = searchParams.get("applyProcedure") ?? "전체";
+  const formData = useFormListQuery();
+  const { likeMutate } = useLikeMutate();
+  const [recruitId, handleChangeFormList] = useFormList(formData);
+  const { allTalent, allTalentRefetch } = useAllTalentQuery(recruitId);
+  const { talentByProcedure, talentByProcedureRefetch } =
+    useTalentByProcedureQuery(recruitId, applyProcedure);
+
+  const kanbanData: IKanbanBase[] = talentToProcedure(allTalent);
+  const { onDragEnd } = useDnD(kanbanData);
+
   const handleTalentChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     item: ITalent,
@@ -53,47 +60,31 @@ const TalentStatus = () => {
       setTalent(newTalent);
     }
   };
-
-  const { allTalent, allTalentRefetch } = useAllTalentQuery(recruitId);
-
-  const totalPages =
-    allTalent && allTalent.data !== null ? ceilPage(allTalent?.data.length) : 0; // 전체 인재로?
-
-  const kanbanData: IKanbanBase[] = talentToProcedure(allTalent);
-  const { onDragEnd } = useDnD(kanbanData);
-
-  const { talentByProcedure, talentByProcedureRefetch } =
-    useTalentByProcedureQuery(recruitId, applyProcedure);
-  // const { talentByProcedure: docsTalent } = useTalentByProcedureQuery(
-  //   recruitId,
-  //   "서류제출",
-  // );
-  // const { talentByProcedure: interviewTalent } = useTalentByProcedureQuery(
-  //   recruitId,
-  //   "면접",
-  // );
-  // const { talentByProcedure: finalTalent } = useTalentByProcedureQuery(
-  //   recruitId,
-  //   "최종조율",
-  // );
-
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSearchParams({
       applyProcedure: e.target.value,
     });
   };
+  const handleChangeStep = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setApplyStep(e.target.value);
+  };
 
-  // console.log({ docsTalent, interviewTalent, finalTalent });
-
-  useEffect(() => {
-    if (applyProcedure === "전체인재") {
-      allTalentRefetch();
-    } else {
-      talentByProcedureRefetch({
-        queryKey: ["procedure", recruitId, applyProcedure],
-      });
+  // 추후 useMutation 처리
+  const multipleEdit = async () => {
+    for (let i = 0; i < talent.length; i++) {
+      try {
+        const res = await editTalentByProcedure(talent[i].applyId, applyStep);
+        if (res.state === 200) {
+          allTalentRefetch();
+          talentByProcedureRefetch();
+          setTalent([]);
+        }
+      } catch (error) {
+        alert("채용 단계 수정이 실패하였습니다.");
+        return;
+      }
     }
-  }, [applyProcedure, recruitId]);
+  };
 
   //  폼 없을 시
   if (formData?.result === "FAIL") {
@@ -116,8 +107,6 @@ const TalentStatus = () => {
       </Banner>
     );
   }
-
-  console.log(talentByProcedure);
 
   return (
     <>
@@ -188,7 +177,7 @@ const TalentStatus = () => {
                     </div>
 
                     <div className="flex max-h-[54.75rem] flex-col gap-4 overflow-y-auto overflow-x-hidden py-1 pr-3">
-                      {kanban.applicant.map((item, index) => (
+                      {kanban.applicant.map((item: ITalent, index: number) => (
                         <Draggable
                           key={item.applyId}
                           draggableId={item.applyId?.toString() as string}
@@ -222,8 +211,14 @@ const TalentStatus = () => {
                                   <ChevronRight />
                                 </Link>
 
-                                <button>
-                                  <ArchiveTick className="text-gray-300" />
+                                <button
+                                  onClick={() => likeMutate(item.applyId!)}
+                                >
+                                  {item.wish ? (
+                                    <ArchiveTickBlue />
+                                  ) : (
+                                    <ArchiveTick className="text-gray-300" />
+                                  )}
                                 </button>
                               </div>
                               <div className="Caption1Semibold flex gap-6px pt-4 pb-8">
@@ -292,15 +287,24 @@ const TalentStatus = () => {
 
           <div className="flex items-center gap-16">
             <div className="flex items-center gap-6">
-              <select className="select max-w-xs bg-blue-50 text-blue-500 focus:border-transparent focus:outline-none">
-                <option disabled>단계를 선택하세요</option>
-                <option>면접 합격</option>
+              <select
+                className="outline-none"
+                value={applyStep}
+                onChange={handleChangeStep}
+              >
+                <option value="서류제출">서류제출</option>
+                <option value="면접">면접</option>
+                <option value="최종조율">최종조율</option>
               </select>
 
               <span className="Head4Medium text-gray-600">단계로</span>
             </div>
 
-            <button className="flex items-center gap-3 rounded-lg bg-blue-500 px-14 py-3 text-gray-0 shadow-blue">
+            <button
+              disabled={talent.length < 1}
+              className="flex items-center gap-3 rounded-lg bg-blue-500 px-14 py-3 text-gray-0 shadow-blue disabled:bg-gray-300"
+              onClick={multipleEdit}
+            >
               추가하기 <Add />
             </button>
           </div>
@@ -314,7 +318,6 @@ const TalentStatus = () => {
             value={applyProcedure}
             onChange={handleChange}
           >
-            <option value="전체인재">전체 인재</option>
             {APPLY_PROCEDURE.map((item) => (
               <option key={item} value={item}>
                 {item}
@@ -329,8 +332,7 @@ const TalentStatus = () => {
               <input
                 id="searchBar"
                 placeholder="인재를 검색해보세요"
-                className="autofill:none h-full w-full bg-transparent focus:outline-none"
-                // ref={searchInput}
+                className="h-full w-full bg-transparent focus:outline-none"
               />
             </label>
             <button className="mr-6">
@@ -354,47 +356,55 @@ const TalentStatus = () => {
               </tr>
             </thead>
             <tbody>
-              {allTalent?.data?.slice(offset, offset + LIMIT).map((item) => (
-                <tr key={item.applyId} className="border-b border-gray-50">
-                  <td>
-                    <input
-                      type="checkbox"
-                      className="h-5 w-5 border-gray-400 checked:bg-blue-500"
-                      onChange={(e) => handleTalentChange(e, item)}
-                    />
-                  </td>
-                  <th>
-                    <div className="flex items-center gap-4">
-                      <HeartMemoji /> <span>{item.applyName}</span>
-                    </div>
-                  </th>
-                  <td>
-                    <div className="flex gap-6px">
-                      {item.keywordList.map((keyword) => (
-                        <TKeywordBadge key={keyword}>{keyword}</TKeywordBadge>
-                      ))}
-                    </div>
-                  </td>
+              {(applyProcedure === "전체" ? allTalent : talentByProcedure)?.data
+                ?.slice(offset, offset + LIMIT)
+                .map((item) => (
+                  <tr key={item.applyId} className="border-b border-gray-50">
+                    <td>
+                      <input
+                        type="checkbox"
+                        className="h-5 w-5 border-gray-400 checked:bg-blue-500"
+                        onChange={(e) => handleTalentChange(e, item)}
+                      />
+                    </td>
+                    <th>
+                      <div className="flex items-center gap-4">
+                        <HeartMemoji /> <span>{item.applyName}</span>
+                      </div>
+                    </th>
+                    <td>
+                      <div className="flex gap-6px">
+                        {item.keywordList.map((keyword) => (
+                          <TKeywordBadge key={keyword}>{keyword}</TKeywordBadge>
+                        ))}
+                      </div>
+                    </td>
 
-                  <td className="SubHead2Medium text-gray-500">
-                    {formatDate(item.createdTime)}
-                  </td>
+                    <td className="SubHead2Medium text-gray-500">
+                      {formatDate(item.createdTime)}
+                    </td>
 
-                  <td>
-                    <div className="flex gap-4">
-                      <button>
-                        {item.wish ? <ArchiveTickBlue /> : <ArchiveTick />}
-                      </button>
-                      <button>
-                        <Trash />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                    <td>
+                      <div className="flex gap-4">
+                        <button>
+                          {item.wish ? <ArchiveTickBlue /> : <ArchiveTick />}
+                        </button>
+                        <button>
+                          <Trash />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
-          <Pagination totalPages={totalPages} />
+          {applyProcedure === "전체" ? (
+            <Pagination length={allTalent?.data?.length as number} />
+          ) : (
+            <Pagination
+              length={(talentByProcedure?.data?.length as number) ?? 0}
+            />
+          )}
         </div>
       </section>
       <ModalForLater id="modal" />
@@ -404,6 +414,6 @@ const TalentStatus = () => {
 
 const TH_ITEMS = ["선택", "인재", "키워드", "지원일", "액션"];
 
-const APPLY_PROCEDURE = ["서류제출", "면접", "최종조율"];
+const APPLY_PROCEDURE = ["전체", "서류제출", "면접", "최종조율"];
 
 export default TalentStatus;

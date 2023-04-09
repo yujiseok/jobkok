@@ -18,7 +18,7 @@ export const useTimer = (initialValue: number, start: boolean) => {
 
   const resetTime = () => setTime(initialValue);
 
-  const formattedTime = new Date(time).toISOString().substring(14, 5);
+  const formattedTime = new Date(time).toISOString().substr(14, 5);
 
   return { formattedTime, isCountingDown, setIsCountingDown, resetTime };
 };

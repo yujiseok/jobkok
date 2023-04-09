@@ -2,7 +2,7 @@ import type { AxiosRequestConfig } from "axios";
 import axios from "axios";
 
 const config: AxiosRequestConfig = {
-  baseURL: "https://jobkok.shop",
+  baseURL: import.meta.env.VITE_BASE_URL,
 };
 
 export const client = axios.create(config);

@@ -31,14 +31,14 @@ export interface IStatus {
 }
 
 export interface ITalentBase {
-  applyId?: string;
+  applyId: string;
   applyName: string;
   applyPhone: string;
   applyEmail: string;
   applyProcedure: ProcedureType;
   applyDelete: boolean;
   createdTime: string;
-  pass?: boolean;
+  pass: boolean;
   wish: boolean;
   keywords: string[];
   keywordList: string[];

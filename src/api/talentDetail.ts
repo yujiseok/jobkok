@@ -1,4 +1,5 @@
 import type { AxiosResponse } from "axios";
+import type { INotibase } from "@/types/notification";
 import type { ITalentDetail } from "@/types/talentDetail";
 import { client } from "./axios";
 
@@ -8,7 +9,7 @@ export const getDetailInfo = async (applyId: string) => {
     method: "GET",
     url: `/apply/${applyId}`,
   });
-  return data.data;
+  return data.data as ITalentDetail;
 };
 
 // 인재 코멘트 등록
@@ -45,19 +46,17 @@ export const checkApplication = async (applyId: string) => {
     method: "PUT",
     url: `apply/check/${applyId}`,
   });
-  return data;
+  console.log(data);
+  return data as INotibase;
 };
 
 // 면접 날짜 지정
-export const setMeeting = async (
-  applyId: string,
-  interviewDate: string,
-  interviewTime: string,
-) => {
+export const setMeeting = async (applyId: string, interviewDate: string) => {
   const { data } = await client({
     method: "PUT",
     url: `apply/set_meeting/${applyId}`,
-    data: { interviewDate, interviewTime },
+    data: interviewDate,
   });
+  console.log(data);
   return data;
 };

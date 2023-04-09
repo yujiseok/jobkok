@@ -1,8 +1,11 @@
 import usePagination from "@/lib/hooks/usePagination";
+import ceilPage from "@/lib/utils/ceilPage";
 import makeString from "@/lib/utils/makeString";
 
-const Pagination = ({ totalPages }: { totalPages: number }) => {
+const Pagination = ({ length }: { length: number }) => {
   const { page, handleClick } = usePagination();
+
+  const totalPages = ceilPage(length); // 전체 인재로?
 
   return (
     <nav className="mt-12 flex justify-center gap-14">

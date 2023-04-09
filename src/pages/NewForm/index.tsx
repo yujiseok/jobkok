@@ -15,6 +15,7 @@ import FieldCareer from "@components/Applicant/field/FieldCareer";
 import FieldCertificate from "@components/Applicant/field/FieldCertificate";
 import FieldCoverLetter from "@components/Applicant/field/FieldCoverLetter";
 import FieldEdu from "@components/Applicant/field/FieldEdu";
+import FieldKeywords from "@components/Applicant/field/FieldKeywords";
 import FieldLanguage from "@components/Applicant/field/FieldLanguage";
 import FieldLink from "@components/Applicant/field/FieldLink";
 import FieldPreference from "@components/Applicant/field/FieldPreference";
@@ -247,25 +248,8 @@ const NewForm = () => {
         </div>
       </div>
       {/* 추천인재키워드 */}
-      <ContentsBox className="mb-[52px] flex flex-col items-center gap-8 py-[68px]">
-        <div className="flex flex-col items-center gap-3">
-          <h3 className="Head4Semibold text-black">추천 인재 키워드</h3>
-          <p className="SubHead2Medium text-gray-400">
-            10개 중 최소 5개 선택 가능합니다.
-          </p>
-        </div>
-        <div className="grid h-[108px] max-w-[820px] grid-cols-5 gap-5">
-          {KEYWORDS_CHECK.map((keyword) => (
-            <button
-              className="SubHead1Semibold h-[44px] w-[148px] rounded-lg border-[1.5px] border-gray-100 py-2.5 text-gray-200"
-              key={keyword}
-              type="button"
-            >
-              {keyword}
-            </button>
-          ))}
-        </div>
-      </ContentsBox>
+      <FieldKeywords />
+
       {/* 약관 동의 */}
       <div className="flex flex-col items-center justify-center gap-[29px]">
         <div className="flex gap-2">

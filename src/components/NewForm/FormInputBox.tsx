@@ -9,7 +9,7 @@ const FormInputBox = ({
 }) => {
   return (
     <input
-      className={`${className} bg-blue-25 focus:outline-none`}
+      className={`${className} bg-blue-25 text-gray-100 placeholder-gray-100 focus:outline-none`}
       type={type}
       id={id}
       placeholder="텍스트 입력 불가"

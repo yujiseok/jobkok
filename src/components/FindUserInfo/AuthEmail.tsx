@@ -1,18 +1,23 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { useForm } from "react-hook-form";
-import type * as z from "zod";
+import * as z from "zod";
+import { getSendCode } from "@/api/auth";
 import { ReactComponent as Dot } from "@/assets/svg/blue-dot.svg";
 import { ReactComponent as Xicon } from "@/assets/svg/x-icon.svg";
-import { userSchema } from "@pages/SignIn";
 
 type Props = {
   setStep: React.Dispatch<React.SetStateAction<number>>;
 };
 
-const authSchema = userSchema.extend({});
+export const schema = z.object({
+  useremail: z
+    .string()
+    .min(1, "이메일을 입력해 주세요.")
+    .email("올바른 이메일 형식을 입력해 주세요."),
+});
 
-type User = z.infer<typeof authSchema>;
+type User = z.infer<typeof schema>;
 
 const AuthEmail = ({ setStep }: Props) => {
   const {
@@ -23,12 +28,18 @@ const AuthEmail = ({ setStep }: Props) => {
     formState: { errors, isSubmitting, isDirty },
   } = useForm<User>({
     mode: "onChange",
-    resolver: zodResolver(authSchema),
+    resolver: zodResolver(schema),
   });
 
-  const onSubmit = (data: User) => {
-    console.log(data);
-    setStep(2);
+  // 인증번호 발송
+  const onSubmit = async (data: User) => {
+    const res = await getSendCode(data.useremail);
+    if (res.state === 200) {
+      localStorage.setItem("useremail", data.useremail);
+      setStep(2);
+    } else {
+      return alert("인증코드 발송에 실패했습니다.");
+    }
   };
 
   return (
@@ -80,12 +91,11 @@ const AuthEmail = ({ setStep }: Props) => {
           </span>
         </div>
         <button
-          className="SubHead1Semibold my-5 mb-12 h-[48px] w-[430px] self-center rounded-lg bg-blue-50 text-blue-400"
+          className={`SubHead1Semibold my-5 mb-12 h-[48px] w-[430px] self-center rounded-lg text-blue-500 ${
+            getValues("useremail") ? "bg-blue-100" : "bg-blue-50"
+          }`}
           type="submit"
-          disabled={isSubmitting && isDirty}
-          onClick={() => {
-            setStep(2);
-          }}
+          disabled={isSubmitting && !errors.useremail}
         >
           인증코드 발송
         </button>

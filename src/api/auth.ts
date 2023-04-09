@@ -99,7 +99,6 @@ export const putResetPassword = async (
       newPassword: password,
       passwordCheck: confirmPassword,
     });
-
     return data;
   } catch (error) {
     if (error instanceof AxiosError) {

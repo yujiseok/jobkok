@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Pagination } from "swiper";
 import "./swiper.css";
-// import "swiper/css/pagination";
 import { SwiperSlide } from "swiper/react";
 import { ReactComponent as Arrow } from "@/assets/svg/chevron-down-large.svg";
 import { ReactComponent as Search } from "@/assets/svg/search.svg";

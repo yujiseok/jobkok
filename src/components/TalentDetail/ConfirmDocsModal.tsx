@@ -1,13 +1,11 @@
 import { useParams } from "react-router-dom";
 import { checkApplication } from "@/api/talentDetail";
 import { ReactComponent as Confirm } from "@/assets/svg/modal-confirm.svg";
+import useConfirmDocsMutate from "@/lib/hooks/useConfirmDocsMutate";
 
 const ConfirmDocsModal = () => {
   const { id } = useParams() as { id: string };
-  const checkTalent = async () => {
-    const res = await checkApplication(id);
-    console.log(res);
-  };
+  const { confirmDocsMutate } = useConfirmDocsMutate();
 
   return (
     <>
@@ -25,7 +23,7 @@ const ConfirmDocsModal = () => {
             <button
               type="submit"
               className="SubHead2Semibold w-[150px] cursor-pointer  rounded-md bg-blue-500 px-[2.1875rem] py-[10px] text-white"
-              onClick={checkTalent}
+              onClick={() => confirmDocsMutate(id)}
             >
               <label htmlFor="confirm-docs-modal" className="cursor-pointer">
                 서류 검토 처리

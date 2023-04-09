@@ -29,7 +29,7 @@ const TalentDetail = () => {
         <div className="SubHead2Semibold flex items-start gap-4 rounded-md">
           <ConfirmDocsBtn talentInfo={talentInfo!} />
           <ConfirmFailBtn />
-          <PersonalNotiBtn />
+          <PersonalNotiBtn talentInfo={talentInfo!} id={id} />
         </div>
       </section>
 
@@ -39,7 +39,7 @@ const TalentDetail = () => {
           <Timeline />
         </div>
         <div className=" flex flex-[0.4] flex-col gap-4">
-          <InterviewInfo id={id} talentInfo={talentInfo!} />
+          <InterviewInfo talentInfo={talentInfo!} />
           <EvaluationNote id={id} talentInfo={talentInfo!} />
         </div>
       </section>

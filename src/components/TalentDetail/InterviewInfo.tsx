@@ -1,19 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { getDetailInfo, setMeeting } from "@/api/talentDetail";
 import { ReactComponent as Edit } from "@/assets/svg/edit-icon.svg";
+import formatDate from "@/lib/utils/formatDate";
+import { formatTime } from "@/lib/utils/formatTime";
 import type { ITalentDetail } from "@/types/talentDetail";
+import ConfirmInterviewModal from "./ConfirmInterviewModal";
 
-const InterviewInfo = ({
-  id,
-  talentInfo,
-}: {
-  id: string;
-  talentInfo: ITalentDetail;
-}) => {
-  const [isEditing, setisEditing] = useState(false);
+const InterviewInfo = ({ talentInfo }: { talentInfo: ITalentDetail }) => {
+  const [isEditing, setIsEditing] = useState(false);
   const [interviewDate, setInterviewDate] = useState("");
   const [interviewTime, setInterviewTime] = useState("");
+
   const handleInterviewDate = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInterviewDate(e.target.value);
   };
@@ -22,14 +18,6 @@ const InterviewInfo = ({
     const time = e.target.value + ":00";
     setInterviewTime(time);
   };
-
-  const setMeetingDate = async (e: React.MouseEvent<SVGSVGElement>) => {
-    const newTime = interviewDate + "T" + interviewTime;
-    console.log(newTime);
-    const res = await setMeeting(id, newTime);
-    setisEditing(false);
-  };
-  console.log(talentInfo);
 
   return (
     <div className="interview-container flex justify-between gap-4 rounded-md border-2 border-gray-50 bg-white px-5 py-4">
@@ -75,7 +63,7 @@ const InterviewInfo = ({
                     면접 날짜
                   </span>
                   <span className="BodyBody2">
-                    {/* {talentInfo?.meeting.slice(0, 10)} */}
+                    {talentInfo.meeting ? formatDate(talentInfo?.meeting) : "-"}
                   </span>
                 </div>
                 <div className="flex items-center gap-3">
@@ -83,7 +71,7 @@ const InterviewInfo = ({
                     면접 시간
                   </span>
                   <span className="BodyBody2">
-                    {/* {talentInfo?.meeting.slice(11, 16)} */}
+                    {talentInfo.meeting ? formatTime(talentInfo?.meeting) : "-"}
                   </span>
                 </div>
               </>
@@ -96,11 +84,18 @@ const InterviewInfo = ({
         className="SubHead2Medium cursor-pointer text-gray-400"
       >
         {isEditing ? (
-          <Edit onClick={setMeetingDate} />
+          <label htmlFor="confirm-interview-modal">
+            <Edit />
+          </label>
         ) : (
-          <Edit onClick={() => setisEditing(!isEditing)} />
+          <Edit onClick={() => setIsEditing(!isEditing)} />
         )}
       </button>
+      <ConfirmInterviewModal
+        setIsEditing={setIsEditing}
+        interviewDate={interviewDate}
+        interviewTime={interviewTime}
+      />
     </div>
   );
 };

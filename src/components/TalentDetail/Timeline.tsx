@@ -1,13 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
-import { getDetailInfo } from "@/api/talentDetail";
+import formatDate from "@/lib/utils/formatDate";
+import type { ITalentDetail } from "@/types/talentDetail";
 
-const Timeline = () => {
-  const { id } = useParams() as { id: string };
-  const { data: talentInfo } = useQuery({
-    queryKey: ["talentInfo"],
-    queryFn: () => getDetailInfo(id),
-  });
+const Timeline = ({ talentInfo }: { talentInfo: ITalentDetail }) => {
   return (
     <div className="timeline-container mt-4 rounded-md border-2 border-gray-50 bg-white p-10">
       <p className="Head4Semibold pb-2">타임라인</p>
@@ -18,8 +12,14 @@ const Timeline = () => {
       <ul className="steps w-full">
         {[
           { label: "최초 접수", date: talentInfo?.createdTime },
-          { label: "서류 검토", date: talentInfo?.checkApply },
-          { label: "면접일", date: talentInfo?.meeting },
+          {
+            label: "서류 검토",
+            date: talentInfo?.checkApply || talentInfo?.meeting,
+          },
+          {
+            label: "면접일",
+            date: talentInfo?.meeting || talentInfo?.pass,
+          },
           {
             label: "최종 합격",
             date: talentInfo?.pass !== "false" && talentInfo?.pass,
@@ -34,7 +34,7 @@ const Timeline = () => {
             }`}
           >
             <p>{label}</p>
-            <p>{date ? date.slice(0, 10) : "-"}</p>
+            <p>{date ? formatDate(date) : "-"}</p>
           </li>
         ))}
       </ul>

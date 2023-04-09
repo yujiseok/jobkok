@@ -6,9 +6,7 @@ const SliderWrapper = ({ children }: { children: React.ReactNode }) => {
     <Swiper
       slidesPerView={3}
       spaceBetween={16}
-      pagination={{
-        clickable: true,
-      }}
+      pagination={{ clickable: true }}
       speed={1000}
       modules={[Pagination]}
       slidesPerGroup={3}

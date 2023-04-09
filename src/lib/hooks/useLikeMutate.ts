@@ -7,7 +7,7 @@ const useLikeMutate = () => {
     assortLikeTalent,
     {
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["fail"] });
+        queryClient.invalidateQueries();
       },
     },
   );

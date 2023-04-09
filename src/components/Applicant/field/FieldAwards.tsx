@@ -5,7 +5,7 @@ import FormBox from "@components/NewForm/FormBox";
 import FormInputBox from "@components/NewForm/FormInputBox";
 
 const FieldAwards = ({ handleKeyDown }: IHandleKeyDown) => {
-  if (location.pathname === "/applicant/application") {
+  if (location.pathname.slice(0, 10) === "/applicant") {
     const {
       register,
       formState: { errors },
@@ -20,7 +20,7 @@ const FieldAwards = ({ handleKeyDown }: IHandleKeyDown) => {
               수상명
             </label>
             <input
-              className="max-w-[150px]"
+              className="max-w-[150px] focus:outline-none"
               type="text"
               id="awardsName"
               maxLength={20}
@@ -33,7 +33,7 @@ const FieldAwards = ({ handleKeyDown }: IHandleKeyDown) => {
               수여기관
             </label>
             <input
-              className="max-w-[160px]"
+              className="max-w-[160px] focus:outline-none"
               type="text"
               id="awardsCompany"
               maxLength={20}

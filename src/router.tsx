@@ -251,7 +251,7 @@ const router: RemixRouter = createBrowserRouter([
         path: "/applicant",
         children: [
           {
-            path: "auth",
+            path: "auth/:id",
             element: <ApplicantAuth />,
           },
           {
@@ -263,7 +263,7 @@ const router: RemixRouter = createBrowserRouter([
     ],
   },
   {
-    path: "/applicant/application",
+    path: "/applicant/application/:id",
     element: <Application />,
   },
   {

@@ -1,29 +1,30 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import * as z from "zod";
-import { emailAuth, emailDuplicatecheck, submitApply } from "@/api/applicant";
+import { emailDuplicatecheck } from "@/api/applicant";
+import { getConfirmCode, getSendCode } from "@/api/auth";
 import { ReactComponent as IconLogo } from "@/assets/svg/blue-logo.svg";
 import AuthEnter from "@components/Applicant/AuthEnter";
 import AuthLabel from "@components/Applicant/AuthLabel";
 import AuthRow from "@components/Applicant/AuthRow";
 
 const schema = z.object({
-  name: z
+  applyName: z
     .string()
     .nonempty("이름을 입력해주세요.")
     .min(2, "이름을 2자 이상 20자 이내로 입력해주세요.")
     .max(15, "이름을 2자 이상 20자 이내로 입력해주세요.")
     .regex(/^[ㄱ-ㅎ가-힣a-zA-Z]+$/, "특수문자, 숫자, 공백은 입력 불가합니다."),
-  tel: z
+  applyPhone: z
     .string()
     .nonempty("전화번호를 입력해주세요.")
     .regex(
       /^01([0|1|6|7|8|9])-([0-9]{4})-([0-9]{4})$/,
       "전화번호가 올바르지 않습니다.",
     ),
-  email: z
+  applyEmail: z
     .string()
     .nonempty("이메일을 입력해주세요.")
     .email("이메일 형식이 올바르지 않습니다.")
@@ -41,6 +42,7 @@ const schema = z.object({
 type IAuthForm = z.infer<typeof schema>;
 
 const ApplicantAuth = () => {
+  const params = useParams();
   const navigate = useNavigate();
   const [isSended, setIsSended] = useState(false);
   const [isCertified, setIsCertified] = useState(false);
@@ -56,25 +58,37 @@ const ApplicantAuth = () => {
     resolver: zodResolver(schema),
   });
 
-  const getDuplicateTest = () => {
-    emailDuplicatecheck(3, "ssakthree33@gmail.com");
+  // 이메일 중복확인
+  const emailCheck = async () => {
+    const res = await emailDuplicatecheck(watch().applyEmail, 49);
+    return res.data;
   };
 
-  const getEmailAuth = () => {
-    emailAuth(3, "ssakthree33@gmail.com");
+  // 인증코드 확인
+  const authcodeCheck = async () => {
+    const res = await getConfirmCode(watch().applyEmail, watch().authCode);
+    return res === 200;
   };
 
   // 인증받기 토글 열릴 때 : 이메일 유효성 통과, 중복없음, 인증미완료
   const handleGetCodeBtn = async () => {
-    if (getValues().email === "" || errors.email?.message !== undefined) {
-      setFocus("email");
-      // 중복없음 분기 추가 필요 : 중복시 confirm("이미 지원됐습니다. 중복지원이 불가합니다.")
+    if (
+      getValues().applyEmail === "" ||
+      errors.applyEmail?.message !== undefined
+    ) {
+      setFocus("applyEmail");
     } else if (isCertified) {
       confirm("이미 이메일 인증이 완료됐습니다.");
+    } else if (await emailCheck()) {
+      const res = await getSendCode(watch().applyEmail);
+      if (res.state === 200) {
+        confirm("이메일이 전송됐습니다. 메일함을 확인해주세요.");
+        setIsSended(true);
+      } else {
+        confirm(`이메일 전송에 실패했습니다.`);
+      }
     } else {
-      setIsSended(true);
-      // 이메일 인증 API
-      confirm("이메일이 전송됐습니다. 메일함을 확인해주세요.");
+      confirm("이미 지원됐습니다. 중복지원이 불가합니다.");
     }
   };
 
@@ -86,20 +100,23 @@ const ApplicantAuth = () => {
       errors.authCode
     ) {
       setFocus("authCode");
-      // 이메일 인증 API 성공값 추가 필요 : 실패시 confirm("올바른 인증코드를 입력해주세요")
-    } else {
+    } else if (await authcodeCheck()) {
       setIsSended(false);
       setIsCertified(true);
+    } else {
+      confirm("올바른 인증코드를 입력해주세요");
     }
   };
 
   // 폼 제출 : 인증됐으면 페이지이동, 안됐으면 인증코드에 focus
   const onSubmit = async (data: IAuthForm) => {
     if (isCertified) {
-      //데이터 지원서로 가져와서, 한꺼번에 등록 api 호출해야함
-      //리덕스에 data 저장?
-      console.log(data);
-      navigate("/applicant/application");
+      const { authCode, ...rest } = data;
+      const convertData = {
+        ...rest,
+        recruitId: params.id,
+      };
+      navigate(`/applicant/application/${params.id}`, { state: convertData });
     } else {
       setFocus("authCode");
     }
@@ -124,41 +141,41 @@ const ApplicantAuth = () => {
           >
             <AuthRow>
               <AuthEnter>
-                <AuthLabel htmlFor="name">이름</AuthLabel>
+                <AuthLabel htmlFor="applyName">이름</AuthLabel>
                 <input
                   className={`SubHead1Medium h-[52px] w-full rounded-md border py-4 px-6 text-gray-800 focus:outline-none ${
-                    errors.name && "border-error-400"
+                    errors.applyName && "border-error-400"
                   }`}
                   type="text"
-                  id="name"
+                  id="applyName"
                   placeholder="홍길동"
-                  {...register("name")}
+                  {...register("applyName")}
                 />
               </AuthEnter>
               <AuthEnter>
-                <AuthLabel htmlFor="tel">전화번호</AuthLabel>
+                <AuthLabel htmlFor="applyPhone">전화번호</AuthLabel>
                 <input
                   className={`SubHead1Medium h-[52px] w-full rounded-md border py-4 px-6 text-gray-800 focus:outline-none ${
-                    errors.tel && "border-error-400"
+                    errors.applyPhone && "border-error-400"
                   }`}
                   type="tel"
-                  id="tel"
+                  id="applyPhone"
                   placeholder="010-1234-5678"
-                  {...register("tel")}
+                  {...register("applyPhone")}
                 />
               </AuthEnter>
             </AuthRow>
             <AuthRow>
               <AuthEnter>
-                <AuthLabel htmlFor="email">이메일</AuthLabel>
+                <AuthLabel htmlFor="applyEmail">이메일</AuthLabel>
                 <input
                   className={`SubHead1Medium h-[52px] w-[315px] rounded-md border py-4 px-6 text-gray-800 focus:outline-none ${
-                    errors.email && "border-error-400"
+                    errors.applyEmail && "border-error-400"
                   } ${isCertified && "bg-gray-100"}`}
                   type="email"
-                  id="email"
+                  id="applyEmail"
                   placeholder="jobkok@jobkok.com"
-                  {...register("email")}
+                  {...register("applyEmail")}
                   disabled={isCertified}
                 />
                 <p className="Caption1Medium mt-1 text-gray-400">
@@ -168,8 +185,8 @@ const ApplicantAuth = () => {
                 </p>
               </AuthEnter>
               <button
-                className={`SubHead1Semibold mt-[19px] h-[52px] rounded-lg bg-blue-50 py-2.5 px-6 ${
-                  errors.email || watch().email === ""
+                className={`SubHead1Semibold btn mt-[19px] h-[52px] rounded-lg border-transparent bg-blue-50 py-2.5 px-6 ${
+                  errors.applyEmail || watch().applyEmail === ""
                     ? "text-blue-200"
                     : "text-blue-400"
                 }`}
@@ -201,7 +218,7 @@ const ApplicantAuth = () => {
                   </span>
                 </AuthEnter>
                 <button
-                  className={`SubHead1Semibold mt-[19px] h-[52px] rounded-lg bg-blue-50 py-2.5 px-6 ${
+                  className={`SubHead1Semibold btn mt-[19px] h-[52px] rounded-lg border-transparent bg-blue-50 py-2.5 px-6 ${
                     errors.authCode || watch().authCode === ""
                       ? "text-blue-200"
                       : "text-blue-400"
@@ -219,7 +236,7 @@ const ApplicantAuth = () => {
           </form>
         </div>
         <button
-          className={`SubHead1Semibold absolute bottom-0 h-11 w-full rounded-lg  py-2.5 px-6 text-gray-0 ${
+          className={`SubHead1Semibold btn absolute bottom-0 h-11 w-full rounded-lg border-transparent py-2.5 px-6 text-gray-0 ${
             isCertified && isValid ? "bg-blue-500" : "bg-gray-200"
           }`}
           type="submit"
@@ -228,14 +245,6 @@ const ApplicantAuth = () => {
         >
           지원서 작성하기
         </button>
-        <div>
-          <button className="btn mt-4" type="button" onClick={getDuplicateTest}>
-            이메일 중복확인
-          </button>
-          <button className="btn mt-4" type="button" onClick={getEmailAuth}>
-            이메일 인증
-          </button>
-        </div>
       </section>
     </div>
   );

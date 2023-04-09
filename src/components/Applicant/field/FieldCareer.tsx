@@ -8,7 +8,7 @@ import FormInputBox from "@components/NewForm/FormInputBox";
 const FieldCareer = ({ handleKeyDown }: IHandleKeyDown) => {
   const location = useLocation();
 
-  if (location.pathname === "/applicant/application") {
+  if (location.pathname.slice(0, 10) === "/applicant") {
     const {
       register,
       watch,
@@ -32,31 +32,28 @@ const FieldCareer = ({ handleKeyDown }: IHandleKeyDown) => {
               {...register("careerName")}
             />
           </FieldInputBox>
-          <FieldInputBox errors={errors.careerPeriodStart}>
-            <label
-              className="applicant-field-label"
-              htmlFor="careerPeriodStart"
-            >
+          <FieldInputBox errors={errors.careerStart}>
+            <label className="applicant-field-label" htmlFor="careerStart">
               시작일
             </label>
             <input
               className="max-w-[120px] focus:outline-none"
               type="date"
-              id="careerPeriodStart"
+              id="careerStart"
               onKeyDown={handleKeyDown}
-              {...register("careerPeriodStart")}
+              {...register("careerStart")}
             />
           </FieldInputBox>
-          <FieldInputBox errors={errors.careerPeriodEnd}>
-            <label className="applicant-field-label" htmlFor="careerPeriodEnd">
+          <FieldInputBox errors={errors.careerEnd}>
+            <label className="applicant-field-label" htmlFor="careerEnd">
               마감일
             </label>
             <input
               className="max-w-[120px] focus:outline-none"
               type="date"
-              id="careerPeriodEnd"
+              id="careerEnd"
               onKeyDown={handleKeyDown}
-              {...register("careerPeriodEnd")}
+              {...register("careerEnd")}
             />
           </FieldInputBox>
         </div>
@@ -99,26 +96,23 @@ const FieldCareer = ({ handleKeyDown }: IHandleKeyDown) => {
             />
           </FormBox>
           <FormBox>
-            <label
-              className="applicant-field-label"
-              htmlFor="careerPeriodStart"
-            >
+            <label className="applicant-field-label" htmlFor="careerStart">
               시작일
             </label>
             <FormInputBox
               className="max-w-[120px]"
               type="date"
-              id="careerPeriodStart"
+              id="careerStart"
             />
           </FormBox>
           <FormBox>
-            <label className="applicant-field-label" htmlFor="careerPeriodEnd">
+            <label className="applicant-field-label" htmlFor="careerEnd">
               마감일
             </label>
             <FormInputBox
               className="max-w-[120px]"
               type="date"
-              id="careerPeriodEnd"
+              id="careerEnd"
             />
           </FormBox>
         </div>

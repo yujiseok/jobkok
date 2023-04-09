@@ -96,6 +96,17 @@ const SignIn = () => {
     }
   };
 
+  const handleEnter = (e: any) => {
+    const data = {
+      useremail: getValues("useremail"),
+      password: getValues("password"),
+    };
+    if (e.key === "Enter") {
+      e.preventDefault();
+      onSubmit(data);
+    }
+  };
+
   return (
     <div className="flex h-screen justify-center p-16">
       <div className="w-[430px]">
@@ -105,7 +116,11 @@ const SignIn = () => {
           <p className="SubHead1Medium mb-12 text-gray-600">
             잡콕에 다시 오신 걸 환영해요
           </p>
-          <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
+          <form
+            className="flex flex-col"
+            onKeyDown={handleEnter}
+            // onSubmit={handleSubmit(onSubmit)}
+          >
             <label
               htmlFor="email"
               className="Caption1Medium mb-1 text-gray-300"

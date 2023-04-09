@@ -2,13 +2,6 @@ import type { AxiosResponse } from "axios";
 import type { IFormReq, IFormRes, IResponse } from "@/types/form";
 import { client } from "./axios";
 
-// 채용폼 전체목록 조회
-export const getRecuitForms = async () => {
-  const { data }: AxiosResponse = await client.get(`/recruit/?status=true`);
-
-  return data as IResponse<IFormRes>;
-};
-
 // 채용폼 상세조회
 export const getRecuitFormDetail = async (recruitId: number) => {
   const { data }: AxiosResponse = await client.get(`/recruit/${recruitId}`);

@@ -47,8 +47,9 @@ const AuthCode = ({ setStep }: Props) => {
     const code = getValues("code");
     setValue("useremail", InputValue);
     const res = await getConfirmCode(email, code);
-    if (res.state === 200) {
+    if (res === 200) {
       setConfirmCode(true);
+      setIsCountingDown(false);
     } else {
       console.log("코드확인실패");
     }

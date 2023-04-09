@@ -9,9 +9,10 @@ import Banner from "@components/Common/Banner";
 import FormList from "@components/LinkForm/FormList";
 import FormSlider from "@components/LinkForm/FormSlider";
 import SliderWrapper from "@components/Talent/SliderWrapper";
+import data from "../../pages/LinkForm/otherFormList.json";
 
 const LinkForm = () => {
-  const [setOtherForm, setSetOtherForm] = useState([1, 2, 3, 4, 5, 6]);
+  // const [setOtherForm, setSetOtherForm] = useState([1, 2, 3, 4, 5, 6]);
   const [isClicked, setIsClicked] = useState(false);
 
   const handleClick = () => {
@@ -63,9 +64,9 @@ const LinkForm = () => {
               <User className="absolute right-4 bottom-2" />
             </div>
             <SliderWrapper>
-              {setOtherForm.length > 0 ? (
-                setOtherForm.map((data) => (
-                  <SwiperSlide key={data}>
+              {data.data.length > 0 ? (
+                data.data.map((data) => (
+                  <SwiperSlide key={data.id}>
                     <FormSlider data={data} />
                   </SwiperSlide>
                 ))

@@ -77,7 +77,7 @@ const Email = ({ setStep }: Props) => {
   // 인증코드 확인
   const handleConfirmCode = async () => {
     const res = await getConfirmCode(getValues("useremail"), getValues("code"));
-    if (res.state !== 200) {
+    if (res !== 200) {
       return alert("인증코드를 확인해 주세요");
     } else {
       setIsCodeConfirmed(true);

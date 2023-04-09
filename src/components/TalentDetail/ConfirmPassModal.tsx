@@ -1,6 +1,21 @@
 import { ReactComponent as Confirm } from "@/assets/svg/modal-confirm.svg";
+import useApplyPassMutate from "@/lib/hooks/useApplyPassMutate";
+import type { ITalentDetail } from "@/types/talentDetail";
 
-const ConfirmPassModal = () => {
+const ConfirmPassModal = ({
+  talentInfo,
+  id,
+}: {
+  talentInfo: ITalentDetail;
+  id: string;
+}) => {
+  const { applyPassMutate } = useApplyPassMutate();
+  const handlePassApplicant = () => {
+    if (talentInfo.applyProcedure !== "최종조율")
+      return alert("해당 대상자가 아닙니다!");
+    applyPassMutate(id);
+  };
+  console.log(talentInfo);
   return (
     <>
       <input type="checkbox" id="confirm-pass-modal" className="modal-toggle" />
@@ -17,7 +32,7 @@ const ConfirmPassModal = () => {
             <button
               type="submit"
               className="SubHead2Semibold w-[130px] cursor-pointer  rounded-md bg-blue-500 px-[2.1875rem] py-[10px] text-white"
-              onClick={(e) => console.log(e)}
+              onClick={handlePassApplicant}
             >
               <label htmlFor="confirm-pass-modal" className="cursor-pointer">
                 채용 확정

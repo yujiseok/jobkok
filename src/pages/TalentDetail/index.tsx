@@ -27,7 +27,7 @@ const TalentDetail = () => {
       <section className="flex justify-between">
         <TalentDetailHeading />
         <div className="SubHead2Semibold flex items-start gap-4 rounded-md">
-          <ConfirmDocsBtn />
+          <ConfirmDocsBtn talentInfo={talentInfo!} />
           <ConfirmFailBtn />
           <PersonalNotiBtn />
         </div>

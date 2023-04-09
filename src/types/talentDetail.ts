@@ -15,7 +15,8 @@ export interface ITalentDetail {
   pass: string;
   creationTime: string;
   applyDelete: string;
-  keywords: string[];
+  keywords: string;
+  keywordList: string[];
   wish: string;
   careerName: string;
   careerStart: string;

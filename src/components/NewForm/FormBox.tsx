@@ -7,7 +7,7 @@ const FormBox = ({
 }) => {
   return (
     <span
-      className={`${className} flex h-[52px] items-center gap-4 rounded-lg border bg-blue-25 px-4`}
+      className={`${className} flex h-[52px] items-center gap-4 rounded-lg border border-gray-100 bg-blue-25 px-4`}
     >
       {children}
     </span>

@@ -133,28 +133,26 @@ export const getFailedTalent = async ({ queryKey }: QueryFunctionContext) => {
       url: `/drop/view-applicant/${recruitId}?size=10&page=${page}`,
     });
 
+    const data: IFailedTalent[] = res.data.data.content;
     const totalPages: number = res.data.data.totalPages;
 
-    const data: IResponse<IFailedTalent[]> = res.data;
-
     if (filter === "wish") {
-      const filteredData = data.data.filter((item) => item.wish === true);
+      const filteredData = data.filter((item) => item.wish === true);
 
-      return { filteredData, totalPages: ceilPage(filteredData.length) };
+      return { data: filteredData, totalPages: ceilPage(filteredData.length) };
     }
 
-    if (filter === "applyDelete") {
-      const filteredData = data.data.filter(
-        (item) => item.applyDelete === true,
-      );
+    // if (filter === "applyDelete") {
+    //   const filteredData = data.filter((item) => item.applyDelete === true);
 
-      return { filteredData, totalPages: ceilPage(filteredData.length) };
-    }
+    //   return { data: filteredData, totalPages: ceilPage(filteredData.length) };
+    // }
 
     return { data, totalPages };
   } catch (error) {
     if (error instanceof AxiosError) {
-      const data: IResponse<null> = error.response?.data;
+      console.log(error);
+      const data = error.response?.data;
       return { data, totalPages: 0 };
     }
   }

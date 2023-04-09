@@ -8,7 +8,7 @@ import { ReactComponent as IconChevronLeft } from "@/assets/svg/chevron-left.svg
 import { ReactComponent as IconEdit } from "@/assets/svg/edit-icon.svg";
 import { KEYWORDS_CHECK } from "@/constants/applicant";
 import { convertIsoDate } from "@/lib/utils/convertIsoDate";
-import type { IFormResponseData } from "@/types/form";
+import type { IFormRes } from "@/types/form";
 
 import FieldAwards from "@components/Applicant/field/FieldAwards";
 import FieldCareer from "@components/Applicant/field/FieldCareer";
@@ -41,7 +41,7 @@ type IRecuiteForm = z.infer<typeof schema>;
 const NewForm = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(0);
-  const [registerData, setRegisterData] = useState<IFormResponseData>();
+  const [registerData, setRegisterData] = useState<IFormRes>();
   const [isSaveModal, setIsSaveModal] = useState<boolean>(false);
   const {
     register,

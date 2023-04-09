@@ -13,16 +13,9 @@ const useGetTalentQuery = (
     return test;
   };
 
-  const selectTalent = async () => {
-    const test = await getAllTalent(recruitId);
-    console.log(test);
-  };
-
   const { data } = useQuery({
     queryKey: ["allTalent", recruitId, applyProcedure, applyName],
     queryFn: () => getAllTalent(recruitId),
-    // queryFn: selectTalent,
-    suspense: true,
     select:
       !applyProcedure || applyProcedure === "전체"
         ? undefined

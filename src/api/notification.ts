@@ -39,7 +39,9 @@ export const searchApplicant = async (applyName: string, recruitId: string) => {
     url: `notice/search?applyName=${applyName}&recruitId=${recruitId}`,
     data: { applyName, recruitId },
   });
-  const data: ISearchData[] = res.data;
+  // 타입 지정 필요
+  const data = res.data;
+  console.log(data);
   return data;
 };
 

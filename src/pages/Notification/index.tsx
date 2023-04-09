@@ -45,19 +45,16 @@ const Notification = () => {
     if (!searchInput?.current?.value) return alert("입력해주세요");
     setSearchParams({ applyName: searchInput.current.value.trim() });
     setIsSearch(true);
-    const test = async () => {
+    const search = async () => {
       const res = await searchApplicant(applyName, recruitId);
-      console.log(res.data);
-      setSearchTalent(res?.data as ISearchData[]);
+      console.log(res);
+      setSearchTalent(res.data);
     };
-    test();
+    search();
   };
 
   //폼과 절차에 따라 인재 목록 보여주기
   const allTalent = useGetTalentQuery(recruitId, applyProcedure, applyName);
-
-  const totalPage =
-    allTalent && allTalent !== null ? ceilPage(allTalent.length) : 0;
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSearchParams({
@@ -205,7 +202,7 @@ const Notification = () => {
                       ))}
                   </tbody>
                 </table>
-                <Pagination totalPages={totalPage} />
+                <Pagination length={allTalent.length} />
               </div>
             </div>
 

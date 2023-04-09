@@ -7,7 +7,7 @@ import FormInputBox from "@components/NewForm/FormInputBox";
 import FormSelectBox from "@components/NewForm/FormSelectBox";
 
 const FieldEdu = ({ handleKeyDown }: IHandleKeyDown) => {
-  if (location.pathname === "/applicant/application") {
+  if (location.pathname.slice(0, 10) === "/applicant") {
     const {
       register,
       formState: { errors },
@@ -43,14 +43,14 @@ const FieldEdu = ({ handleKeyDown }: IHandleKeyDown) => {
               {...register("eduMajor")}
             />
           </FieldInputBox>
-          <FieldInputBox errors={errors.eduLevel}>
-            <label className="sr-only" htmlFor="eduLevel">
+          <FieldInputBox errors={errors.eduYear}>
+            <label className="sr-only" htmlFor="eduYear">
               년제
             </label>
             <select
               className="max-w-[160px] focus:outline-none"
-              id="eduLevel"
-              {...register("eduLevel")}
+              id="eduYear"
+              {...register("eduYear")}
             >
               {EDULEVEL_OPTION.map((level) => {
                 return (
@@ -79,28 +79,28 @@ const FieldEdu = ({ handleKeyDown }: IHandleKeyDown) => {
               })}
             </select>
           </FieldInputBox>
-          <FieldInputBox errors={errors.eduPeriodStart}>
-            <label className="applicant-field-label" htmlFor="eduPeriodStart">
+          <FieldInputBox errors={errors.eduStart}>
+            <label className="applicant-field-label" htmlFor="eduStart">
               입학날짜
             </label>
             <input
               className="max-w-[120px] focus:outline-none"
               type="date"
-              id="eduPeriodStart"
+              id="eduStart"
               onKeyDown={handleKeyDown}
-              {...register("eduPeriodStart")}
+              {...register("eduStart")}
             />
           </FieldInputBox>
-          <FieldInputBox errors={errors.eduPeriodEnd}>
-            <label className="applicant-field-label" htmlFor="eduPeriodEnd">
+          <FieldInputBox errors={errors.eduEnd}>
+            <label className="applicant-field-label" htmlFor="eduEnd">
               졸업날짜
             </label>
             <input
               className="max-w-[120px] focus:outline-none"
               type="date"
-              id="eduPeriodEnd"
+              id="eduEnd"
               onKeyDown={handleKeyDown}
-              {...register("eduPeriodEnd")}
+              {...register("eduEnd")}
             />
           </FieldInputBox>
         </div>
@@ -123,10 +123,10 @@ const FieldEdu = ({ handleKeyDown }: IHandleKeyDown) => {
             <FormInputBox className="max-w-[190px]" type="text" id="eduMajor" />
           </FormBox>
           <FormBox>
-            <label className="sr-only " htmlFor="eduLevel">
+            <label className="sr-only " htmlFor="eduYear">
               년제
             </label>
-            <FormSelectBox className="max-w-[160px]" id="eduLevel">
+            <FormSelectBox className="max-w-[160px]" id="eduYear">
               {EDULEVEL_OPTION.map((level) => {
                 return (
                   <option key={level.value} value={level.value}>
@@ -151,24 +151,20 @@ const FieldEdu = ({ handleKeyDown }: IHandleKeyDown) => {
             </FormSelectBox>
           </FormBox>
           <FormBox>
-            <label className="applicant-field-label" htmlFor="eduPeriodStart">
+            <label className="applicant-field-label" htmlFor="eduStart">
               입학날짜
             </label>
             <FormInputBox
               className="max-w-[120px]e"
               type="date"
-              id="eduPeriodStart"
+              id="eduStart"
             />
           </FormBox>
           <FormBox>
-            <label className="applicant-field-label" htmlFor="eduPeriodEnd">
+            <label className="applicant-field-label" htmlFor="eduEnd">
               졸업날짜
             </label>
-            <FormInputBox
-              className="max-w-[120px]"
-              type="date"
-              id="eduPeriodEnd"
-            />
+            <FormInputBox className="max-w-[120px]" type="date" id="eduEnd" />
           </FormBox>
         </div>
       </div>

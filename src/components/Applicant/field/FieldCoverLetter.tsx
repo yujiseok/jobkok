@@ -1,10 +1,10 @@
 import { useFormContext } from "react-hook-form";
 import { useLocation } from "react-router-dom";
 
-const FieldCoverLetter = () => {
+const FieldCoverLetter = ({ resumeTitle }: any) => {
   const location = useLocation();
 
-  if (location.pathname === "/applicant/application") {
+  if (location.pathname.slice(0, 10) === "/applicant") {
     const {
       register,
       watch,
@@ -14,9 +14,7 @@ const FieldCoverLetter = () => {
     return (
       <div className="applicant-field-box">
         <legend className="applicant-field-legend">자기소개(필수)</legend>
-        <p className="Head4Medium text-gray-700">
-          본인 대해 자유롭게 서술해주세요.
-        </p>
+        <p className="Head4Medium text-gray-700">{resumeTitle}</p>
         <div
           className={`applicant-field-textarea-div ${
             errors.resumeContent ? " border-error-400" : " border-gray-100"

@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { ReactComponent as ArchiveTickBlue } from "@/assets/svg/archive-tick-blue.svg";
 import { ReactComponent as ArchiveTick } from "@/assets/svg/archive-tick.svg";
 import { ReactComponent as ChevronRight } from "@/assets/svg/chevron-right.svg";
+import useLikeMutate from "@/lib/hooks/useLikeMutate";
 import formatDate from "@/lib/utils/formatDate";
 import shuffle from "@/lib/utils/shuffle";
 import type { ITalent } from "@/types/talent";
@@ -9,6 +10,8 @@ import KeywordBadge from "./KeywordBadge";
 import ProcedureBadge from "./ProcedureBadge";
 
 const Slider = ({ talent, i }: { talent: ITalent; i: number }) => {
+  const { likeMutate } = useLikeMutate();
+
   return (
     <>
       <div className="relative h-48 rounded-xl bg-gray-0 px-4 py-6 shadow-job">
@@ -24,7 +27,7 @@ const Slider = ({ talent, i }: { talent: ITalent; i: number }) => {
             <ChevronRight className="ml-1" />
           </Link>
           <div>
-            <button>
+            <button onClick={() => likeMutate(talent.applyId!)}>
               {talent.wish ? (
                 <ArchiveTickBlue />
               ) : (

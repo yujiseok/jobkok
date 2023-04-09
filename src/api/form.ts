@@ -1,9 +1,5 @@
 import type { AxiosResponse } from "axios";
-import type {
-  IFormRequestData,
-  IFormResponseData,
-  IResponse,
-} from "@/types/form";
+import type { IFormReq, IFormRes, IResponse } from "@/types/form";
 import { client } from "./axios";
 
 // 채용폼 전체목록 조회
@@ -12,7 +8,7 @@ export const getRecuitForms = async (ongoing: boolean) => {
     `/recruit/?status=${ongoing}`,
   );
 
-  return data as IResponse<IFormResponseData>;
+  return data as IResponse<IFormRes>;
 };
 
 // 채용폼 상세조회
@@ -20,7 +16,7 @@ export const getRecuitFormDetail = async (recruitId: number) => {
   const { data }: AxiosResponse = await client.get(`/recruit/${recruitId}`);
 
   console.log(data);
-  return data as IResponse<IFormResponseData>;
+  return data as IResponse<IFormRes>;
 };
 
 // 채용폼 목록검색
@@ -30,22 +26,22 @@ export const searchRecuitForm = async (status: boolean, title: string) => {
   );
 
   console.log(data);
-  return data as IResponse<IFormResponseData>;
+  return data as IResponse<IFormRes>;
 };
 
 // 채용폼 등록
-export const newRecuitForm = async (value: IFormRequestData) => {
+export const newRecuitForm = async (value: IFormReq) => {
   const { data }: AxiosResponse = await client.post(`/recruit`, value);
 
-  return data as IResponse<IFormResponseData>;
+  return data as IResponse<IFormRes>;
 };
 
 // 채용폼 수정
-export const editRecuitForm = async (value: IFormRequestData) => {
+export const editRecuitForm = async (value: IFormReq) => {
   const { data }: AxiosResponse = await client.put(`/recruit`, value);
 
   console.log(data);
-  return data as IResponse<IFormResponseData>;
+  return data as IResponse<IFormRes>;
 };
 
 // 채용폼 삭제
@@ -55,5 +51,5 @@ export const delRecuitForm = async (recruitId: number) => {
   );
 
   console.log(data);
-  return data as IResponse<IFormResponseData>;
+  return data as IResponse<IFormRes>;
 };

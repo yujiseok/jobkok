@@ -78,6 +78,7 @@ const TalentStatus = () => {
           allTalentRefetch();
           talentByProcedureRefetch();
           setTalent([]);
+          alert("채용 단계 수정이 성공하였습니다.");
         }
       } catch (error) {
         alert("채용 단계 수정이 실패하였습니다.");
@@ -386,7 +387,7 @@ const TalentStatus = () => {
 
                     <td>
                       <div className="flex gap-4">
-                        <button>
+                        <button onClick={() => likeMutate(item.applyId)}>
                           {item.wish ? <ArchiveTickBlue /> : <ArchiveTick />}
                         </button>
                         <button>

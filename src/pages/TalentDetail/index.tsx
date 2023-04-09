@@ -17,9 +17,9 @@ const TalentDetail = () => {
   const { data: talentInfo } = useQuery({
     queryKey: ["talentInfo"],
     queryFn: () => getDetailInfo(id),
-    suspense: true,
   });
 
+  console.log(talentInfo);
   return (
     <section className="relative pt-8">
       <ConfirmFailModal />
@@ -35,12 +35,12 @@ const TalentDetail = () => {
 
       <section className="applicant-container mt-12 flex gap-5">
         <div className="applicant-left flex-[0.6]">
-          <ProfileCard id={id} />
+          <ProfileCard id={id} talentInfo={talentInfo!} />
           <Timeline />
         </div>
         <div className=" flex flex-[0.4] flex-col gap-4">
-          <InterviewInfo id={id} />
-          <EvaluationNote id={id} />
+          <InterviewInfo id={id} talentInfo={talentInfo!} />
+          <EvaluationNote id={id} talentInfo={talentInfo!} />
         </div>
       </section>
 

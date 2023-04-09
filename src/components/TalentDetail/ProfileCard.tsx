@@ -1,23 +1,24 @@
-import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { assortLikeTalent, getDetailInfo } from "@/api/talentDetail";
+import { assortLikeTalent } from "@/api/talentDetail";
 import { ReactComponent as TickBlue } from "@/assets/svg/archive-tick-blue.svg";
 import { ReactComponent as Tick } from "@/assets/svg/archive-tick.svg";
 import { ReactComponent as Profile } from "@/assets/svg/profile-detail.svg";
 import { ReactComponent as TrashBin } from "@/assets/svg/trash.svg";
+import type { ITalentDetail } from "@/types/talentDetail";
 import ConfirmPassModal from "./ConfirmPassModal";
 
-const ProfileCard = ({ id }: { id: string }) => {
+const ProfileCard = ({
+  talentInfo,
+  id,
+}: {
+  talentInfo: ITalentDetail;
+  id: string;
+}) => {
   const [isLiked, setIsLiked] = useState(false);
   const handleWishApplicant = async () => {
     const res = await assortLikeTalent(id);
     setIsLiked(true);
   };
-  const { data: talentInfo } = useQuery({
-    queryKey: ["talentInfo"],
-    queryFn: () => getDetailInfo(id),
-    suspense: true,
-  });
   return (
     <div className="info-container flex gap-10 rounded-md border-2 border-gray-50 bg-white p-8">
       <div className="applicant-avatar avatar">

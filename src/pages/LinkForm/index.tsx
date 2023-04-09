@@ -88,7 +88,7 @@ const LinkForm = () => {
           </div>
         </div>
       </section>
-      <section className="pt-36">
+      <section className="flex flex-col pt-36">
         <div className="flex cursor-pointer pb-10">
           <div
             className={`Head4Semibold w-[160px] text-center ${
@@ -117,14 +117,15 @@ const LinkForm = () => {
             ></div>
           </div>
         </div>
-        {formLists.length > 0 ? (
+        {formLists.length > 0 && isClicked ? (
           formLists.map((data, index) => {
             return <FormList key={index} data={data} />;
           })
         ) : (
-          <span>아직 등록된 폼이 없습니다.</span>
+          <span className="SubHead1Medium self-center text-gray-500">
+            임시저장된 폼이 없습니다.
+          </span>
         )}
-        {/* {isClicked ? <div>완료</div> : <div>임시 저장</div>} */}
       </section>
     </>
   );

@@ -9,11 +9,9 @@ interface IProps {
 }
 const SaveModal = ({ setIsSaveModal, apiData }: IProps) => {
   const handleCopyBtn = () => {
-    handleCopyClipBoard("https://jobkok.netlify.app/talent/management");
+    handleCopyClipBoard(apiData ? apiData.recruitUrl : "");
     setIsSaveModal(false);
   };
-
-  console.log(apiData);
 
   return (
     <div
@@ -38,7 +36,7 @@ const SaveModal = ({ setIsSaveModal, apiData }: IProps) => {
           </button>
           <Link
             className="SubHead2Semibold cursor-pointer rounded-lg bg-gray-0 px-[3.75rem] py-[0.7188rem] text-blue-500 shadow-blue"
-            to={"https://jobkok.netlify.app/talent/management"}
+            to={apiData ? apiData.recruitUrl : ""}
           >
             이동
           </Link>

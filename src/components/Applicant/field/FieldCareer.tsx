@@ -15,6 +15,7 @@ const FieldCareer = ({ handleKeyDown }: IHandleKeyDown) => {
       formState: { errors },
     } = useFormContext();
 
+    // 지원서 작성
     return (
       <div className="applicant-field-box">
         <legend className="applicant-field-legend">경력(필수)</legend>
@@ -82,6 +83,7 @@ const FieldCareer = ({ handleKeyDown }: IHandleKeyDown) => {
       </div>
     );
   } else {
+    // 채용폼 작성
     return (
       <div className="form-field-box">
         <div className="applicant-filed-row">

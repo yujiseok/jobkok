@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { ReactComponent as IconModalConfirm } from "@/assets/svg/modal-confirm.svg";
 import { handleCopyClipBoard } from "@/lib/utils/copyClipboard";
 import type { IFormRes } from "@/types/form";
 
@@ -8,41 +9,40 @@ interface IProps {
 }
 const SaveModal = ({ setIsSaveModal, apiData }: IProps) => {
   const handleCopyBtn = () => {
-    handleCopyClipBoard("https://jobkok.netlify.app/talent/management");
+    handleCopyClipBoard(apiData ? apiData.recruitUrl : "");
     setIsSaveModal(false);
   };
 
-  console.log(apiData);
-
   return (
-    <>
-      <div
-        className={`fixed left-1/2 top-1/4 flex h-[302px] w-[680px] max-w-[680px] translate-x-[-50%] flex-col items-center justify-between bg-gray-50 pt-10 pb-[60px] text-center text-gray-800 shadow-job2`}
-      >
-        <div>
-          <p className="mb-8">
-            {apiData?.contents}으로 지원서 링크생성이 완료되었습니다.
+    <div
+      className={`fixed left-0 top-0 flex h-screen w-full items-center justify-center  bg-black bg-opacity-70 py-[40px] text-center `}
+    >
+      <div className="grid w-[680px] place-items-center items-center rounded-lg bg-gray-0 py-[40px] shadow-job2">
+        <div className="flex flex-col items-center">
+          <IconModalConfirm className="mb-6" />
+          <p className="SubHead1Semibold mb-8 text-gray-800">
+            {apiData?.contents}의 지원서 링크생성이 완료되었습니다.
           </p>
-          <p className="mb-8 rounded-lg border border-gray-100 py-3 px-5">
+          <p className="mb-8 rounded-lg border border-gray-100 py-3 px-5 text-gray-300">
             {apiData?.recruitUrl}
           </p>
         </div>
         <div className="flex gap-4">
           <button
-            className="height-10 SubHead2Semibold w-[144px] rounded-lg bg-blue-500 py-2.5 px-6 text-gray-0"
+            className="SubHead2Semibold cursor-pointer rounded-lg bg-blue-500 px-[3.75rem] py-[0.7188rem] text-gray-0 shadow-blue"
             onClick={handleCopyBtn}
           >
             복사
           </button>
           <Link
-            className="height-10 SubHead2Semibold w-[144px] rounded-lg border border-blue-500 bg-gray-0 py-2.5 px-6 text-blue-500"
-            to={"https://jobkok.netlify.app/talent/management"}
+            className="SubHead2Semibold cursor-pointer rounded-lg bg-gray-0 px-[3.75rem] py-[0.7188rem] text-blue-500 shadow-blue"
+            to={apiData ? apiData.recruitUrl : ""}
           >
             이동
           </Link>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 export default SaveModal;

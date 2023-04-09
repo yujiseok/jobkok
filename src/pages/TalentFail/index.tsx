@@ -1,4 +1,5 @@
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useAppSelector } from "@/app/hooks";
 import { ReactComponent as ArchiveTickBlue } from "@/assets/svg/archive-tick-blue.svg";
 import { ReactComponent as ArchiveTick } from "@/assets/svg/archive-tick.svg";
 import { ReactComponent as ArrowRight } from "@/assets/svg/arrow-right.svg";
@@ -12,12 +13,14 @@ import useLikeMutate from "@/lib/hooks/useLikeMutate";
 import usePagination from "@/lib/hooks/usePagination";
 import useSearchFailedQuery from "@/lib/hooks/useSearchFailedQuery";
 import formatDate from "@/lib/utils/formatDate";
+import type { IFailedTalent } from "@/types/talent";
 import Banner from "@components/Common/Banner";
 import FailProcedureBadge from "@components/Talent/FailProcedureBadge";
 import Pagination from "@components/Talent/Pagination";
 import TKeywordBadge from "@components/Talent/TKeywordBadge";
 
 const TalentFail = () => {
+  const { auth } = useAppSelector((state) => state);
   const formData = useFormListQuery();
   const [recruitId, handleChangeFormList] = useFormList(formData);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -26,11 +29,7 @@ const TalentFail = () => {
   const { likeMutate } = useLikeMutate();
   const { searchInput, handleSearchBar, searchData } =
     useSearchFailedQuery(recruitId);
-  const { failedTalent, totalPages } = useFailedTalentQuery(
-    recruitId,
-    page,
-    filter,
-  );
+  const failedTalent = useFailedTalentQuery(recruitId, page, filter);
 
   const navigate = useNavigate();
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -40,12 +39,14 @@ const TalentFail = () => {
     searchInput.current!.value = "";
   };
 
+  console.log(failedTalent);
+
   if (formData?.result === "FAIL") {
     return (
       <Banner className="h-[25rem]">
         <div className="mx-auto flex h-full max-w-7xl flex-col items-center justify-center">
           <h1 className="Head2Semibold">
-            안녕하세요, <span>잡콕미술학원</span>님!
+            안녕하세요, <span>{auth.companyName}</span>님!
           </h1>
           <p className="Head4/Semibold Head4Semibold mt-[6px] mb-9">
             첫 지원서 폼 만들고 편한 채용관리하세요!
@@ -61,7 +62,7 @@ const TalentFail = () => {
     );
   }
 
-  if (failedTalent?.data === null) {
+  if (failedTalent?.data.result === "FAIL") {
     return (
       <>
         <input
@@ -131,7 +132,6 @@ const TalentFail = () => {
             <option disabled>인재를 선택하세요</option>
             <option value="all">전체 인재</option>
             <option value="wish">찜된 탈락 인재</option>
-            <option value="applyDelete">영구 삭제 인재</option>
           </select>
           {/* </div> */}
           <form
@@ -175,116 +175,109 @@ const TalentFail = () => {
                 </tr>
               )} */}
               {/* 검색 결과 없을 시 어떻게 할지 처리하기, 검색 결과 있고 탈락인재 없을시 분기 처리 어떻게 할지? */}
-              {/* {!searchData && failedTalent !== null
-                ? failedTalent?.map((talent) => (
-                    <tr
-                      key={talent.applyId}
-                      className="border-b border-gray-50"
-                    >
-                      <th>
+              {
+                failedTalent?.data.map((talent: IFailedTalent) => (
+                  <tr key={talent.applyId} className="border-b border-gray-50">
+                    <th>
+                      <Link to={`/talent/detail/${talent.applyId}`}>
                         <div className="flex items-center gap-4">
                           <HeartMemoji /> <span>{talent.applyName}</span>
                         </div>
-                      </th>
-                      <td>
-                        <div className="flex gap-6px">
-                          {talent.keywords.map((keyword) => (
-                            <TKeywordBadge key={keyword}>
-                              {keyword}
-                            </TKeywordBadge>
-                          ))}
-                        </div>
-                      </td>
-                      <td>
-                        {talent.applyProcedure !== null ? (
-                          <FailProcedureBadge>
-                            {talent.applyProcedure}
-                          </FailProcedureBadge>
-                        ) : (
-                          "-"
-                        )}
-                      </td>
-                      <td className="SubHead2Medium text-gray-500">
-                        {formatDate(talent.createdTime)}
-                      </td>
-                      <td className="SubHead2Medium text-gray-500">
-                        {talent.recentMessageTime !== null
-                          ? formatDate(talent.recentMessageTime)
-                          : "-"}
-                      </td>
-                      <td>
-                        <div className="flex gap-4">
-                          <button onClick={() => likeMutate(talent.applyId!)}>
-                            {talent.wish ? (
-                              <ArchiveTickBlue />
-                            ) : (
-                              <ArchiveTick />
-                            )}
-                          </button>
+                      </Link>
+                    </th>
+                    <td>
+                      <div className="flex gap-6px">
+                        {talent.keywords.map((keyword) => (
+                          <TKeywordBadge key={keyword}>{keyword}</TKeywordBadge>
+                        ))}
+                      </div>
+                    </td>
+                    <td>
+                      {talent.applyProcedure !== null ? (
+                        <FailProcedureBadge>
+                          {talent.applyProcedure}
+                        </FailProcedureBadge>
+                      ) : (
+                        "-"
+                      )}
+                    </td>
+                    <td className="SubHead2Medium text-gray-500">
+                      {formatDate(talent.createdTime)}
+                    </td>
+                    <td className="SubHead2Medium text-gray-500">
+                      {talent.recentMessageTime !== null
+                        ? formatDate(talent.recentMessageTime)
+                        : "-"}
+                    </td>
+                    <td>
+                      <div className="flex gap-4">
+                        <button onClick={() => likeMutate(talent.applyId)}>
+                          {talent.wish ? <ArchiveTickBlue /> : <ArchiveTick />}
+                        </button>
 
-                          <button>
-                            <Trash />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                : searchData?.map((talent) => (
-                    <tr
-                      key={talent.applyId}
-                      className="border-b border-gray-50"
-                    >
-                      <th>
-                        <div className="flex items-center gap-4">
-                          <HeartMemoji /> <span>{talent.applyName}</span>
-                        </div>
-                      </th>
-                      <td>
-                        <div className="flex gap-6px">
-                          {talent.keywords.map((keyword) => (
-                            <TKeywordBadge key={keyword}>
-                              {keyword}
-                            </TKeywordBadge>
-                          ))}
-                        </div>
-                      </td>
-                      <td>
-                        {talent.applyProcedure !== null ? (
-                          <FailProcedureBadge>
-                            {talent.applyProcedure}
-                          </FailProcedureBadge>
-                        ) : (
-                          "-"
-                        )}
-                      </td>
-                      <td className="SubHead2Medium text-gray-500">
-                        {formatDate(talent.createdTime)}
-                      </td>
-                      <td className="SubHead2Medium text-gray-500">
-                        {talent.recentMessageTime !== null
-                          ? formatDate(talent.recentMessageTime)
-                          : "-"}
-                      </td>
-                      <td>
-                        <div className="flex gap-4">
-                          <button onClick={() => likeMutate(talent.applyId!)}>
-                            {talent.wish ? (
-                              <ArchiveTickBlue />
-                            ) : (
-                              <ArchiveTick />
-                            )}
-                          </button>
+                        {/* <button>
+                          <Trash />
+                        </button> */}
+                      </div>
+                    </td>
+                  </tr>
+                ))
+                // : searchData?.map((talent) => (
+                //     <tr
+                //       key={talent.applyId}
+                //       className="border-b border-gray-50"
+                //     >
+                //       <th>
+                //         <div className="flex items-center gap-4">
+                //           <HeartMemoji /> <span>{talent.applyName}</span>
+                //         </div>
+                //       </th>
+                //       <td>
+                //         <div className="flex gap-6px">
+                //           {talent.keywords.map((keyword) => (
+                //             <TKeywordBadge key={keyword}>
+                //               {keyword}
+                //             </TKeywordBadge>
+                //           ))}
+                //         </div>
+                //       </td>
+                //       <td>
+                //         {talent.applyProcedure !== null ? (
+                //           <FailProcedureBadge>
+                //             {talent.applyProcedure}
+                //           </FailProcedureBadge>
+                //         ) : (
+                //           "-"
+                //         )}
+                //       </td>
+                //       <td className="SubHead2Medium text-gray-500">
+                //         {formatDate(talent.createdTime)}
+                //       </td>
+                //       <td className="SubHead2Medium text-gray-500">
+                //         {talent.recentMessageTime !== null
+                //           ? formatDate(talent.recentMessageTime)
+                //           : "-"}
+                //       </td>
+                //       <td>
+                //         <div className="flex gap-4">
+                //           <button onClick={() => likeMutate(talent.applyId!)}>
+                //             {talent.wish ? (
+                //               <ArchiveTickBlue />
+                //             ) : (
+                //               <ArchiveTick />
+                //             )}
+                //           </button>
 
-                          <button>
-                            <Trash />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))} */}
+                //           <button>
+                //             <Trash />
+                //           </button>
+                //         </div>
+                //       </td>
+                //     </tr>
+              }
             </tbody>
           </table>
-          {/* <Pagination totalPages={totalPages!} /> */}
+          <Pagination length={failedTalent?.data.length} />
         </div>
       </section>
     </>

@@ -82,6 +82,7 @@ type IApplicationForm = z.infer<typeof schema>;
 
 const Application = () => {
   const { state } = useLocation();
+  console.log(state);
   const navigate = useNavigate();
   const [recruitData, setRecruitData] = useState<IApplicantFormReq>();
 
@@ -96,6 +97,23 @@ const Application = () => {
     };
     serverGetRecuitData();
   }, []);
+
+  // 새로고침 막기
+  // useEffect(() => {
+  //   const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+  //     event.preventDefault();
+  //     event.returnValue = ""; //Chrome에서 동작하도록; deprecated
+  //     navigate(`/application/auth/${state.recruitId}`);
+  //   };
+
+  //   (() => {
+  //     window.addEventListener("beforeunload", handleBeforeUnload);
+  //   })();
+
+  //   return () => {
+  //     window.removeEventListener("beforeunload", handleBeforeUnload);
+  //   };
+  // }, []);
 
   // input date 는 키보드로 입력불가
   const handleKeyDown = (event: React.KeyboardEvent) => {

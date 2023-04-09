@@ -52,6 +52,9 @@ export interface ITalentDetail {
   employment: boolean;
   militaryEnum: string;
   terms: boolean;
+  createdTime: string;
+  checkApply: string;
+  meeting: string;
 }
 export interface IAddComment extends ITalentBase {
   message: string;

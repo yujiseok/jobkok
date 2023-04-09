@@ -141,7 +141,6 @@ const Application = () => {
         eduEnd,
         certificateDate,
         awardsDate,
-        keywords,
         ...rest
       } = data;
       const convertData = {
@@ -161,7 +160,7 @@ const Application = () => {
       };
       console.log(convertData);
       submitApply(convertData);
-      // navigate("/applicant/completion");
+      navigate("/applicant/completion");
     }
   };
 

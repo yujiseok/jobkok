@@ -128,12 +128,14 @@ const NewForm = () => {
       </div>
       {/* 메인 내용 */}
       <div className="mb-10 flex flex-col gap-6">
+        {/* 생성된 지원서 링크 */}
         <ContentsBox className="h-[71px] gap-6">
           <h3 className="SubHead1Semibold text-gray-800">생성된 지원서 링크</h3>
           <p className="SubHead2Medium text-gray-300">
             폼 작성 완료 후 생성됩니다.
           </p>
         </ContentsBox>
+        {/* 채용폼 내용 */}
         <ContentsBox>
           <div className="flex flex-col gap-4">
             <fieldset className="flex items-center gap-6">
@@ -174,6 +176,7 @@ const NewForm = () => {
             </fieldset>
           </div>
         </ContentsBox>
+        {/* 인재 필수 수집 정보 */}
         <ContentsBox className="flex flex-col items-baseline gap-4">
           <h3 className="SubHead1Semibold text-gray-800">인재 필수 수집정보</h3>
           <div className="flex gap-1.5">
@@ -182,6 +185,7 @@ const NewForm = () => {
             <RequiredBadge>이메일</RequiredBadge>
           </div>
         </ContentsBox>
+        {/* 인재 추가 정보 */}
         <div className="flex gap-8">
           <ContentsBox className="w-[190px] flex-col gap-4">
             <h3 className="SubHead1Semibold text-gray-800">인재 추가 정보</h3>
@@ -203,12 +207,16 @@ const NewForm = () => {
               })}
             </ul>
           </ContentsBox>
-          <div className="w-full max-w-[930px] rounded-lg border-[1.5px] border-gray-50 bg-gray-0 p-0">
-            <ul className="tab flex h-[66px] w-full justify-between p-0">
+          <div className="w-full min-w-[777px] rounded-lg border-[1.5px] border-gray-50 bg-gray-0 p-0">
+            <ul className="flex h-[66px] p-0">
               {ADD_INFO.map((field, index) => {
                 return (
                   <li
-                    className="tab-bordered tab"
+                    className={`SubHead1Semibold flex w-[112.6px] cursor-pointer items-center justify-center border-t-0 border-r-0 border-l-0 ${
+                      activeTab === index
+                        ? "border-b-[0.143rem] border-blue-500 text-blue-500"
+                        : "border-b-dashed border-b-2 border-blue-50 text-gray-400"
+                    }`}
                     key={field.title}
                     onClick={() => setActiveTab(index)}
                   >

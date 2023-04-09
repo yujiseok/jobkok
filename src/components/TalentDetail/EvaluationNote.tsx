@@ -2,23 +2,27 @@ import { useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { addComment, getDetailInfo } from "@/api/talentDetail";
 import { ReactComponent as Edit } from "@/assets/svg/edit-icon.svg";
+import type { ITalentDetail } from "@/types/talentDetail";
 
 type FormValues = {
   evaluation: string;
 };
 
-const EvaluationNote = ({ id }: { id: string }) => {
+const EvaluationNote = ({
+  id,
+  talentInfo,
+}: {
+  id: string;
+  talentInfo: ITalentDetail;
+}) => {
   const { register, watch, handleSubmit } = useForm<FormValues>();
 
   const onSubmit = async (data: FormValues) => {
     const res = await addComment(id, data.evaluation);
-    console.log(res);
   };
-  const { data: talentInfo } = useQuery({
-    queryKey: ["talentInfo"],
-    queryFn: () => getDetailInfo(id),
-    suspense: true,
-  });
+
+  console.log(talentInfo);
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}

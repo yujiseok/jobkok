@@ -1,9 +1,8 @@
-import { useState } from "react";
-import { assortLikeTalent } from "@/api/talentDetail";
 import { ReactComponent as TickBlue } from "@/assets/svg/archive-tick-blue.svg";
 import { ReactComponent as Tick } from "@/assets/svg/archive-tick.svg";
 import { ReactComponent as Profile } from "@/assets/svg/profile-detail.svg";
 import { ReactComponent as TrashBin } from "@/assets/svg/trash.svg";
+import useLikeMutate from "@/lib/hooks/useLikeMutate";
 import type { ITalentDetail } from "@/types/talentDetail";
 import ConfirmPassModal from "./ConfirmPassModal";
 
@@ -14,11 +13,7 @@ const ProfileCard = ({
   talentInfo: ITalentDetail;
   id: string;
 }) => {
-  const [isLiked, setIsLiked] = useState(false);
-  const handleWishApplicant = async () => {
-    const res = await assortLikeTalent(id);
-    setIsLiked(true);
-  };
+  const { likeMutate } = useLikeMutate();
   return (
     <div className="info-container flex gap-10 rounded-md border-2 border-gray-50 bg-white p-8">
       <div className="applicant-avatar avatar">
@@ -34,13 +29,11 @@ const ProfileCard = ({
                 {talentInfo?.applyName}
               </p>
               <div className="flex cursor-pointer gap-2">
-                {isLiked ? (
-                  <button onClick={() => setIsLiked(false)}>
-                    <TickBlue />
-                  </button>
+                {talentInfo.wish ? (
+                  <TickBlue />
                 ) : (
-                  <button onClick={handleWishApplicant}>
-                    <Tick />{" "}
+                  <button onClick={() => likeMutate(id)}>
+                    <Tick />
                   </button>
                 )}
 

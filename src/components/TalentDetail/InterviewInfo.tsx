@@ -1,19 +1,13 @@
-import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { getDetailInfo, setMeeting } from "@/api/talentDetail";
 import { ReactComponent as Edit } from "@/assets/svg/edit-icon.svg";
 import type { ITalentDetail } from "@/types/talentDetail";
+import ConfirmInterviewModal from "./ConfirmInterviewModal";
 
-const InterviewInfo = ({
-  id,
-  talentInfo,
-}: {
-  id: string;
-  talentInfo: ITalentDetail;
-}) => {
-  const [isEditing, setisEditing] = useState(false);
+const InterviewInfo = ({ talentInfo }: { talentInfo: ITalentDetail }) => {
+  const [isEditing, setIsEditing] = useState(false);
   const [interviewDate, setInterviewDate] = useState("");
   const [interviewTime, setInterviewTime] = useState("");
+
   const handleInterviewDate = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInterviewDate(e.target.value);
   };
@@ -23,13 +17,13 @@ const InterviewInfo = ({
     setInterviewTime(time);
   };
 
-  const setMeetingDate = async (e: React.MouseEvent<SVGSVGElement>) => {
-    const newTime = interviewDate + "T" + interviewTime;
-    console.log(newTime);
-    const res = await setMeeting(id, newTime);
-    setisEditing(false);
-  };
   console.log(talentInfo);
+
+  if (talentInfo.meeting) {
+    return (
+      <div className="interview-container flex justify-between gap-4 rounded-md border-2 border-gray-50 bg-white px-5 py-4"></div>
+    );
+  }
 
   return (
     <div className="interview-container flex justify-between gap-4 rounded-md border-2 border-gray-50 bg-white px-5 py-4">
@@ -96,11 +90,18 @@ const InterviewInfo = ({
         className="SubHead2Medium cursor-pointer text-gray-400"
       >
         {isEditing ? (
-          <Edit onClick={setMeetingDate} />
+          <label htmlFor="confirm-interview-modal">
+            <Edit />
+          </label>
         ) : (
-          <Edit onClick={() => setisEditing(!isEditing)} />
+          <Edit onClick={() => setIsEditing(!isEditing)} />
         )}
       </button>
+      <ConfirmInterviewModal
+        setIsEditing={setIsEditing}
+        interviewDate={interviewDate}
+        interviewTime={interviewTime}
+      />
     </div>
   );
 };

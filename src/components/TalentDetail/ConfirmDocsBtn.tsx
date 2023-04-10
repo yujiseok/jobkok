@@ -2,7 +2,6 @@ import type { ITalentDetail } from "@/types/talentDetail";
 import ConfirmDocsModal from "@components/TalentDetail/ConfirmDocsModal";
 
 const ConfirmDocsBtn = ({ talentInfo }: { talentInfo: ITalentDetail }) => {
-  console.log(talentInfo);
   if (talentInfo.checkApply !== null) {
     return (
       <button className="cursor-default rounded-md bg-gray-100 px-6 py-3 text-blue-500">

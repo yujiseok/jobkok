@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
-import { ReactComponent as Confirm } from "@/assets/svg/modal-confirm.svg";
+// import { ReactComponent as Confirm } from "@/assets/svg/modal-confirm.svg";
 import useSetInterviewMutate from "@/lib/hooks/useSetInterviewMutate";
+import confirm from "../../assets/svg/modal-confirm.svg";
 
 const ConfirmInterviewModal = ({
   interviewDate,
@@ -29,7 +30,7 @@ const ConfirmInterviewModal = ({
       <div className="modal ">
         <div className="modal-box flex flex-col p-10">
           <div className="flex justify-center">
-            <Confirm />
+            <img src={confirm} alt="" />
           </div>
           <p className="SubHead1Semibold mx-auto mt-6 mb-8 text-gray-800">
             면접 일정을 확정하시겠습니까?

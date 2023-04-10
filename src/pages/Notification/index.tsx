@@ -47,7 +47,6 @@ const Notification = () => {
     setIsSearch(true);
     const search = async () => {
       const res = await searchApplicant(applyName, recruitId);
-      console.log(res);
       setSearchTalent(res.data);
     };
     search();

@@ -15,7 +15,6 @@ const ConfirmPassModal = ({
       return alert("해당 대상자가 아닙니다!");
     applyPassMutate(id);
   };
-  console.log(talentInfo);
   return (
     <>
       <input type="checkbox" id="confirm-pass-modal" className="modal-toggle" />

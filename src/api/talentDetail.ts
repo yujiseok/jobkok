@@ -1,15 +1,21 @@
-import type { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import type { INotibase } from "@/types/notification";
 import type { ITalentDetail } from "@/types/talentDetail";
 import { client } from "./axios";
 
 // 인재 상세 정보 조회
 export const getDetailInfo = async (applyId: string) => {
-  const { data } = await client({
-    method: "GET",
-    url: `/apply/${applyId}`,
-  });
-  return data.data as ITalentDetail;
+  try {
+    const { data } = await client({
+      method: "GET",
+      url: `/apply/${applyId}`,
+    });
+    return data.data as ITalentDetail;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      return error?.response?.data;
+    }
+  }
 };
 
 // 인재 코멘트 등록

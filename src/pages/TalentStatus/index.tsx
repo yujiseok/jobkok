@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { Link, useSearchParams } from "react-router-dom";
 import { editTalentByProcedure } from "@/api/talent";
@@ -27,6 +27,9 @@ import type { IKanbanBase, ITalent } from "@/types/talent";
 import Banner from "@components/Common/Banner";
 import ModalForLater from "@components/Common/ModalForLater";
 // import InterviewBadge from "@components/Talent/InterviewBadge";
+import Kanban from "@components/Talent/Kanban";
+import { KanbanBoard } from "@components/Talent/KanbanBoard";
+import KanbanHeader from "@components/Talent/KanbanHeader";
 import NumberBadge from "@components/Talent/NumberBadge";
 import Pagination from "@components/Talent/Pagination";
 import PreferentialBadge from "@components/Talent/PreferentialBadge";
@@ -149,124 +152,7 @@ const TalentStatus = () => {
           </p>
         </div>
 
-        <DragDropContext onDragEnd={onDragEnd}>
-          <div className="flex items-start justify-between gap-6">
-            {kanbanData.map((kanban) => (
-              <Droppable key={kanban.title} droppableId={kanban.title}>
-                {(provided) => (
-                  <div
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                    className={`flex-1 rounded-xl border border-gray-50 bg-gray-0 pl-8 pr-4 ${
-                      kanban.applicant.length ? "pb-12" : "pb-0"
-                    }`}
-                  >
-                    <div className="flex items-center justify-between pr-4">
-                      <div className="flex items-center py-5">
-                        <span className="SubHead1Semibold">{kanban.title}</span>
-                        <NumberBadge procedure={kanban.title}>
-                          {kanban.applicant.length}
-                        </NumberBadge>
-                      </div>
-                      {kanban.title === "면접" ? (
-                        <label
-                          htmlFor="modal-calendar"
-                          className="cursor-pointer"
-                        >
-                          <Calendar />
-                        </label>
-                      ) : kanban.title === "최종조율" ? (
-                        <label
-                          htmlFor="modal"
-                          className={`cursor-pointer rounded-md border bg-gray-0 px-5 py-[0.3438rem] ${
-                            kanban.applicant.length
-                              ? " border-blue-500  text-blue-500"
-                              : "pointer-events-none border-gray-200 text-gray-200"
-                          }`}
-                        >
-                          채용 확정
-                        </label>
-                      ) : null}
-                    </div>
-
-                    <div className="flex max-h-[54.75rem] flex-col gap-4 overflow-y-auto overflow-x-hidden py-1 pr-3">
-                      {kanban.applicant.map((item: ITalent, index: number) => (
-                        <Draggable
-                          key={item.applyId}
-                          draggableId={item.applyId?.toString() as string}
-                          index={index}
-                        >
-                          {(provided, snapshot) => (
-                            <div
-                              className={`rounded-xl bg-gray-0 px-4 py-5 shadow-job  ${
-                                snapshot.isDragging
-                                  ? "bg-gray-50/95"
-                                  : "bg-gray-0"
-                              }`}
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                              style={{
-                                ...provided.draggableProps.style,
-                              }}
-                            >
-                              <div className="flex items-center justify-between">
-                                <Link
-                                  to={`/talent/detail/${item.applyId}`}
-                                  className="flex items-center gap-2"
-                                >
-                                  <div className="rounded-md bg-blue-50">
-                                    <HeartMemoji />
-                                  </div>
-                                  <span className="SubHead1Semibold">
-                                    {item.applyName}
-                                  </span>
-                                  <ChevronRight />
-                                </Link>
-
-                                <button
-                                  onClick={() => likeMutate(item.applyId!)}
-                                >
-                                  {item.wish ? (
-                                    <ArchiveTickBlue />
-                                  ) : (
-                                    <ArchiveTick className="text-gray-300" />
-                                  )}
-                                </button>
-                              </div>
-                              <div className="Caption1Semibold flex gap-6px pt-4 pb-8">
-                                <PreferentialBadge>
-                                  우대사항 <span>2</span>/<span>5</span>
-                                </PreferentialBadge>
-                                <PreferentialBadge>
-                                  키워드 <span>{item.keywordList.length}</span>/
-                                  <span>5</span>
-                                </PreferentialBadge>
-                              </div>
-                              <div className="flex items-center justify-between">
-                                <time
-                                  className="Caption1Medium text-gray-300"
-                                  dateTime={new Date().toLocaleDateString()}
-                                >
-                                  {formatDate(item.createdTime)}
-                                </time>
-
-                                {/* <InterviewBadge>
-                                      면접 D-16 20:00 예정
-                                    </InterviewBadge> */}
-                              </div>
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
-                      {provided.placeholder}
-                    </div>
-                  </div>
-                )}
-              </Droppable>
-            ))}
-          </div>
-        </DragDropContext>
+        <Kanban allTalent={allTalent} likeMutate={likeMutate} />
       </section>
 
       <section className="pt-[6.25rem]">
@@ -370,6 +256,7 @@ const TalentStatus = () => {
             </thead>
             <tbody>
               {(applyProcedure === "전체" ? allTalent : talentByProcedure)?.data
+                ?.filter((talent) => talent.failApply !== true)
                 ?.slice(offset, offset + LIMIT)
                 .map((item) => (
                   <tr key={item.applyId} className="border-b border-gray-50">
@@ -414,10 +301,19 @@ const TalentStatus = () => {
             </tbody>
           </table>
           {applyProcedure === "전체" ? (
-            <Pagination length={allTalent?.data?.length as number} />
+            <Pagination
+              length={
+                allTalent?.data?.filter((talent) => talent.failApply !== true)
+                  .length as number
+              }
+            />
           ) : (
             <Pagination
-              length={(talentByProcedure?.data?.length as number) ?? 0}
+              length={
+                (talentByProcedure?.data?.filter(
+                  (talent) => talent.failApply !== true,
+                ).length as number) ?? 0
+              }
             />
           )}
         </div>

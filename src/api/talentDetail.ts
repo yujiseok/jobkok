@@ -1,15 +1,21 @@
-import type { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import type { INotibase } from "@/types/notification";
 import type { ITalentDetail } from "@/types/talentDetail";
 import { client } from "./axios";
 
 // 인재 상세 정보 조회
 export const getDetailInfo = async (applyId: string) => {
-  const { data } = await client({
-    method: "GET",
-    url: `/apply/${applyId}`,
-  });
-  return data.data as ITalentDetail;
+  try {
+    const { data } = await client({
+      method: "GET",
+      url: `/apply/${applyId}`,
+    });
+    return data.data as ITalentDetail;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      return error?.response?.data;
+    }
+  }
 };
 
 // 인재 코멘트 등록
@@ -47,15 +53,19 @@ export const checkApplication = async (applyId: string) => {
     url: `apply/check/${applyId}`,
   });
   console.log(data);
-  return data as INotibase;
+  return data;
 };
 
 // 면접 날짜 지정
-export const setMeeting = async (applyId: string, interviewDate: string) => {
+export const setMeeting = async (
+  applyId: string,
+  interviewDate: string,
+  interviewTime: string,
+) => {
   const { data } = await client({
     method: "PUT",
     url: `apply/set_meeting/${applyId}`,
-    data: interviewDate,
+    data: { interviewDate, interviewTime },
   });
   console.log(data);
   return data;

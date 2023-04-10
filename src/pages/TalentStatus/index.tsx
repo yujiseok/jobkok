@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRef, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { Link, useSearchParams } from "react-router-dom";
 import { editTalentByProcedure } from "@/api/talent";
+import { assortFailTalent } from "@/api/talentDetail";
 import { ReactComponent as Add } from "@/assets/svg/add-icon.svg";
 import { ReactComponent as ArchiveTickBlue } from "@/assets/svg/archive-tick-blue.svg";
 import { ReactComponent as ArchiveTick } from "@/assets/svg/archive-tick.svg";
@@ -46,6 +48,14 @@ const TalentStatus = () => {
   const kanbanData: IKanbanBase[] = talentToProcedure(allTalent);
   const { onDragEnd } = useDnD(kanbanData);
 
+  const queryClient = useQueryClient();
+  const { mutate: deleteMutate, data } = useMutation(assortFailTalent, {
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+      console.log(data);
+    },
+  });
+
   const handleTalentChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     item: ITalent,
@@ -78,7 +88,7 @@ const TalentStatus = () => {
           allTalentRefetch();
           talentByProcedureRefetch();
           setTalent([]);
-          alert("채용 단계 수정이 성공하였습니다.");
+          // alert("채용 단계 수정이 성공하였습니다.");
         }
       } catch (error) {
         alert("채용 단계 수정이 실패하였습니다.");
@@ -160,9 +170,12 @@ const TalentStatus = () => {
                         </NumberBadge>
                       </div>
                       {kanban.title === "면접" ? (
-                        <button>
+                        <label
+                          htmlFor="modal-calendar"
+                          className="cursor-pointer"
+                        >
                           <Calendar />
-                        </button>
+                        </label>
                       ) : kanban.title === "최종조율" ? (
                         <label
                           htmlFor="modal"
@@ -369,9 +382,11 @@ const TalentStatus = () => {
                       />
                     </td>
                     <th>
-                      <div className="flex items-center gap-4">
-                        <HeartMemoji /> <span>{item.applyName}</span>
-                      </div>
+                      <Link to={`/talent/detail/${item.applyId}`}>
+                        <div className="flex items-center gap-4">
+                          <HeartMemoji /> <span>{item.applyName}</span>
+                        </div>
+                      </Link>
                     </th>
                     <td>
                       <div className="flex gap-6px">
@@ -390,7 +405,7 @@ const TalentStatus = () => {
                         <button onClick={() => likeMutate(item.applyId)}>
                           {item.wish ? <ArchiveTickBlue /> : <ArchiveTick />}
                         </button>
-                        <button>
+                        <button onClick={() => deleteMutate(item.applyId)}>
                           <Trash />
                         </button>
                       </div>
@@ -409,6 +424,7 @@ const TalentStatus = () => {
         </div>
       </section>
       <ModalForLater id="modal" />
+      <ModalForLater id="modal-calendar" />
     </>
   );
 };

@@ -59,18 +59,17 @@ const schema = z.object({
   languageLevel: z.string().nonempty(),
 
   // 취업우대사항
-  veteran: z.boolean().refine((val) => val),
-  disorder: z.boolean().refine((val) => val),
-  employment: z.boolean().refine((val) => val),
-  militaryEnum: z.string().nonempty(),
-  terms: z.boolean().refine((val) => val),
+  veteran: z.boolean(),
+  disorder: z.boolean(),
+  employment: z.boolean(),
+  militaryEnum: z.string(),
+  terms: z.boolean(),
 
   // 기타이력서
   applyPortfolio: z.string().url("올바른 URL 형식이 아닙니다."),
   applyResume: z.string().url("올바른 URL 형식이 아닙니다."),
 
   // 나의 성격 키워드
-  keywordsReq: z.array(z.string()).default([]),
 
   // 약관
   requiredAgree: z.boolean().refine((val) => val),
@@ -82,7 +81,6 @@ type IApplicationForm = z.infer<typeof schema>;
 
 const Application = () => {
   const { state } = useLocation();
-  console.log(state);
   const navigate = useNavigate();
   const [recruitData, setRecruitData] = useState<IApplicantFormReq>();
 
@@ -127,6 +125,9 @@ const Application = () => {
       : null;
   };
 
+  console.log(methods.watch());
+  // console.log(methods.formState.errors);
+
   // 폼 제출
   const onSubmit = async (data: IApplicationForm) => {
     if (confirm("제출 후에는 수정이 불가능합니다. 정말 제출하시겠습니까?")) {
@@ -140,7 +141,6 @@ const Application = () => {
         eduEnd,
         certificateDate,
         awardsDate,
-        keywordsReq,
         ...rest
       } = data;
       const convertData = {
@@ -158,6 +158,7 @@ const Application = () => {
         activitiesEnd: "2000-03-26T17:07:23.668771300",
         keywordsReq: "센스 있어요",
       };
+      console.log(convertData);
       submitApply(convertData);
       navigate("/applicant/completion");
     }

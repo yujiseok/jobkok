@@ -2,13 +2,10 @@ import type { AxiosResponse } from "axios";
 import type { IFormReq, IFormRes, IResponse } from "@/types/form";
 import { client } from "./axios";
 
-// 채용폼 전체목록 조회
-export const getRecuitForms = async (ongoing: boolean) => {
-  const { data }: AxiosResponse = await client.get(
-    `/recruit/?status=${ongoing}`,
-  );
-
-  return data as IResponse<IFormRes>;
+// 채용폼 리스트 조회
+export const getFormLinkList = async () => {
+  const { data }: AxiosResponse = await client.get("/recruit/?status=true");
+  return data.data;
 };
 
 // 채용폼 상세조회
@@ -27,6 +24,14 @@ export const searchRecuitForm = async (status: boolean, title: string) => {
 
   console.log(data);
   return data as IResponse<IFormRes>;
+};
+
+//채용폼 검색
+export const searchRecruitForm = async (title: string) => {
+  const { data }: AxiosResponse = await client.get(
+    `/recruit/search?status=true&title=${title}`,
+  );
+  return data;
 };
 
 // 채용폼 등록

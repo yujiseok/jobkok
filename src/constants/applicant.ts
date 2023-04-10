@@ -1,5 +1,5 @@
 export const EDULEVEL_OPTION = [
-  { value: "", keywords: "년제" },
+  { value: "null", keywords: "년제" },
   { value: "초등학교", keywords: "초등학교" },
   { value: "중학교", keywords: "중학교" },
   { value: "고등학교", keywords: "고등학교" },
@@ -9,7 +9,7 @@ export const EDULEVEL_OPTION = [
 ];
 
 export const EDUSTATUS_OPTION = [
-  { value: "", keywords: "졸업상태" },
+  { value: "null", keywords: "졸업상태" },
   { value: "재학", keywords: "재학" },
   { value: "중퇴", keywords: "중퇴" },
   { value: "휴학", keywords: "휴학" },
@@ -18,14 +18,14 @@ export const EDUSTATUS_OPTION = [
 ];
 
 export const LANGUAGELEVEL_OPTION = [
-  { value: "", keywords: "언어수준" },
+  { value: "null", keywords: "언어수준" },
   { value: "상", keywords: "상" },
   { value: "중", keywords: "중" },
   { value: "하", keywords: "하" },
 ];
 
 export const MILITARY_OPTION = [
-  { value: "", keywords: "병역" },
+  { value: "null", keywords: "병역" },
   { value: "해당없음", keywords: "해당없음" },
   { value: "군필", keywords: "군필" },
   { value: "미필", keywords: "미필" },

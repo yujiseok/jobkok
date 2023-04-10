@@ -10,6 +10,7 @@ const FieldLink = () => {
       formState: { errors },
     } = useFormContext();
 
+    // 지원서 작성
     return (
       <div className="applicant-field-box">
         <legend className="applicant-field-legend">기타 이력서</legend>
@@ -46,6 +47,7 @@ const FieldLink = () => {
       </div>
     );
   } else {
+    // 채용폼 작성
     return (
       <div className="form-field-box">
         <div className="applicant-filed-row">

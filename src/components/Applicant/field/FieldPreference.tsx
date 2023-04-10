@@ -1,14 +1,16 @@
 import { useFormContext } from "react-hook-form";
+import { ReactComponent as IconSelect } from "@/assets/svg/check-gray-100.svg";
 import { MILITARY_OPTION, TERMS_SENSITIVE } from "@/constants/applicant";
 import FieldCheckbox from "@components/Applicant/FieldCheckbox";
 import FieldInputBox from "@components/Applicant/FieldInputBox";
 import FormBox from "@components/NewForm/FormBox";
-import FormInputBox from "@components/NewForm/FormInputBox";
+import FormSelectBox from "@components/NewForm/FormSelectBox";
 
 const FieldPreference = () => {
   if (location.pathname.slice(0, 10) === "/applicant") {
     const { register, watch } = useFormContext();
 
+    // 지원서 작성
     return (
       <div className="applicant-field-box">
         <legend className="applicant-field-legend">취업우대사항</legend>
@@ -63,35 +65,27 @@ const FieldPreference = () => {
       </div>
     );
   } else {
+    // 채용폼 작성
     return (
       <div className="form-field-box">
-        <p className="applicant-field-Paragraph">
-          본인이 해당하는 항목을 선택해주세요.
-        </p>
         <div className="applicant-filed-row">
-          <label
-            className="SubHead1Semibold flex h-[52px] w-fit items-center rounded-lg border bg-gray-0 px-6  text-gray-500"
-            htmlFor="veteran"
-          >
+          <span className="SubHead1Semibold flex h-[52px] w-[200px] items-center justify-center gap-1 rounded-lg border border-gray-100 bg-blue-25 px-6 text-gray-100">
+            <IconSelect />
             국가보훈
-          </label>
-          <label
-            className="SubHead1Semibold flex h-[52px] w-fit items-center rounded-lg border bg-gray-0 px-6  text-gray-500"
-            htmlFor="disorder"
-          >
+          </span>
+          <span className="SubHead1Semibold flex h-[52px] w-[200px] items-center justify-center gap-1 rounded-lg border border-gray-100 bg-blue-25 px-6 text-gray-100">
+            <IconSelect />
             장애
-          </label>
-          <label
-            className="SubHead1Semibold flex h-[52px] w-fit items-center rounded-lg border bg-gray-0 px-6  text-gray-500"
-            htmlFor="employment"
-          >
+          </span>
+          <span className="SubHead1Semibold t flex h-[52px] w-[200px] items-center justify-center gap-1 rounded-lg border border-gray-100 bg-blue-25 px-6 text-gray-100">
+            <IconSelect />
             고용지원금
-          </label>
-          <FieldInputBox>
+          </span>
+          <FormBox>
             <label className="sr-only" htmlFor="militaryEnum">
               병역사항
             </label>
-            <select className="focus:outline-none" id="militaryEnum">
+            <FormSelectBox className="focus:outline-none" id="militaryEnum">
               {MILITARY_OPTION.map((status) => {
                 return (
                   <option key={status.value} value={status.value}>
@@ -99,17 +93,9 @@ const FieldPreference = () => {
                   </option>
                 );
               })}
-            </select>
-          </FieldInputBox>
+            </FormSelectBox>
+          </FormBox>
         </div>
-        <label
-          className="SubHead2Semibold h-[86px]w-full flex items-center rounded-lg border bg-gray-0 px-6  text-gray-600"
-          htmlFor="terms"
-        >
-          <p className="SubHead2Medium ml-6 h-[54px] max-w-[540px] overflow-auto text-gray-300">
-            {TERMS_SENSITIVE}
-          </p>
-        </label>
       </div>
     );
   }

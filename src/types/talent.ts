@@ -43,6 +43,7 @@ export interface ITalentBase {
   keywords: string[];
   keywordList: string[];
   score: number;
+  failApply: boolean;
 }
 
 export interface ITalent extends ITalentBase {

@@ -119,7 +119,7 @@ const SignIn = () => {
           <form
             className="flex flex-col"
             onKeyDown={handleEnter}
-            // onSubmit={handleSubmit(onSubmit)}
+            onSubmit={handleSubmit(onSubmit)}
           >
             <label
               htmlFor="email"

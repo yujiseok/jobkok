@@ -39,8 +39,6 @@ const TalentFail = () => {
     searchInput.current!.value = "";
   };
 
-  console.log(failedTalent);
-
   if (formData?.result === "FAIL") {
     return (
       <Banner className="h-[25rem]">

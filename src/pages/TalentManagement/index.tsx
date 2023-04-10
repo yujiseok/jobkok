@@ -5,30 +5,24 @@ import "./swiper.css";
 
 import { useAppSelector } from "@/app/hooks";
 import { ReactComponent as Add } from "@/assets/svg/add.svg";
-import { ReactComponent as ArchiveTickBlue } from "@/assets/svg/archive-tick-blue.svg";
-import { ReactComponent as ArchiveTick } from "@/assets/svg/archive-tick.svg";
 import { ReactComponent as ArrowRight } from "@/assets/svg/arrow-right.svg";
 import { ReactComponent as Calendar } from "@/assets/svg/calendar.svg";
 import { ReactComponent as ChevronRight } from "@/assets/svg/chevron-right.svg";
-import { ReactComponent as HeartMemoji } from "@/assets/svg/heart-memoji.svg";
 import { ReactComponent as Pin } from "@/assets/svg/pin.svg";
 import { ReactComponent as Rocket } from "@/assets/svg/rocket.svg";
 import { ReactComponent as Stats } from "@/assets/svg/stats.svg";
 import { ReactComponent as User } from "@/assets/svg/user.svg";
 import useAllTalentQuery from "@/lib/hooks/useAllTalentQuery";
-import useDnD from "@/lib/hooks/useDnD";
 import useFormList from "@/lib/hooks/useFormList";
 import useFormListQuery from "@/lib/hooks/useFormListQuery";
 import useFormStatusQuery from "@/lib/hooks/useFormStatusQuery";
 import useLikeMutate from "@/lib/hooks/useLikeMutate";
-import formatDate from "@/lib/utils/formatDate";
 import sortWithSlice from "@/lib/utils/sortWithSlice";
-import talentToProcedure from "@/lib/utils/talentByProcedure";
-import type { IKanbanBase, ITalent } from "@/types/talent";
+import type { ITalent } from "@/types/talent";
 import Banner from "@components/Common/Banner";
 import ModalForLater from "@components/Common/ModalForLater";
+import Kanban from "@components/Talent/Kanban";
 import NumberBadge from "@components/Talent/NumberBadge";
-import PreferentialBadge from "@components/Talent/PreferentialBadge";
 import Slider from "@components/Talent/Slider";
 import SliderWrapper from "@components/Talent/SliderWrapper";
 import { WhiteContainer } from "@components/Talent/WhiteContainer";
@@ -42,8 +36,6 @@ const TalentManagement = () => {
 
   const formStatus = useFormStatusQuery(recruitId);
   const { allTalent } = useAllTalentQuery(recruitId);
-  const kanbanData: IKanbanBase[] = talentToProcedure(allTalent);
-  const { onDragEnd } = useDnD(kanbanData);
 
   // 폼 없을 시
   if (formData?.result === "FAIL") {
@@ -284,13 +276,13 @@ const TalentManagement = () => {
               </WhiteContainer>
             ) : (
               <SliderWrapper>
-                {sortWithSlice(allTalent?.data)?.map(
-                  (talent: ITalent, i: number) => (
+                {sortWithSlice(allTalent?.data)
+                  ?.filter((talent) => talent.failApply !== true)
+                  .map((talent: ITalent, i: number) => (
                     <SwiperSlide key={talent.applyId}>
                       <Slider talent={talent} i={i} />
                     </SwiperSlide>
-                  ),
-                )}
+                  ))}
               </SliderWrapper>
             )}
           </div>
@@ -312,124 +304,7 @@ const TalentManagement = () => {
           </Link>
         </div>
 
-        <DragDropContext onDragEnd={onDragEnd}>
-          <div className="flex items-start justify-between gap-6">
-            {kanbanData.map((kanban) => (
-              <Droppable key={kanban.title} droppableId={kanban.title}>
-                {(provided) => (
-                  <div
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                    className={`flex-1 rounded-xl border border-gray-50 bg-gray-0 pl-8 pr-4 ${
-                      kanban.applicant.length ? "pb-12" : "pb-0"
-                    }`}
-                  >
-                    <div className="flex items-center justify-between pr-4">
-                      <div className="flex items-center py-5">
-                        <span className="SubHead1Semibold">{kanban.title}</span>
-                        <NumberBadge procedure={kanban.title}>
-                          {kanban.applicant.length}
-                        </NumberBadge>
-                      </div>
-                      {kanban.title === "면접" ? (
-                        <label
-                          htmlFor="modal-calendar"
-                          className="cursor-pointer"
-                        >
-                          <Calendar />
-                        </label>
-                      ) : kanban.title === "최종조율" ? (
-                        <label
-                          htmlFor="modal"
-                          className={`cursor-pointer rounded-md border bg-gray-0 px-5 py-[0.3438rem] ${
-                            kanban.applicant.length
-                              ? " border-blue-500  text-blue-500"
-                              : "pointer-events-none border-gray-200 text-gray-200"
-                          }`}
-                        >
-                          채용 확정
-                        </label>
-                      ) : null}
-                    </div>
-
-                    <div className="flex max-h-[54.75rem] flex-col gap-4 overflow-y-auto overflow-x-hidden py-1 pr-3">
-                      {kanban.applicant.map((item: ITalent, index: number) => (
-                        <Draggable
-                          key={item.applyId}
-                          draggableId={item.applyId?.toString() as string}
-                          index={index}
-                        >
-                          {(provided, snapshot) => (
-                            <div
-                              className={`rounded-xl bg-gray-0 px-4 py-5 shadow-job  ${
-                                snapshot.isDragging
-                                  ? "bg-gray-50/95"
-                                  : "bg-gray-0"
-                              }`}
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                              style={{
-                                ...provided.draggableProps.style,
-                              }}
-                            >
-                              <div className="flex items-center justify-between">
-                                <Link
-                                  to={`/talent/detail/${item.applyId}`}
-                                  className="flex items-center gap-2"
-                                >
-                                  <div className="rounded-md bg-blue-50">
-                                    <HeartMemoji />
-                                  </div>
-                                  <span className="SubHead1Semibold">
-                                    {item.applyName}
-                                  </span>
-                                  <ChevronRight />
-                                </Link>
-
-                                <button
-                                  onClick={() => likeMutate(item.applyId!)}
-                                >
-                                  {item.wish ? (
-                                    <ArchiveTickBlue />
-                                  ) : (
-                                    <ArchiveTick className="text-gray-300" />
-                                  )}
-                                </button>
-                              </div>
-                              <div className="Caption1Semibold flex gap-6px pt-4 pb-8">
-                                <PreferentialBadge>
-                                  우대사항 <span>2</span>/<span>5</span>
-                                </PreferentialBadge>
-                                <PreferentialBadge>
-                                  키워드 <span>{item.keywordList.length}</span>/
-                                  <span>5</span>
-                                </PreferentialBadge>
-                              </div>
-                              <div className="flex items-center justify-between">
-                                <time
-                                  className="Caption1Medium text-gray-300"
-                                  dateTime={new Date().toLocaleDateString()}
-                                >
-                                  {formatDate(item.createdTime)}
-                                </time>
-
-                                {/* <InterviewBadge>
-                                      면접 D-16 20:00 예정
-                                    </InterviewBadge> */}
-                              </div>
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
-                      {provided.placeholder}
-                    </div>
-                  </div>
-                )}
-              </Droppable>
-            ))}
-          </div>
-        </DragDropContext>
+        <Kanban allTalent={allTalent} likeMutate={likeMutate} />
       </section>
       <ModalForLater id="modal" />
       <ModalForLater id="modal-calendar" />

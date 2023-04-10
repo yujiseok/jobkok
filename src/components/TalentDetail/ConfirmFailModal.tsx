@@ -6,7 +6,6 @@ const ConfirmFailModal = () => {
   const { id } = useParams() as { id: string };
   const failTalent = async () => {
     const res = await assortFailTalent(id);
-    console.log(res);
   };
   return (
     <>

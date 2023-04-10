@@ -1,3 +1,4 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { OnDragEndResponder } from "react-beautiful-dnd";
 import { editTalentByProcedure } from "@/api/talent";
 import type { IKanbanBase } from "@/types/talent";
@@ -5,6 +6,17 @@ import type { IKanbanBase } from "@/types/talent";
 type UseDnD = (kanbanData: IKanbanBase[]) => { onDragEnd: OnDragEndResponder };
 
 const useDnD: UseDnD = (kanbanData) => {
+  // const queryClient = useQueryClient();
+  // const { mutate } = useMutation(
+  //   (variables: { applyId: string; applyProcedure: string }) =>
+  //     editTalentByProcedure(variables.applyId, variables.applyProcedure),
+  //   {
+  //     onSuccess: () => {
+  //       queryClient.invalidateQueries(["allTalent"]);
+  //     },
+  //   },
+  // );
+
   const onDragEnd: OnDragEndResponder = async (result) => {
     if (!result.destination) return;
 
@@ -29,10 +41,7 @@ const useDnD: UseDnD = (kanbanData) => {
       kanbanData[sourceColIndex].applicant = sourceApplicant;
       kanbanData[destinationColIndex].applicant = destinationApplicant;
 
-      await editTalentByProcedure(
-        removed.applyId as string,
-        destinationCol.title,
-      );
+      await editTalentByProcedure(removed.applyId, destinationCol.title);
     } else {
       const sourceColIndex = kanbanData.findIndex(
         (e) => e.title === source.droppableId,

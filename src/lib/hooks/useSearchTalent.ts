@@ -12,23 +12,16 @@ const useSearchTalent = (recruitId: string) => {
   const applyName = searchParams.get("applyName") ?? "";
   const [searchTalent, setSearchTalent] = useState<ISearchData[]>([]);
 
-  // 이름 검색으로 찾기
-  // const { data: searchTalent } = useQuery({
-  //   queryKey: ["searchTalent", applyName, recruitId],
-  //   queryFn: () => searchApplicant(applyName, recruitId),
-  //   enabled: false,
-  // });
-
   const handleSearchBar = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!searchInput?.current?.value) return alert("입력해주세요");
     setSearchParams({ applyName: searchInput.current.value.trim() });
     setIsSearch(true);
-    const test = async () => {
+    const search = async () => {
       const res = await searchApplicant(applyName, recruitId);
       setSearchTalent(res?.data);
     };
-    test();
+    search();
   };
   return { searchInput, applyName, handleSearchBar, searchTalent, isSearch };
 };

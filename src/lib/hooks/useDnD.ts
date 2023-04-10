@@ -2,24 +2,23 @@ import type { OnDragEndResponder } from "react-beautiful-dnd";
 import { editTalentByProcedure } from "@/api/talent";
 import type { IKanbanBase } from "@/types/talent";
 
-type UseDnD = (dndData: IKanbanBase[]) => { onDragEnd: OnDragEndResponder };
+type UseDnD = (kanbanData: IKanbanBase[]) => { onDragEnd: OnDragEndResponder };
 
-const useDnD: UseDnD = (dndData) => {
-  // const [data, setData] = useState(dndData);
+const useDnD: UseDnD = (kanbanData) => {
   const onDragEnd: OnDragEndResponder = async (result) => {
     if (!result.destination) return;
 
     const { source, destination } = result;
     if (source.droppableId !== destination.droppableId) {
-      const sourceColIndex = dndData.findIndex(
+      const sourceColIndex = kanbanData.findIndex(
         (e) => e.title === source.droppableId,
       );
-      const destinationColIndex = dndData.findIndex(
+      const destinationColIndex = kanbanData.findIndex(
         (e) => e.title === destination.droppableId,
       );
 
-      const sourceCol = dndData[sourceColIndex];
-      const destinationCol = dndData[destinationColIndex];
+      const sourceCol = kanbanData[sourceColIndex];
+      const destinationCol = kanbanData[destinationColIndex];
 
       const sourceApplicant = [...sourceCol.applicant];
       const destinationApplicant = [...destinationCol.applicant];
@@ -27,30 +26,26 @@ const useDnD: UseDnD = (dndData) => {
       const [removed] = sourceApplicant.splice(source.index, 1);
       destinationApplicant.splice(destination.index, 0, removed);
 
-      dndData[sourceColIndex].applicant = sourceApplicant;
-      dndData[destinationColIndex].applicant = destinationApplicant;
+      kanbanData[sourceColIndex].applicant = sourceApplicant;
+      kanbanData[destinationColIndex].applicant = destinationApplicant;
 
-      const res = await editTalentByProcedure(
+      await editTalentByProcedure(
         removed.applyId as string,
         destinationCol.title,
       );
     } else {
-      const sourceColIndex = dndData.findIndex(
+      const sourceColIndex = kanbanData.findIndex(
         (e) => e.title === source.droppableId,
       );
 
-      const col = dndData[sourceColIndex];
+      const col = kanbanData[sourceColIndex];
       const copiedItems = [...col.applicant];
       const [removed] = copiedItems.splice(source.index, 1);
       copiedItems.splice(destination.index, 0, removed);
 
-      dndData[sourceColIndex].applicant = copiedItems;
+      kanbanData[sourceColIndex].applicant = copiedItems;
     }
   };
-
-  // useEffect(() => {
-  //   setData(dndData);
-  // }, [dndData]);
 
   return { onDragEnd };
 };

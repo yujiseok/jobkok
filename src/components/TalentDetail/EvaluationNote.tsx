@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { addComment, getDetailInfo } from "@/api/talentDetail";
 import { ReactComponent as Edit } from "@/assets/svg/edit-icon.svg";
+import useEvaluationMutate from "@/lib/hooks/useEvaluationMutate";
 import type { ITalentDetail } from "@/types/talentDetail";
 
 type FormValues = {
@@ -16,12 +17,13 @@ const EvaluationNote = ({
   talentInfo: ITalentDetail;
 }) => {
   const { register, watch, handleSubmit } = useForm<FormValues>();
+  const { setEvaluationMutate } = useEvaluationMutate();
 
   const onSubmit = async (data: FormValues) => {
-    const res = await addComment(id, data.evaluation);
+    const evaluation = data.evaluation;
+    setEvaluationMutate({ id, evaluation });
+    console.log({ id, evaluation });
   };
-
-  console.log(talentInfo);
 
   return (
     <form

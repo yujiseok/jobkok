@@ -8,9 +8,9 @@ const useGetTalentQuery = (
   applyName: string,
 ) => {
   const filteredData = (data: ITalent[], step: string) => {
-    let test = data;
-    if (data) test = data.filter((item) => item.applyProcedure === step);
-    return test;
+    let newData = data;
+    if (data) newData = data.filter((item) => item.applyProcedure === step);
+    return newData;
   };
 
   const { data } = useQuery({

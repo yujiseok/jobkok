@@ -25,7 +25,7 @@ const PersonalNotiModal = ({
       applyIds,
       mailContent,
       noticeStep,
-      "2023-02-20T15:59:46.803305",
+      new Date().toISOString(),
     );
   };
 

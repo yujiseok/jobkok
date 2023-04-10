@@ -47,12 +47,12 @@ const SendingBox = ({
   const onSubmit = async (data: FormValues) => {
     if (noticeStep === ("all" || null)) return alert("단계를 선택해주세요");
     if (data.mailContent === "") return alert("내용을 입력해주세요");
-    const res = await sendEmail(
+    await sendEmail(
       recruitId,
       applyIdsArray,
       data.mailContent,
       noticeStep,
-      "2023-02-20T15:59:46.803305",
+      new Date().toISOString(),
     );
     alert("메일 전송에 성공했습니다");
   };

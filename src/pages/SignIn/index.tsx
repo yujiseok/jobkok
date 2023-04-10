@@ -88,13 +88,22 @@ const SignIn = () => {
 
   const onSubmit = async (data: User) => {
     const res = await postSignIn(data.useremail, data.password);
-    console.log(res.data);
-
     if (res.state === 200) {
       navigate("/");
       dispatch(signIn(res.data));
     } else {
       setIsFail(true);
+    }
+  };
+
+  const handleEnter = (e: any) => {
+    const data = {
+      useremail: getValues("useremail"),
+      password: getValues("password"),
+    };
+    if (e.key === "Enter") {
+      e.preventDefault();
+      onSubmit(data);
     }
   };
 
@@ -107,7 +116,11 @@ const SignIn = () => {
           <p className="SubHead1Medium mb-12 text-gray-600">
             잡콕에 다시 오신 걸 환영해요
           </p>
-          <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
+          <form
+            className="flex flex-col"
+            onKeyDown={handleEnter}
+            // onSubmit={handleSubmit(onSubmit)}
+          >
             <label
               htmlFor="email"
               className="Caption1Medium mb-1 text-gray-300"
@@ -181,13 +194,12 @@ const SignIn = () => {
               </button>
             </div>
             {/* 오류 메세지 띄우기 */}
-            {IsFail ? (
+            <span className="Caption1Medium text-error-400">
+              {errors?.password?.message}
+            </span>
+            {IsFail && (
               <span className="Caption1Medium text-error-400">
                 아이디 또는 비밀번호가 다릅니다.
-              </span>
-            ) : (
-              <span className="Caption1Medium text-error-400">
-                {errors?.password?.message}
               </span>
             )}
             <div className="mt-4 mb-20 flex justify-between">

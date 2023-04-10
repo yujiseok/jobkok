@@ -1,7 +1,8 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import "./swiper.css";
 import { SwiperSlide } from "swiper/react";
+import { getFormLinkList, searchRecruitForm } from "@/api/form";
 import { ReactComponent as Arrow } from "@/assets/svg/chevron-down-large.svg";
 import { ReactComponent as Search } from "@/assets/svg/search.svg";
 import { ReactComponent as User } from "@/assets/svg/user.svg";
@@ -9,13 +10,48 @@ import Banner from "@components/Common/Banner";
 import FormList from "@components/LinkForm/FormList";
 import FormSlider from "@components/LinkForm/FormSlider";
 import SliderWrapper from "@components/Talent/SliderWrapper";
+import data from "../../pages/LinkForm/otherFormList.json";
 
 const LinkForm = () => {
-  const [setOtherForm, setSetOtherForm] = useState([1, 2, 3, 4, 5, 6]);
   const [isClicked, setIsClicked] = useState(false);
+  const [formLists, setFormLists] = useState([]);
+  const [searchText, setSearchText] = useState("");
+  const [searchLists, setSearchLists] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const params = useParams<{ searchQuery: string }>();
+  const { keyword } = useParams();
 
   const handleClick = () => {
     setIsClicked(!isClicked);
+  };
+
+  const getFormLists = async () => {
+    const data = await getFormLinkList();
+    console.log(data);
+    setFormLists(data);
+  };
+
+  useEffect(() => {
+    getFormLists();
+  }, []);
+
+  const searchList = async (title: string) => {
+    const res = await searchRecruitForm(searchText);
+    if (res.state === 200) {
+      setIsSearching(true);
+      setSearchLists(res.data);
+      console.log("검색결과", searchLists);
+    } else {
+      setIsSearching(false);
+    }
+  };
+
+  const handleEnter = (e: any) => {
+    console.log("검색어", searchText);
+    if (e.key === "Enter") {
+      e.preventDefault();
+      searchList(searchText);
+    }
   };
 
   return (
@@ -45,6 +81,8 @@ const LinkForm = () => {
                 className="w-full outline-none"
                 type="text"
                 placeholder="키워드를 이용해서 폼을 검색해보세요."
+                onChange={(e) => setSearchText(e.target.value)}
+                onKeyDown={handleEnter}
               />
               <Search />
             </div>
@@ -52,61 +90,84 @@ const LinkForm = () => {
         </div>
       </Banner>
       <section className="pt-[26rem]">
-        <div className="flex flex-col gap-8">
-          <div className="relative flex items-center gap-1">
-            <div className="relative mr-2 h-48 flex-[0.3] rounded-xl bg-blue-400 px-4 py-6 text-gray-0 shadow-job">
-              <p className="SubHead1Semibold mb-3">타기업 폼 리스트</p>
-              <p className="SubHead2Medium">
-                타기업에서 작성한
-                <br /> 폼 리스트를 보여드립니다!
-              </p>
-              <User className="absolute right-4 bottom-2" />
-            </div>
-            <SliderWrapper>
-              {setOtherForm.length > 0 ? (
-                setOtherForm.map((data) => (
-                  <SwiperSlide key={data}>
-                    <FormSlider data={data} />
-                  </SwiperSlide>
-                ))
+        {isSearching ? (
+          searchLists.length > 0 ? (
+            searchLists.map((data, index) => {
+              return <FormList key={index} data={data} />;
+            })
+          ) : (
+            <span className="SubHead1Medium self-center text-gray-500">
+              검색결과가 없습니다.
+            </span>
+          )
+        ) : (
+          <>
+            <section>
+              <div className="flex flex-col gap-8">
+                <div className="relative flex items-center gap-1">
+                  <div className="relative mr-2 h-48 flex-[0.3] rounded-xl bg-blue-400 px-4 py-6 text-gray-0 shadow-job">
+                    <p className="SubHead1Semibold mb-3">타기업 폼 리스트</p>
+                    <p className="SubHead2Medium">
+                      타기업에서 작성한
+                      <br /> 폼 리스트를 보여드립니다!
+                    </p>
+                    <User className="absolute right-4 bottom-2" />
+                  </div>
+                  <SliderWrapper>
+                    {data.data.length > 0 ? (
+                      data.data.map((data) => (
+                        <SwiperSlide key={data.id}>
+                          <FormSlider data={data} />
+                        </SwiperSlide>
+                      ))
+                    ) : (
+                      <span>타기업 폼 정보가 없습니다.</span>
+                    )}
+                  </SliderWrapper>
+                </div>
+              </div>
+            </section>
+            <section className="flex flex-col pt-36">
+              <div className="flex cursor-pointer pb-10">
+                <div
+                  className={`Head4Semibold w-[160px] text-center ${
+                    isClicked ? "text-gray-600" : "text-blue-500"
+                  }`}
+                  onClick={handleClick}
+                >
+                  임시저장된 폼
+                  <div
+                    className={`mt-5 h-0.5 w-[160px] ${
+                      isClicked ? "bg-gray-100" : "bg-blue-500"
+                    }`}
+                  ></div>
+                </div>
+                <div
+                  className={`Head4Semibold w-[160px] text-center ${
+                    isClicked ? "text-blue-500" : "text-gray-600"
+                  }`}
+                  onClick={handleClick}
+                >
+                  링크생성 완료된 폼
+                  <div
+                    className={`mt-5 h-0.5 w-[160px] ${
+                      isClicked ? "bg-blue-500" : "bg-gray-100"
+                    }`}
+                  ></div>
+                </div>
+              </div>
+              {formLists.length > 0 && isClicked ? (
+                formLists.map((data, index) => {
+                  return <FormList key={index} data={data} />;
+                })
               ) : (
-                <span>타기업 폼 정보가 없습니다.</span>
+                <span className="SubHead1Medium self-center text-gray-500">
+                  임시저장된 폼이 없습니다.
+                </span>
               )}
-            </SliderWrapper>
-          </div>
-        </div>
-      </section>
-      <section className="pt-36">
-        <div className="flex cursor-pointer pb-10">
-          <div
-            className={`Head4Semibold w-[160px] text-center ${
-              isClicked ? "text-gray-600" : "text-blue-500"
-            }`}
-            onClick={handleClick}
-          >
-            임시저장된 폼
-            <div
-              className={`mt-5 h-0.5 w-[160px] ${
-                isClicked ? "bg-gray-100" : "bg-blue-500"
-              }`}
-            ></div>
-          </div>
-          <div
-            className={`Head4Semibold w-[160px] text-center ${
-              isClicked ? "text-blue-500" : "text-gray-600"
-            }`}
-            onClick={handleClick}
-          >
-            링크생성 완료된 폼
-            <div
-              className={`mt-5 h-0.5 w-[160px] ${
-                isClicked ? "bg-blue-500" : "bg-gray-100"
-              }`}
-            ></div>
-          </div>
-        </div>
-        <FormList />
-        {/* {isClicked ? <div>완료</div> : <div>임시 저장</div>} */}
+            </section>
+          </>
+        )}
       </section>
     </>
   );

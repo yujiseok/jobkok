@@ -4,7 +4,6 @@ import { checkApplication } from "@/api/talentDetail";
 
 const useConfirmDocsMutate = () => {
   const { id } = useParams() as { id: string };
-  console.log(id);
   const queryClient = useQueryClient();
   const { mutate: confirmDocsMutate, data: mutateData } = useMutation(
     checkApplication,

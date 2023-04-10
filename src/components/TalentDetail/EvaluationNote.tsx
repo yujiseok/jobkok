@@ -22,7 +22,6 @@ const EvaluationNote = ({
   const onSubmit = async (data: FormValues) => {
     const evaluation = data.evaluation;
     setEvaluationMutate({ id, evaluation });
-    console.log({ id, evaluation });
   };
 
   return (

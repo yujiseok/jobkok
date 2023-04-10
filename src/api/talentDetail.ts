@@ -52,7 +52,6 @@ export const checkApplication = async (applyId: string) => {
     method: "PUT",
     url: `apply/check/${applyId}`,
   });
-  console.log(data);
   return data;
 };
 
@@ -67,6 +66,5 @@ export const setMeeting = async (
     url: `apply/set_meeting/${applyId}`,
     data: { interviewDate, interviewTime },
   });
-  console.log(data);
   return data;
 };

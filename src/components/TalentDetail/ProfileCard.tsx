@@ -14,7 +14,6 @@ const ProfileCard = ({
   id: string;
 }) => {
   const { likeMutate } = useLikeMutate();
-  console.log(talentInfo.keywords);
   return (
     <div className="info-container flex gap-10 rounded-md border-2 border-gray-50 bg-white p-8">
       <div className="applicant-avatar avatar">

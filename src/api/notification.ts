@@ -41,18 +41,15 @@ export const searchApplicant = async (applyName: string, recruitId: string) => {
   });
   // 타입 지정 필요
   const data = res.data;
-  console.log(data);
   return data;
 };
 
 //절차 선택
 export const setProcedure = async (recruitId: string, noticeStep: string) => {
-  // console.log(noticeStep);
   const { data } = await client({
     method: "POST",
     url: "/notice/select",
     data: { recruitId, noticeStep },
   });
-  console.log(data.data);
   return data.data;
 };

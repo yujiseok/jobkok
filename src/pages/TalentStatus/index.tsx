@@ -52,7 +52,6 @@ const TalentStatus = () => {
   const { mutate: deleteMutate, data } = useMutation(assortFailTalent, {
     onSuccess: () => {
       queryClient.invalidateQueries();
-      console.log(data);
     },
   });
 

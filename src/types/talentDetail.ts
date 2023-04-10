@@ -40,10 +40,10 @@ export interface ITalentDetail {
   certificateName: string;
   certificateDate: string;
   certificatePublisher: string;
-  // activitesTitle: string;
-  // activitesContent: string;
-  // activitesStart: string;
-  // activitesEnd: string;
+  activitesTitle: string;
+  activitesContent: string;
+  activitesStart: string;
+  activitesEnd: string;
   awardsName: string;
   awardsDate: string;
   awardsCompany: string;

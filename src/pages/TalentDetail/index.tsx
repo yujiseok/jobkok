@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getDetailInfo } from "@/api/talentDetail";
 import Breadcrumbs from "@components/TalentDetail/Breadcrumbs";
 import ConfirmDocsBtn from "@components/TalentDetail/ConfirmDocsBtn";
@@ -14,11 +14,41 @@ import Timeline from "@components/TalentDetail/Timeline";
 
 const TalentDetail = () => {
   const { id } = useParams() as { id: string };
-  const { data: talentInfo } = useQuery({
+  const { data: talentInfo, isError } = useQuery({
     queryKey: ["talentInfo"],
     queryFn: () => getDetailInfo(id),
   });
+  const navigate = useNavigate();
 
+  if (talentInfo.status === 400 || isError) {
+    return (
+      <>
+        <input
+          type="checkbox"
+          checked={true}
+          id="confirm"
+          className="modal-toggle"
+        />
+        <label htmlFor="confirm" className="modal">
+          <label className="relative grid w-[680px] place-items-center rounded-lg bg-gray-0 pt-10 pb-[3.75rem] shadow-job2">
+            <img src="/assets/images/folder.webp" alt="폴더" />
+            <p className="SubHead1Semibold pt-6 pb-8 text-gray-800">
+              인재가 존재하지 않습니다.
+            </p>
+            <div className="modal-action mt-0">
+              <label
+                htmlFor="confirm"
+                className="SubHead2Semibold cursor-pointer rounded-lg bg-blue-500 px-[3.75rem] py-[0.7188rem] text-gray-0 shadow-blue"
+                onClick={() => navigate("/")}
+              >
+                확인
+              </label>
+            </div>
+          </label>
+        </label>
+      </>
+    );
+  }
   console.log(talentInfo);
   return (
     <section className="relative pt-8">
@@ -27,20 +57,20 @@ const TalentDetail = () => {
       <section className="flex justify-between">
         <TalentDetailHeading />
         <div className="SubHead2Semibold flex items-start gap-4 rounded-md">
-          <ConfirmDocsBtn talentInfo={talentInfo!} />
+          <ConfirmDocsBtn talentInfo={talentInfo} />
           <ConfirmFailBtn />
-          <PersonalNotiBtn talentInfo={talentInfo!} id={id} />
+          <PersonalNotiBtn talentInfo={talentInfo} id={id} />
         </div>
       </section>
 
       <section className="applicant-container mt-12 flex gap-5">
         <div className="applicant-left flex-[0.6]">
-          <ProfileCard id={id} talentInfo={talentInfo!} />
-          <Timeline />
+          <ProfileCard id={id} talentInfo={talentInfo} />
+          <Timeline talentInfo={talentInfo} />
         </div>
         <div className=" flex flex-[0.4] flex-col gap-4">
-          <InterviewInfo talentInfo={talentInfo!} />
-          <EvaluationNote id={id} talentInfo={talentInfo!} />
+          <InterviewInfo talentInfo={talentInfo} />
+          <EvaluationNote id={id} talentInfo={talentInfo} />
         </div>
       </section>
 

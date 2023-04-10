@@ -9,13 +9,15 @@ const talentToProcedure = (
     { title: "최종조율", applicant: [] },
   ];
 
-  talentData?.data?.forEach((applicant) => {
-    const { applyProcedure } = applicant;
-    const match = base.find((item) => item.title === applyProcedure);
-    if (match) {
-      match.applicant.push(applicant);
-    }
-  });
+  talentData?.data
+    ?.filter((talent) => talent.failApply !== true)
+    .forEach((applicant) => {
+      const { applyProcedure } = applicant;
+      const match = base.find((item) => item.title === applyProcedure);
+      if (match) {
+        match.applicant.push(applicant);
+      }
+    });
 
   return base;
 };

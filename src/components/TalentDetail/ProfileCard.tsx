@@ -33,7 +33,6 @@ const ProfileCard = ({
                 <button onClick={() => likeMutate(id)}>
                   {talentInfo.wish ? <TickBlue /> : <Tick />}
                 </button>
-                <TrashBin />
               </div>
             </div>
             <p className="SubHead2Medium text-gray-600">
@@ -50,7 +49,7 @@ const ProfileCard = ({
           >
             채용 확정
           </label>
-          <ConfirmPassModal />
+          <ConfirmPassModal talentInfo={talentInfo} id={id} />
         </div>
         <div className="badge-container mt-10 flex max-w-[280px] flex-wrap gap-x-2 gap-y-6px">
           {talentInfo?.keywordList.map((keyword, i) => (

@@ -47,15 +47,19 @@ export const checkApplication = async (applyId: string) => {
     url: `apply/check/${applyId}`,
   });
   console.log(data);
-  return data as INotibase;
+  return data;
 };
 
 // 면접 날짜 지정
-export const setMeeting = async (applyId: string, interviewDate: string) => {
+export const setMeeting = async (
+  applyId: string,
+  interviewDate: string,
+  interviewTime: string,
+) => {
   const { data } = await client({
     method: "PUT",
     url: `apply/set_meeting/${applyId}`,
-    data: interviewDate,
+    data: { interviewDate, interviewTime },
   });
   console.log(data);
   return data;

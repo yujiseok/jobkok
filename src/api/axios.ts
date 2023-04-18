@@ -1,5 +1,5 @@
 import type { AxiosRequestConfig } from "axios";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 const config: AxiosRequestConfig = {
   baseURL: import.meta.env.VITE_BASE_URL,
@@ -22,25 +22,31 @@ client.interceptors.response.use(
   async (error) => {
     const { refreshToken } = JSON.parse(localStorage.getItem("token") || "{}");
     const { config, response } = error;
-
     const status = response.status;
+    const originalConfig = config;
 
     if (status === 400) {
-      const res = await axios({
-        method: "POST",
-        url: "https://jobkok.shop/auth/reissue",
-        headers: {
-          Authorization: `Bearer ${refreshToken}`,
-        },
-      });
+      try {
+        const res = await axios({
+          method: "POST",
+          url: `${config.baseURL}/auth/reissue`,
+          headers: {
+            Authorization: `Bearer ${refreshToken}`,
+          },
+        });
 
-      if (res.status === 200) {
-        localStorage.setItem("token", JSON.stringify(res.data.data));
-        config.headers.Authorization = `Bearer ${res.data.data.accessToken}`;
-      } else {
-        return Promise.reject(error);
+        if (res.status === 200) {
+          localStorage.setItem("token", JSON.stringify(res.data.data));
+          originalConfig.headers.Authorization = `Bearer ${res.data.data.accessToken}`;
+          return axios(originalConfig);
+        }
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          return Promise.reject(error.response?.data);
+        }
       }
     }
-    return axios(config);
+
+    return Promise.reject(error);
   },
 );

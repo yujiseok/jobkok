@@ -2,6 +2,8 @@
 [![Netlify Status](https://api.netlify.com/api/v1/badges/f14f6822-855c-4a25-b7d7-5c8aacecfb93/deploy-status)](https://app.netlify.com/sites/kdt-final/deploys)
 
 # JOBKOK
+- 팀: [Github](https://github.com/kdt-final-3/jobkok-fe)
+- 노션: [Notion](https://www.notion.so/3-e6ecfb1d3143440f9afa58481929ab5a)
 
 ## < KDT3 Front-End : Final Project Team3 - SSAK3 >
 
